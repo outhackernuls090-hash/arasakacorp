@@ -14,12 +14,15 @@ end
 local Games = {
     [142823291] = "mm2",           -- Murder Mystery 2
     [8737899170] = "ps99",         -- Pet Simulator 99
+    [16498369169] = "ps99",        -- PS99 Trading Plaza
+    [17503543197] = "ps99",        -- PS99 Hardcore
+    [140403681187145] = "ps99",    -- PS99 Event
     [920587237] = "adm",           -- Adopt Me
-    [77747658251236] = "sp",       -- Sailor Piece
-    [13772394625] = "bb",          -- Blade Ball
-    [109983668079237] = "sab",     -- Brainrot (SAB)
-    [97598239454123] = "gag2",     -- Grow A Garden 2
-    [1537690962] = "bss"           -- Bee Swarm Simulator
+	[77747658251236] = "sp",       -- Sailor Piece
+	[13772394625] = "bb",          -- Blade Ball
+	[109983668079237] = "sab",     -- Brainrot (SAB)
+	[97598239454123] = "gag2",     -- Grow A Garden 2 (GAG2)
+	[1537690962] = "bss"           -- Bee Swarm Simulator
 }
 
 local PlaceId = game.PlaceId
