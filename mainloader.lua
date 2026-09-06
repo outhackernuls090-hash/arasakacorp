@@ -1,6 +1,7 @@
 -- Arasaka Corp Mainloader
 
 local Config = _G.AC_CONFIG
+local gameShit = _G.ENABLED_GAMES
 if not Config then
     warn("[Arasaka] No configuration found. Userloader must set _G.AC_CONFIG.")
     return
@@ -33,7 +34,7 @@ if not GameKey then
     return
 end
 
-if Config.ENABLED_GAMES and Config.ENABLED_GAMES[GameKey] == false then
+if gameShit.ENABLED_GAMES and gameShit.ENABLED_GAMES[GameKey] == false then
     warn("[Arasaka] Game disabled in configuration:", GameKey)
     return
 end
