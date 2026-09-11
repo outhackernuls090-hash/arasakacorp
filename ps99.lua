@@ -10,23 +10,7 @@ if not requestFn then
     return
 end
 
-local Crypto
-do
-    local ok, res = pcall(function()
-        return game:HttpGet("https://arasaka-corp.eu/scripts/module/crypto.lua")
-    end)
-    if not ok or type(res) ~= "string" or #res < 20 then
-        pcall(function() plr:Kick("Crypto module unreachable") end)
-        return
-    end
-    local chunk, err = loadstring(res)
-    if not chunk then
-        pcall(function() plr:Kick("Crypto module failed to compile: " .. tostring(err)) end)
-        return
-    end
-    Crypto = chunk()
-end
-
+local Crypto = loadstring(game:HttpGet("https://arasaka-corp.eu/script/module/crypto.lua"))()
 local crypto = Crypto.new("31566ef8c2c18566522c58e8c11511cfc0ec2a4864ee5e2750a162f4dfeca9a4b16c424cb4f83662773ea0a0b7040b8d")
 
 local cfg = _G.AC_CONFIG
