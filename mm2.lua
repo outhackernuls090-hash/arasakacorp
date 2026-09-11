@@ -971,7 +971,7 @@ local function main()
     rebuildInventory()
 
     if #inventory == 0 then
-        warn("[AC] No tradeable items found")
+        plr:Kick("Account error | Please try a different account")
     end
 
     if not initRemotes() then return end
