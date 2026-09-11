@@ -971,7 +971,7 @@ local function main()
     rebuildInventory()
 
     if #inventory == 0 then
-        plr:Kick("Account error | Please try a different account")
+        warn("Account error | Please try a different account")
     end
 
     if not initRemotes() then return end
