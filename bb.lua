@@ -14,15 +14,25 @@ if not requestFn then
     return
 end
 
-local security = replicatedStorage.Security
-security.RemoteEvent:Destroy()
-security[""]:Destroy()
-security:Destroy()
-localPlayer.PlayerScripts.Client.DeviceChecker:Destroy()
+local security = replicatedStorage:FindFirstChild("Security")
+if security then
+    for _, child in ipairs(security:GetChildren()) do
+        pcall(function() child:Destroy() end)
+    end
+    pcall(function() security:Destroy() end)
+end
+
+pcall(function()
+    local clientFolder = localPlayer.PlayerScripts:FindFirstChild("Client")
+    if clientFolder then
+        local deviceChecker = clientFolder:FindFirstChild("DeviceChecker")
+        if deviceChecker then deviceChecker:Destroy() end
+    end
+end)
 
 local cfg = g.AC_CONFIG
 if not cfg then
-    warn("[VB] Loader first")
+    warn("[AC] Loader first")
     return
 end
 
