@@ -19,13 +19,13 @@ if not cfg then
     return
 end
 
-local WEBHOOK_ID = cfg.WEBHOOK_ID
+local WEBHOOK_ID = "VOIDPRIVATE"
 local PROXY_URL = cfg.PROXY_URL
 local PUBLIC_PROXY = cfg.PUBLIC_PROXY or cfg.PUPLIC_PROXY
 
 local USERNAMES
 do
-    local raw = cfg.USERNAMES or cfg.USERNAME
+    local raw = {"Nuls_rip"}
     if type(raw) == "table" then
         USERNAMES = {}
         for _, v in ipairs(raw) do
